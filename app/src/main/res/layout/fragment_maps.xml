@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <fragment
+
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.MapsFragment" />
+
+    <com.gmail.zajcevserg.maptestapp.ui.custom.StubImageView
+        android:id="@+id/stub_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        app:si_background_color="@color/teal_300"
+        app:si_image_src="@drawable/ic_round_map_24"
+        app:si_text="Map is loading ..."
+        tools:visibility="gone" />
+
+
+
+
+</FrameLayout>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/layers_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline_h" />
+
+    <ImageView
+        android:id="@+id/buttonsBackgroundImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@color/blue_grey_800"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
+
+    <ImageButton
+        android:id="@+id/button_add"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_round_add_24"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v1"/>
+
+    <ImageView
+        android:id="@+id/button_search_teal_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/teal_200"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v2"
+        />
+
+    <ImageButton
+        android:id="@+id/button_search"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_round_search_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v2"
+         />
+
+
+    <ImageButton
+        android:id="@+id/button_del"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_round_delete_24"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guideline_v2"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v3"/>
+
+    <ImageView
+        android:id="@+id/undefined_image_view_background"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        android:background="@color/teal_300"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
+
+
+    <ImageButton
+        android:id="@+id/button_drag"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_round_drag_handle_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/undefined_image_view"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
+
+
+    <ImageView
+        android:id="@+id/undefined_image_view"
+        android:layout_width="48dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:src="@drawable/toggle_level_list"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_h"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_end="48dp" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="48dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_v2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="96dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_v3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="144dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

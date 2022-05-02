@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Map Test App</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="substrates_fragment_text">Substrates fragment</string>
+    <string name="missions_fragment_text">Missions fragment</string>
+    <string name="layers">Слои</string>
+    <string name="substrates">Подложки</string>
+    <string name="missions">Миссии</string>
+    <string name="transparency">Прозрачность: %1$d%%</string>
+    <string name="sync_date">Синхр.: %1$s</string>
+    <string name="elements_num">Эл-тов: 23</string>
+    <string name="zoom_range">Зум: 16-18</string>
+    <string name="scheme">Схема</string>
+    <string name="satellite">Спутник</string>
+    <string name="hybrid">Гибрид</string>
+</resources>

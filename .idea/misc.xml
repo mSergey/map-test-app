@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/divider_drawable.xml" value="0.29" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/expanded_layer_item_drawable.xml" value="0.264" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic.xml" value="0.346" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2895" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_baseline_favorite_24_small.xml" value="0.2895" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_delyany_layer_24dp.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_delyany_layer_24dp_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_outline_description_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_outline_folder_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_outline_folder_24_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_outline_place_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_outline_place_24_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_pentagon_black_24dp.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_pentagon_black_24dp_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_pentagon_black_hatched_24dp.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_pentagon_black_hatched_24dp_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_add_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_delete_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_description_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_drag_handle_24.xml" value="0.346" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_expand_less_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_expand_more_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_flag_circle_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_flag_circle_24_small.xml" value="0.2895" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_folder_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_layers_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_map_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_my_location_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_place_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_remove_red_eye_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_search_24.xml" value="0.366" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_show_chart_24.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_show_chart_24_selected.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_round_terrain_24.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_sleep_24dp.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_toggle_off_black_24dp.xml" value="0.257" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_toggle_on_black_24dp.xml" value="0.257" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_toggle_undefined_black_24dp.xml" value="0.257" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/ic_visibility_black_24dp.xml" value="0.439" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/layer_title_text_color_selector.xml" value="0.287" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/search_button_background.xml" value="0.4365" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_delany_layer.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_expand_icon.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_folder.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_pentagon.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_pentagon_hatched.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_place.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/selector_show_chart.xml" value="0.2285" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/drawable/stub_image_background_drawable.xml" value="0.212" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/fragment_layers_settings.xml" value="0.5186246418338109" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/fragment_maps.xml" value="0.33" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/fragment_missions.xml" value="0.3137050547159979" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/fragment_settings.xml" value="0.5544554455445545" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/fragment_substrates.xml" value="0.3137050547159979" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/item_layer_layout.xml" value="0.2712765957446808" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/layout_settings.xml" value="0.33" />
+        <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/stub_image.xml" value="0.5" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

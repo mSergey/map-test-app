@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <declare-styleable name="StubImageView">
+        <attr name="si_background_color" format="color" />
+        <attr name="si_image_src" format="integer" />
+        <attr name="si_image_padding" format="dimension" />
+        <attr name="si_text" format="string" />
+    </declare-styleable>
+
+
+</resources>

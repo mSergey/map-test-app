@@ -1,5 +1,6 @@
 package com.gmail.zajcevserg.maptestapp.ui.fragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
@@ -25,6 +27,21 @@ class LayersSettingsFragment : Fragment() {
     private var decorator: HeaderItemDecorator? = null
     private lateinit var mAdapter: LayersAdapter
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        log("onAttach")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        log("onCreate")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        log("onStart")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,6 +52,7 @@ class LayersSettingsFragment : Fragment() {
             layersRecyclerView.adapter = mAdapter
             layersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             layersRecyclerView.isScrollbarFadingEnabled = false
+            log("onCreateView")
 
         }
 
@@ -101,6 +119,6 @@ class LayersSettingsFragment : Fragment() {
             mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()
         }
 
-
+        log("onViewCreated")
     }
 }

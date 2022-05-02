@@ -5,11 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.custom.SwitchStates
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.Polygon
-import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
 
 
@@ -20,7 +16,7 @@ class LayersVM : ViewModel() {
     private val savedLayers = mutableListOf<LayerItem>()
     private var needToSaveCurrentLayers = true
     private var modeWithoutUndefineState = false
-
+    //private val layersCache: List<LayerItem> = mutableListOf()
 
     val liveDataLayers by lazy {
         MutableLiveData<List<LayerItem>>()
@@ -57,7 +53,8 @@ class LayersVM : ViewModel() {
 
 
     init {
-        repository.observeLayers { layers ->
+        repository.requestLayers { layers ->
+
             liveDataLayers.value = layers.sortedBy { it.groupFeature }
             val isAllActive = layers.all { it.visibleOnMap }
             val isAllInactive = layers.none { it.visibleOnMap }
@@ -87,7 +84,8 @@ class LayersVM : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        repository.stopObserve()
+        //repository.stopObserve()
+        repository.save()
     }
 
     fun onLayerBackgroundButtonClicked(viewId: Int, position: Int) {
@@ -99,10 +97,10 @@ class LayersVM : ViewModel() {
         liveDataBackgroundBtn.value = null
     }
 
-    fun updateLayer(layerItem: LayerItem) {
+    fun updateLayer(index: Int, layerItem: LayerItem) {
         needToSaveCurrentLayers = true
         //log("updateLayer ${layerItem.id}")
-        repository.updateLayer(layerItem)
+        repository.updateLayer(index, layerItem)
 
     }
 
@@ -145,4 +143,5 @@ class LayersVM : ViewModel() {
 
         liveDataSwitchControlAllAppearance.value = state
     }
+
 }

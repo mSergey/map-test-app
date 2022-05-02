@@ -71,7 +71,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                             return
                         }
                         toUpdate.transparency = slider.value.toInt()
-                        mViewModel.updateLayer(toUpdate)
+                        mViewModel.updateLayer(adapterPosition, toUpdate)
                         // Responds to when slider's touch event is being stopped
                     }
                 })
@@ -102,7 +102,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                             return@setOnClickListener
                         }
                         toUpdate.visibleOnMap = checked
-                        mViewModel.updateLayer(toUpdate)
+                        mViewModel.updateLayer(adapterPosition, toUpdate)
                     }
                 }
 
@@ -115,7 +115,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     if (!currentLayerItem.activeOnList) return@setOnClickListener
                     setExpanded(binding, !currentLayerItem.expanded)
                     currentLayerItem.expanded = !currentLayerItem.expanded
-                    mViewModel.updateLayer(currentLayerItem)
+                    mViewModel.updateLayer(adapterPosition, currentLayerItem)
                 }
 
                 expandImage.setOnClickListener {
@@ -127,7 +127,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     if (!currentLayerItem.activeOnList) return@setOnClickListener
                     setExpanded(binding, !currentLayerItem.expanded)
                     currentLayerItem.expanded = !currentLayerItem.expanded
-                    mViewModel.updateLayer(currentLayerItem)
+                    mViewModel.updateLayer(adapterPosition, currentLayerItem)
                 }
 
                 goToLayerCenterButton.setOnClickListener {

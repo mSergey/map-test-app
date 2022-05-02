@@ -16,7 +16,9 @@ import io.reactivex.schedulers.Schedulers
 
 class Repository(private val dao: LayersDao = App.database.getDao()) {
 
-    private lateinit var disposable: Disposable
+    private val layersCache: MutableList<LayerItem>? = null
+
+    //private lateinit var disposable: Disposable
     val polygonOptions = PolygonOptions()
         .add(LatLng(55.82344398214789, 37.71777048265712))
         .add(LatLng(55.823955375520974, 37.7159497389675))
@@ -45,7 +47,7 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
 
 
 
-    @SuppressLint("CheckResult")
+    /*@SuppressLint("CheckResult")
     fun observeLayers(callback: (List<LayerItem>) -> Unit): Disposable {
         disposable = dao.getLayersFlowable()
             .subscribeOn(Schedulers.io())
@@ -54,16 +56,20 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
                 callback.invoke(it)
             }
         return disposable
-    }
+    }*/
 
     @SuppressLint("CheckResult")
-    fun getLayers(callback: (List<LayerItem>) -> Unit) {
-        dao.getLayersFlowable()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(Consumer {
-                callback.invoke(it)
-            })
+    fun requestLayers(callback: (List<LayerItem>) -> Unit) {
+        if (layersCache != null) {
+            callback.invoke(layersCache)
+        } else {
+            dao.getLayersFlowable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    callback.invoke(it)
+                }
+        }
     }
 
     fun saveLayer(toSave: LayerItem) {
@@ -79,20 +85,22 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
     }
 
     fun updateAllLayers(layers: List<LayerItem>) {
-        dao.updateAllLayers(layers)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+        layersCache?.let {
+            it.clear()
+            it.addAll(layers)
+        }
     }
 
-    fun updateLayer(toUpdate: LayerItem) {
-        dao.update(toUpdate)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+    fun updateLayer(index: Int, toUpdate: LayerItem) {
+        layersCache?.let {
+            it.removeAt(index)
+            it.add(index, toUpdate)
+        }
     }
 
-    fun stopObserve() {
+    /*fun stopObserve() {
         disposable.dispose()
-    }
+    }*/
 
     fun updateActiveStateAll(active: Boolean) {
         dao.updateActiveStateAll(if (active) 1 else 0)
@@ -100,5 +108,12 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
             .subscribe()
     }
 
+    fun save() {
+        layersCache?.let {
+            dao.updateAllLayers(it)
+                .subscribeOn(Schedulers.io())
+                .subscribe()
+        }
+    }
 
 }

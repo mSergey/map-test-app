@@ -13,4 +13,10 @@
     <string name="scheme">Схема</string>
     <string name="satellite">Спутник</string>
     <string name="hybrid">Гибрид</string>
+
+    <string-array name="settings_names">
+        <item>Слои</item>
+        <item>Подложки</item>
+        <item>Миссии</item>
+    </string-array>
 </resources>

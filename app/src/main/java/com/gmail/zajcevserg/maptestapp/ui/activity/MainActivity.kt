@@ -9,14 +9,22 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.PagerAdapter
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.window.layout.WindowMetricsCalculator
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.ActivityMainBinding
+import com.gmail.zajcevserg.maptestapp.ui.custom.SettingsPageTransformer
+import com.gmail.zajcevserg.maptestapp.ui.fragment.LayersSettingsFragment
+import com.gmail.zajcevserg.maptestapp.ui.fragment.MissionsFragment
+import com.gmail.zajcevserg.maptestapp.ui.fragment.SubstratesFragment
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,24 +42,17 @@ class MainActivity : AppCompatActivity() {
             if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             metrics.bounds.width() else metrics.bounds.height()
 
-        binding.tabLayoutSettings.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.pager.adapter = SettingsPageAdapter()
+        binding.pager.setPageTransformer(SettingsPageTransformer())
+        //binding.pager.isUserInputEnabled = false
 
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                when (tab?.position) {
-                    0 -> findNavController(R.id.settings_nav_host).navigate(R.id.layers_settings)
-                    1 -> findNavController(R.id.settings_nav_host).navigate(R.id.substrates_settings)
-                    2 -> findNavController(R.id.settings_nav_host).navigate(R.id.missions_settings)
-                }
 
-                mViewModel.liveDataCurrentTab.value = tab
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-        })
-
-        binding.tabLayoutSettings.selectTab(mViewModel.liveDataCurrentTab.value)
+        val names = resources.getStringArray(R.array.settings_names)
+        TabLayoutMediator(binding.tabLayoutSettings, binding.pager) { tab, position ->
+            log("pos $position")
+            tab.text = names[position]
+            //mViewModel.liveDataCurrentTab.value = tab
+        }.attach()
 
 
         mViewModel.liveDataMapInteraction.observe(this) {
@@ -61,7 +62,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    }
 
+    private inner class SettingsPageAdapter
+        : FragmentStateAdapter(supportFragmentManager, lifecycle) {
+        override fun getItemCount(): Int {
+            return 3
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                0 -> LayersSettingsFragment()
+                1 -> SubstratesFragment()
+                2 -> MissionsFragment()
+                else -> Fragment()
+            }
+        }
 
     }
 

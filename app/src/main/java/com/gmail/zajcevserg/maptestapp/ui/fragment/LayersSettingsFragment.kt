@@ -21,6 +21,10 @@ import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 
 class LayersSettingsFragment : Fragment() {
 
+    init {
+        log("init")
+    }
+
     private var _binding: FragmentLayersSettingsBinding? = null
     private val binding get() = _binding!!
     private val mViewModel: LayersVM by activityViewModels()

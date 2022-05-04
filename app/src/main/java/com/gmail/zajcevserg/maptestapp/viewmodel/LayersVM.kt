@@ -44,9 +44,9 @@ class LayersVM : ViewModel() {
         MutableLiveData<String>()
     }
 
-    val liveDataCurrentTab by lazy {
+    /*val liveDataCurrentTab by lazy {
         MutableLiveData<TabLayout.Tab>()
-    }
+    }*/
     /*val liveDataPolygonOptions by lazy {
         MutableLiveData<List<PolygonOptions>>()
     }*/

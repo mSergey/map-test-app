@@ -46,7 +46,7 @@ tools:openDrawer="start">
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabMode="auto">
 
-                <com.google.android.material.tabs.TabItem
+                <!--<com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/layers" />
@@ -59,7 +59,7 @@ tools:openDrawer="start">
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/missions" />
+                    android:text="@string/missions" />-->
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -72,7 +72,18 @@ tools:openDrawer="start">
                 app:layout_constraintTop_toBottomOf="@id/tab_layout_settings" />
 
 
-            <fragment
+            <androidx.viewpager2.widget.ViewPager2
+
+                android:id="@+id/pager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider"/>
+
+
+            <!--<fragment
                 android:id="@+id/settings_nav_host"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="0dp"
@@ -82,7 +93,7 @@ tools:openDrawer="start">
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider"
-                app:navGraph="@navigation/settings_navigation" />
+                app:navGraph="@navigation/settings_navigation" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -65,13 +65,12 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     }
                     @SuppressLint("RestrictedApi")
                     override fun onStopTrackingTouch(slider: Slider) {
-                        val toUpdate = try {
-                            currentList[adapterPosition]
+                        val idToUpdate = try {
+                            currentList[adapterPosition].id
                         } catch(exception: IndexOutOfBoundsException) {
                             return
                         }
-                        toUpdate.transparency = slider.value.toInt()
-                        mViewModel.updateLayer(adapterPosition, toUpdate)
+                        mViewModel.transparencyChange(idToUpdate, slider.value.toInt())
                         // Responds to when slider's touch event is being stopped
                     }
                 })
@@ -95,39 +94,37 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
 
 
                 switchActivate.setOnCheckedChangeListener { view, checked ->
+
                     view.setOnClickListener {
-                        val toUpdate = try {
-                            currentList[adapterPosition]
+                        val idToUpdate = try {
+                            currentList[adapterPosition].id
                         } catch(exception: IndexOutOfBoundsException) {
                             return@setOnClickListener
                         }
-                        toUpdate.visibleOnMap = checked
-                        mViewModel.updateLayer(adapterPosition, toUpdate)
+                        mViewModel.activateLayer(idToUpdate, checked)
                     }
                 }
 
                 layerTitle.setOnClickListener {
-                    val currentLayerItem = try {
+                    val layerItem = try {
                         currentList[adapterPosition]
                     } catch(exception: IndexOutOfBoundsException) {
                         return@setOnClickListener
                     }
-                    if (!currentLayerItem.activeOnList) return@setOnClickListener
-                    setExpanded(binding, !currentLayerItem.expanded)
-                    currentLayerItem.expanded = !currentLayerItem.expanded
-                    mViewModel.updateLayer(adapterPosition, currentLayerItem)
+                    if (!layerItem.activeOnList) return@setOnClickListener
+                    //setExpanded(binding, layerItem.expanded.not())
+                    mViewModel.expandLayer(layerItem.id, layerItem.expanded.not())
                 }
 
                 expandImage.setOnClickListener {
-                    val currentLayerItem = try {
+                    val layerItem = try {
                         currentList[adapterPosition]
                     } catch(exception: IndexOutOfBoundsException) {
                         return@setOnClickListener
                     }
-                    if (!currentLayerItem.activeOnList) return@setOnClickListener
-                    setExpanded(binding, !currentLayerItem.expanded)
-                    currentLayerItem.expanded = !currentLayerItem.expanded
-                    mViewModel.updateLayer(adapterPosition, currentLayerItem)
+                    if (!layerItem.activeOnList) return@setOnClickListener
+                    //setExpanded(binding, layerItem.expanded.not())
+                    mViewModel.expandLayer(layerItem.id, layerItem.expanded.not())
                 }
 
                 goToLayerCenterButton.setOnClickListener {

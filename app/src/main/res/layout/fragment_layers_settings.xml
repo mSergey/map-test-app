@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layers_constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,10 +11,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@id/guideline_h"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline_h" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/buttonsBackgroundImageView"
@@ -29,12 +30,12 @@
         android:id="@+id/button_add"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_round_add_24"
         android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_round_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h"
-        app:layout_constraintEnd_toStartOf="@id/guideline_v1"/>
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
 
     <ImageView
         android:id="@+id/button_search_teal_back"
@@ -42,10 +43,9 @@
         android:layout_height="0dp"
         android:background="@color/teal_200"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline_v1"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h"
         app:layout_constraintEnd_toStartOf="@id/guideline_v2"
-        />
+        app:layout_constraintStart_toEndOf="@id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
 
     <ImageButton
         android:id="@+id/button_search"
@@ -54,29 +54,28 @@
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/ic_round_search_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline_v1"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h"
         app:layout_constraintEnd_toStartOf="@id/guideline_v2"
-         />
+        app:layout_constraintStart_toEndOf="@id/guideline_v1"
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
 
 
     <ImageButton
         android:id="@+id/button_del"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/ic_round_delete_24"
         android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_round_delete_24"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/guideline_v3"
         app:layout_constraintStart_toEndOf="@id/guideline_v2"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h"
-        app:layout_constraintEnd_toStartOf="@id/guideline_v3"/>
+        app:layout_constraintTop_toBottomOf="@id/guideline_h" />
 
     <ImageView
         android:id="@+id/undefined_image_view_background"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:visibility="gone"
         android:background="@color/teal_300"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/guideline_h" />

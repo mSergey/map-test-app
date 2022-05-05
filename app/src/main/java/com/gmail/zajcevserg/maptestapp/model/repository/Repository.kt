@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 
 class Repository(private val dao: LayersDao = App.database.getDao()) {
 
-    private val layersCache: MutableList<LayerItem>? = null
+    //private val layersCache: MutableList<LayerItem>? = null
 
     //private lateinit var disposable: Disposable
     val polygonOptions = PolygonOptions()
@@ -60,16 +60,18 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
 
     @SuppressLint("CheckResult")
     fun requestLayers(callback: (List<LayerItem>) -> Unit) {
-        if (layersCache != null) {
-            callback.invoke(layersCache)
-        } else {
-            dao.getLayersFlowable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    callback.invoke(it)
-                }
-        }
+        dao.getLayersFlowable()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                callback.invoke(it)
+            }
+    }
+
+    fun save(layers: List<LayerItem>) {
+        dao.updateAllLayers(layers)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     fun saveLayer(toSave: LayerItem) {
@@ -84,7 +86,7 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
             .subscribe()
     }
 
-    fun updateAllLayers(layers: List<LayerItem>) {
+    /*fun updateAllLayers(layers: List<LayerItem>) {
         layersCache?.let {
             it.clear()
             it.addAll(layers)
@@ -96,24 +98,18 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
             it.removeAt(index)
             it.add(index, toUpdate)
         }
-    }
+    }*/
 
     /*fun stopObserve() {
         disposable.dispose()
     }*/
 
-    fun updateActiveStateAll(active: Boolean) {
+    /*fun updateActiveStateAll(active: Boolean) {
         dao.updateActiveStateAll(if (active) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
-    }
+    }*/
 
-    fun save() {
-        layersCache?.let {
-            dao.updateAllLayers(it)
-                .subscribeOn(Schedulers.io())
-                .subscribe()
-        }
-    }
+
 
 }

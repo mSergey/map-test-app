@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.custom.SwitchStates
 import com.google.android.material.tabs.TabLayout
 
@@ -14,6 +15,7 @@ class LayersVM : ViewModel() {
     private val repository: Repository = Repository()
     private var state: SwitchStates = SwitchStates.STATE_NONE
     private val savedLayers = mutableListOf<LayerItem>()
+    //private val mLayers = mutableListOf<LayerItem>()
     private var needToSaveCurrentLayers = true
     private var modeWithoutUndefineState = false
     //private val layersCache: List<LayerItem> = mutableListOf()
@@ -54,7 +56,6 @@ class LayersVM : ViewModel() {
 
     init {
         repository.requestLayers { layers ->
-
             liveDataLayers.value = layers.sortedBy { it.groupFeature }
             val isAllActive = layers.all { it.visibleOnMap }
             val isAllInactive = layers.none { it.visibleOnMap }
@@ -79,13 +80,36 @@ class LayersVM : ViewModel() {
 
     }
 
+    fun activateLayer(idToUpdate: Int, checked: Boolean) {
+        liveDataLayers.value?.let { list ->
+            val itemToUpdate = list.find { it.id == idToUpdate }
+            val index = list.indexOf(itemToUpdate)
+            list[index].visibleOnMap = checked
+            liveDataLayers.postValue(list)
+        }
+    }
+
+    fun expandLayer(layerId: Int, expanded: Boolean) {
+        liveDataLayers.value?.let { list ->
+            val layerItem = list.find { it.id == layerId }
+            val index = list.indexOf(layerItem)
+            list[index].expanded = expanded
+        }
+    }
+
+    fun transparencyChange(layerId: Int, transparency: Int) {
+        liveDataLayers.value?.let { list ->
+            val layerItem = list.find { it.id == layerId }
+            val index = list.indexOf(layerItem)
+            list[index].transparency = transparency
+        }
+    }
 
     fun getCoordinates() = repository.polygonOptions
 
     override fun onCleared() {
         super.onCleared()
-        //repository.stopObserve()
-        repository.save()
+        liveDataLayers.value?.let { repository.save(it) }
     }
 
     fun onLayerBackgroundButtonClicked(viewId: Int, position: Int) {
@@ -97,14 +121,7 @@ class LayersVM : ViewModel() {
         liveDataBackgroundBtn.value = null
     }
 
-    fun updateLayer(index: Int, layerItem: LayerItem) {
-        needToSaveCurrentLayers = true
-        //log("updateLayer ${layerItem.id}")
-        repository.updateLayer(index, layerItem)
-
-    }
-
-    fun onSwitchControlAllLayersClick(currentSwitchStateLevel: SwitchStates) {
+    /*fun onSwitchControlAllLayersClick(currentSwitchStateLevel: SwitchStates) {
         if (!modeWithoutUndefineState) needToSaveCurrentLayers = false
         //log("currentSwitchStateLevel $currentSwitchStateLevel")
         if (modeWithoutUndefineState) {
@@ -142,6 +159,6 @@ class LayersVM : ViewModel() {
         }
 
         liveDataSwitchControlAllAppearance.value = state
-    }
+    }*/
 
 }

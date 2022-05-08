@@ -59,13 +59,13 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
     }*/
 
     @SuppressLint("CheckResult")
-    fun requestLayers(callback: (List<LayerItem>) -> Unit) {
-        dao.getLayersFlowable()
+    fun requestLayers(callback: (MutableList<LayerItem>) -> Unit) {
+        dao.getLayersSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe(Consumer {
                 callback.invoke(it)
-            }
+            })
     }
 
     fun save(layers: List<LayerItem>) {
@@ -74,7 +74,7 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
             .subscribe()
     }
 
-    fun saveLayer(toSave: LayerItem) {
+    /*fun saveLayer(toSave: LayerItem) {
         dao.insert(toSave)
             .subscribeOn(Schedulers.io())
             .subscribe()
@@ -84,7 +84,7 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
         dao.delete(toDelete)
             .subscribeOn(Schedulers.io())
             .subscribe()
-    }
+    }*/
 
     /*fun updateAllLayers(layers: List<LayerItem>) {
         layersCache?.let {

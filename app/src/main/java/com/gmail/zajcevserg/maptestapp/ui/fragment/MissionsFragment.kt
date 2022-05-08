@@ -14,20 +14,12 @@ class MissionsFragment : Fragment() {
 
     private var _binding: FragmentMissionsBinding? = null
     private val binding get() = _binding!!
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        log("onAttach ${this.hashCode()}")
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMissionsBinding.inflate(inflater, container, false)
         return binding.root
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        log("onCreate ${this.hashCode()}")
     }
 
 }

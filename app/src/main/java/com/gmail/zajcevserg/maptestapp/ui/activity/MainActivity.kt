@@ -22,6 +22,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.window.layout.WindowMetricsCalculator
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.ActivityMainBinding
+import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 
 import com.gmail.zajcevserg.maptestapp.ui.fragment.LayersSettingsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.MissionsFragment
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val metrics = WindowMetricsCalculator.getOrCreate()
@@ -53,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         binding.pager.adapter = mAdapter
         binding.pager.isUserInputEnabled = false
         binding.pager.offscreenPageLimit = 3
-        log("${binding.pager.offscreenPageLimit}")
 
         val names = resources.getStringArray(R.array.settings_names)
         TabLayoutMediator(binding.tabLayoutSettings, binding.pager) { tab, position ->
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun createFragment(position: Int): Fragment {
-            log("createFragment $position")
+
             return when (position) {
                 0 -> LayersSettingsFragment()
                 1 -> SubstratesFragment()

@@ -3,7 +3,6 @@ package com.gmail.zajcevserg.maptestapp.model.database
 
 import androidx.room.*
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Single
 
 
@@ -22,11 +21,11 @@ interface LayersDao {
     @Update
     fun updateAllLayers(layers: List<LayerItem>): Completable
 
-    @Query("SELECT * FROM layers")
-    fun getLayersFlowable(): Flowable<List<LayerItem>>
+    /*@Query("SELECT * FROM layers")
+    fun getLayersFlowable(): Flowable<List<LayerItem>>*/
 
     @Query("SELECT * FROM layers")
-    fun getLayersSingle(): Single<List<LayerItem>>
+    fun getLayersSingle(): Single<MutableList<LayerItem>>
 
     @Query("UPDATE layers SET visible_on_map = :active")
     fun updateActiveStateAll(active: Int): Completable

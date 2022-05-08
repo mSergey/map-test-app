@@ -5,9 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.custom.SwitchStates
-import com.google.android.material.tabs.TabLayout
 
 
 class LayersVM : ViewModel() {
@@ -15,13 +13,14 @@ class LayersVM : ViewModel() {
     private val repository: Repository = Repository()
     private var state: SwitchStates = SwitchStates.STATE_NONE
     private val savedLayers = mutableListOf<LayerItem>()
-    //private val mLayers = mutableListOf<LayerItem>()
+    //private var mLayers = mutableListOf<LayerItem>()
     private var needToSaveCurrentLayers = true
     private var modeWithoutUndefineState = false
+
     //private val layersCache: List<LayerItem> = mutableListOf()
 
     val liveDataLayers by lazy {
-        MutableLiveData<List<LayerItem>>()
+        MutableLiveData<MutableList<LayerItem>>()
     }
 
     val liveDataMapInteraction by lazy {
@@ -34,6 +33,12 @@ class LayersVM : ViewModel() {
 
     val liveDataSwitchControlAllAppearance by lazy {
         MutableLiveData<SwitchStates>()
+    }
+
+    val liveDataSearchMode by lazy {
+        MutableLiveData<Boolean>().apply {
+            value = false
+        }
     }
 
     val liveDataDragMode by lazy {
@@ -56,7 +61,9 @@ class LayersVM : ViewModel() {
 
     init {
         repository.requestLayers { layers ->
-            liveDataLayers.value = layers.sortedBy { it.groupFeature }
+            layers.forEach { it.expanded = false }
+            liveDataLayers.value = layers.sortedBy { it.groupFeature }.toMutableList()
+
             val isAllActive = layers.all { it.visibleOnMap }
             val isAllInactive = layers.none { it.visibleOnMap }
 
@@ -81,19 +88,36 @@ class LayersVM : ViewModel() {
     }
 
     fun activateLayer(idToUpdate: Int, checked: Boolean) {
-        liveDataLayers.value?.let { list ->
-            val itemToUpdate = list.find { it.id == idToUpdate }
-            val index = list.indexOf(itemToUpdate)
-            list[index].visibleOnMap = checked
-            liveDataLayers.postValue(list)
+        liveDataLayers.value?.let { layers ->
+            layers.forEach {
+                if (it.id == idToUpdate) {
+                    it.visibleOnMap = checked
+                }
+            }
         }
     }
 
-    fun expandLayer(layerId: Int, expanded: Boolean) {
-        liveDataLayers.value?.let { list ->
-            val layerItem = list.find { it.id == layerId }
-            val index = list.indexOf(layerItem)
-            list[index].expanded = expanded
+    fun expandLayer(idToUpdate: Int) {
+        liveDataLayers.value?.let { layers ->
+            val updatedLayers = mutableListOf<LayerItem>()
+            updatedLayers.addAll(layers)
+            updatedLayers.forEach {
+                when {
+                    it.id == idToUpdate && it.expanded -> {
+                        it.expanded = false
+                    }
+                    it.id == idToUpdate && !it.expanded -> {
+                        it.expanded = true
+                    }
+                    it.id != idToUpdate && it.expanded -> {
+                        it.expanded = false
+                    }
+                    it.id != idToUpdate && !it.expanded -> {
+                        // nothing to do  ...
+                    }
+                }
+            }
+            liveDataLayers.value = updatedLayers
         }
     }
 

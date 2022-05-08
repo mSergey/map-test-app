@@ -35,31 +35,15 @@ tools:openDrawer="start">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_settings"
-                android:layout_width="0dp"
-                android:background="@color/blue_grey_900"
+                android:layout_width="wrap_content"
                 app:tabIndicatorColor="@color/white"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
+                android:background="@android:color/transparent"
                 app:tabSelectedTextColor="@color/white"
                 app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabMode="auto">
-
-                <!--<com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/layers" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/substrates" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/missions" />-->
 
             </com.google.android.material.tabs.TabLayout>
 

@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.view.forEach
 
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
+import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
@@ -31,13 +33,17 @@ class LayersSettingsFragment : Fragment() {
     private lateinit var mAdapter: LayersAdapter
 
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mAdapter = LayersAdapter(mViewModel, context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLayersSettingsBinding.inflate(inflater, container, false)
-        mAdapter = LayersAdapter(mViewModel, requireContext())
+
         with(binding) {
             layersRecyclerView.adapter = mAdapter
             layersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -53,8 +59,9 @@ class LayersSettingsFragment : Fragment() {
         helper.attachToRecyclerView(binding.layersRecyclerView)
 
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
+            log("${layers[2].id}")
+            log("${layers[2].expanded}")
             mAdapter.submitList(layers)
-            log("switchActivate $layers")
             decorator ?: run {
                 decorator = HeaderItemDecorator(layers, requireContext())
                 binding.layersRecyclerView.addItemDecoration(
@@ -78,21 +85,38 @@ class LayersSettingsFragment : Fragment() {
             binding.undefinedImageView.drawable.level = it.ordinal
         }
 
+
+        binding.buttonDrag.setOnClickListener {
+            mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()
+        }
+
         mViewModel.liveDataDragMode.observe(viewLifecycleOwner) { isDragMode ->
 
-            isDragMode ?: return@observe
-
-
-
+            mAdapter.currentList.forEachIndexed { adapterPosition, _ ->
+                val holder = binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
+                        as? LayersAdapter.LayerItemViewHolder
+                holder?.setDragMode(isDragMode)
+            }
             if (isDragMode) {
                 binding.undefinedImageView.visibility = View.GONE
-                binding.undefinedImageViewBackground.visibility = View.VISIBLE
+                binding.buttonDrag.drawable.level = 1
+
             } else {
+
                 binding.undefinedImageView.visibility = View.VISIBLE
-                binding.undefinedImageViewBackground.visibility = View.GONE
+                binding.buttonDrag.drawable.level = 0
             }
-            binding.layersRecyclerView.adapter?.notifyDataSetChanged()
         }
+
+        binding.buttonSearch.setOnClickListener {
+            mViewModel.liveDataSearchMode.value = mViewModel.liveDataSearchMode.value?.not()
+        }
+
+        mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
+            binding.buttonSearch.drawable.level = if (isSearchMode) 1 else 0
+        }
+
+
 
         val toast = Toast
             .makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
@@ -104,9 +128,7 @@ class LayersSettingsFragment : Fragment() {
 
         }
 
-        binding.buttonDrag.setOnClickListener {
-            mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()
-        }
+
     }
 
     companion object {

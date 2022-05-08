@@ -31,5 +31,4 @@ data class LayerItem(
     @ColumnInfo(name = "group_feature")
     var groupFeature: String = ""
 
-
 )

@@ -62,10 +62,10 @@ class LayersVM : ViewModel() {
     init {
         repository.requestLayers { layers ->
             layers.forEach { it.expanded = false }
-            liveDataLayers.value = layers.sortedBy { it.groupFeature }.toMutableList()
+            liveDataLayers.value = layers.sortedBy { it.isSharedLayer }.toMutableList()
 
-            val isAllActive = layers.all { it.visibleOnMap }
-            val isAllInactive = layers.none { it.visibleOnMap }
+            val isAllActive = layers.all { it.turnedOn }
+            val isAllInactive = layers.none { it.turnedOn }
 
             if (needToSaveCurrentLayers) {
                 savedLayers.clear()
@@ -91,7 +91,7 @@ class LayersVM : ViewModel() {
         liveDataLayers.value?.let { layers ->
             layers.forEach {
                 if (it.id == idToUpdate) {
-                    it.visibleOnMap = checked
+                    it.turnedOn = checked
                 }
             }
         }

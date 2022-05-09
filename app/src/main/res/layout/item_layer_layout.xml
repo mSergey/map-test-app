@@ -71,15 +71,16 @@
         app:layout_constraintGuide_end="56dp" />
 
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/layer_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
+        android:tint="@color/layer_icon_selector"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_outline_place_24" />
+        tools:srcCompat="@drawable/expand_field_center_to_gps_icon" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/middle_divider"
@@ -95,7 +96,7 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/expand_color_selector"
+        android:textColor="@color/layer_title_text_selector"
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/pt_sans"
@@ -122,23 +123,25 @@
         app:srcCompat="@drawable/ic_sleep_24dp" />
 
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/expand_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
+        android:tint="@color/expand_icon_selector"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintEnd_toStartOf="@+id/guideline_v1"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/selector_expand_icon" />
+        app:srcCompat="@drawable/to_expand_selector" />
 
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/drag_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tint="@color/drug_button_for_list_selector"
         android:visibility="invisible"
         android:src="@drawable/drag_button_for_list"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
@@ -240,7 +243,7 @@
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
         app:layout_constraintEnd_toStartOf="@+id/doc_image"
-        app:srcCompat="@drawable/ic_visibility_black_24dp" />
+        app:srcCompat="@drawable/expand_field_zoom_to_fit_icon" />
 
     <ImageButton
         android:id="@+id/doc_image"
@@ -253,7 +256,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
         app:layout_constraintEnd_toStartOf="@+id/go_to_layer_center_button"
-        app:srcCompat="@drawable/ic_outline_description_24" />
+        app:srcCompat="@drawable/expand_field_table_view_icon" />
 
     <ImageButton
         android:id="@+id/go_to_layer_center_button"
@@ -265,7 +268,7 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
         app:layout_constraintEnd_toEndOf="@id/transparency_slider"
-        app:srcCompat="@drawable/ic_round_my_location_24" />
+        app:srcCompat="@drawable/expand_field_center_to_gps_icon" />
 
 
 

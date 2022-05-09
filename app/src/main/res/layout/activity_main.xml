@@ -36,10 +36,11 @@ tools:openDrawer="start">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_settings"
                 android:layout_width="wrap_content"
-                app:tabIndicatorColor="@color/white"
+                app:tabIndicatorColor="@color/tab_selected_color"
                 android:layout_height="56dp"
                 android:background="@android:color/transparent"
-                app:tabSelectedTextColor="@color/white"
+                app:tabSelectedTextColor="@color/tab_selected_color"
+                app:tabTextColor="@color/tab_text_color"
                 app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

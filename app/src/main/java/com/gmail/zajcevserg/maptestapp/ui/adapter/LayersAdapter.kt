@@ -2,7 +2,6 @@ package com.gmail.zajcevserg.maptestapp.ui.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.graphics.Typeface
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
@@ -11,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnLayout
 import androidx.core.view.forEach
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -125,7 +122,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     val itemToCollapse = currentList.find {
                         it.id != idToUpdate && it.expanded
                     }
-                    log("$itemToCollapse")
+
                     val indexToCollapse = currentList.indexOf(itemToCollapse)
                     notifyItemChanged(indexToCollapse)
                     notifyItemChanged(adapterPosition)
@@ -146,66 +143,45 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
 
         fun bindView(position: Int) {
 
-
             with (binding) {
-                val layerItem = currentList[position]
+                val layerItemModel = currentList[position]
                 motionLayer.translationX = 0f
                 backgroundButtonsLayer.scaleX = 0f
                 backgroundButtonsLayer.scaleY = 0f
 
-                // main icon
+                //icon
                 val mainIconId =
                     context.resources.getIdentifier(
-                        layerItem.mainIconResName, "drawable", context.packageName)
-                layerIcon.setImageResource(R.drawable.ic_outline_folder_24)
+                        layerItemModel.layerIconResName, "drawable", context.packageName)
+                layerIcon.setImageResource(mainIconId)
+                layerIcon.isActivated = layerItemModel.expanded
+
 
                 //title
-                layerTitle.text = layerItem.title
+                layerTitle.text = layerItemModel.title
+                layerTitle.isActivated = layerItemModel.expanded
+                layerTitle.typeface =
+                    if (layerItemModel.expanded) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
 
                 //sleep icon
-                binding.sleepImage.visibility = if (!layerItem.activeOnList) View.VISIBLE else View.GONE
+                binding.sleepImage.visibility = if (!layerItemModel.enabled) View.VISIBLE else View.GONE
 
 
-                //set active/inactive/expanded state for layer
-                when {
-                    !layerItem.activeOnList -> {
-                        expandImage.isSelected = false
-                        layerIcon.isSelected = false
-                        bottomPanelGroup.visibility = View.GONE
-                        layerTitle.typeface = Typeface.DEFAULT
+                //expanded state
+                bottomPanelGroup.visibility =
+                    if (layerItemModel.expanded) View.VISIBLE else View.GONE
+                expandImage.isActivated = layerItemModel.expanded
 
-                        //val color = ResourcesCompat.getColor(context.resources, R.color.light_grey_transparent, context.theme)
-                        //layerTitle.setTextColor(color)
-                    }
-                    layerItem.expanded -> {
-                        expandImage.isSelected = true
-                        layerIcon.isActivated = true
-                        bottomPanelGroup.visibility = View.VISIBLE
-                        layerTitle.typeface = Typeface.DEFAULT_BOLD
-                        layerTitle.isActivated = true
-                        //val color = ResourcesCompat.getColor(context.resources, R.color.teal_200, context.theme)
-                        //layerTitle.setTextColor(color)
-                    }
-
-                    !layerItem.expanded -> {
-                        expandImage.isSelected = false
-                        layerIcon.isActivated = false
-                        bottomPanelGroup.visibility = View.GONE
-                        layerTitle.isActivated = false
-                        //layerTitle.typeface = Typeface.DEFAULT
-                        //layerTitle.setTextColor(Color.LTGRAY)
-                    }
-
-                }
+                //disabled
                 motionLayout.forEach {
-                    it.isEnabled = layerItem.activeOnList
+                    it.isEnabled = layerItemModel.enabled
                 }
 
                 //switch
-                switchActivate.isChecked = layerItem.visibleOnMap
+                switchActivate.isChecked = layerItemModel.turnedOn
 
                 //slider
-                transparencySlider.value = layerItem.transparency.toFloat()
+                transparencySlider.value = layerItemModel.transparency.toFloat()
 
                 setDragMode(mViewModel.liveDataDragMode.value!!)
 
@@ -213,13 +189,12 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
         }
 
         fun isLayerEnabled(): Boolean {
-            return currentList[adapterPosition].activeOnList
+            return currentList[adapterPosition].enabled
         }
 
 
-
         fun setDragMode(isDragMode: Boolean) {
-            //log("isDragMode $isDragMode")
+
             if (isDragMode) {
                 binding.switchActivate.visibility = View.INVISIBLE
                 binding.dragImageView.visibility = View.VISIBLE
@@ -230,7 +205,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
         }
 
 
-        private fun setExpanded(binding: ItemLayerLayoutBinding, expanded: Boolean) {
+        /*private fun setExpanded(binding: ItemLayerLayoutBinding, expanded: Boolean) {
 
             with (binding) {
 
@@ -249,7 +224,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     layerTitle.setTextColor(Color.LTGRAY)
                 }
             }
-        }
+        }*/
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LayerItemViewHolder {

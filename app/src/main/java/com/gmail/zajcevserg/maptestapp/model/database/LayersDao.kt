@@ -27,7 +27,7 @@ interface LayersDao {
     @Query("SELECT * FROM layers")
     fun getLayersSingle(): Single<MutableList<LayerItem>>
 
-    @Query("UPDATE layers SET visible_on_map = :active")
+    @Query("UPDATE layers SET turned_on = :active")
     fun updateActiveStateAll(active: Int): Completable
 
 

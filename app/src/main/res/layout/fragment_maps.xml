@@ -24,8 +24,8 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
-        app:si_background_color="@color/teal_300"
-        app:si_image_src="@drawable/ic_round_map_24"
+        app:si_background_color="@color/text_expanded_color"
+        app:si_image_src="@drawable/layer_icon_waypoint"
         app:si_text="Map is loading ..."
         tools:visibility="gone" />
 

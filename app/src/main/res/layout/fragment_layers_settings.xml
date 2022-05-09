@@ -79,7 +79,7 @@
         android:layout_height="48dp"
         android:elevation="8dp"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/drag_button_level_list"
+        android:src="@drawable/drag_button_for_panel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/undefined_image_view" />
 

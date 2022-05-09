@@ -1,38 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Panels colors-->
-
     <color name="expand_field_color">#4D566F</color>
     <color name="surface_color">#383F55</color>
 
     <!--Slider colors-->
-
     <color name="slider_thumb_color">#FAFAFA</color>
     <color name="slider_track_active_color">#59BD87</color>
     <color name="slider_track_inactive_color">#C4C4C4</color>
 
 
     <!--Switch colors-->
-
     <color name="disabled_switch_thumb_color">#999FAA</color>
     <color name="checked_switch_thumb_color">#59BD87</color>
     <color name="unchecked_switch_thumb_color">#FAFAFA</color>
-
     <color name="disabled_switch_track_color">#5B6476</color>
     <color name="checked_switch_track_color">#8059BD87</color>
     <color name="unchecked_switch_track_color">#61FFFFFF</color>
 
 
     <!--Layer icon colors-->
-    <color name="icon_normal_color">#FFFFFF</color>
-    <color name="icon_disabled_color">#9C9FAA</color>
-    <color name="icon_expanded_color">#59BD87</color>
+    <color name="layer_icon_normal_color">#FFFFFF</color>
+    <color name="layer_icon_disabled_color">#9C9FAA</color>
+    <color name="layer_icon_expanded_color">#59BD87</color>
 
 
     <!--Layer title text colors-->
     <color name="text_normal_color">#FFFFFF</color>
     <color name="text_disabled_color">#9C9FAA</color>
     <color name="text_expanded_color">#67E4A1</color>
+
+    <!--Drug button for panel colors-->
+    <color name="drag_bg_activate_color">#59BD87</color>
+    <color name="drag_icon_activate_color">#FFFFFF</color>
+    <color name="drag_bg_inactivate_color">#00000000</color>
+    <color name="drag_icon_inactivate_color">#DBDDE2</color>
+
+
+    <!--Drug button for list colors-->
+    <color name="drag_icon_normal_color">#969BAA</color>
+    <color name="drag_icon_disabled_color">#676D80</color>
+
+    <!--Expand icon colors-->
+    <color name="expand_icon_normal_color">#969BAA</color>
+    <color name="expand_icon_disabled_color">#676D80</color>
+
+
+    <!--Sleep icon colors-->
+    <color name="sleep_icon_normal_color">#969BAA</color>
+    <color name="sleep_icon_disabled_color">#676D80</color>
+
+    <!--Tab layout colors-->
+    <color name="tab_selected_color">#FFFFFF</color>
+    <color name="tab_text_color">#9C9FAA</color>
+
+
+
 
 
 </resources>

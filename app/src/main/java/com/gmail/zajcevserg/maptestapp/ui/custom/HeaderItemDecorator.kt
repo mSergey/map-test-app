@@ -20,10 +20,10 @@ import kotlin.collections.set
 class HeaderItemDecorator(layers: List<LayerItem>, val context: Context,
 ) : RecyclerView.ItemDecoration() {
 
-    private val headersSchema =
+    /*private val headersSchema =
         layers.foldIndexed(mutableMapOf<String, Int>()) { index, acc, layer ->
-            if (!acc.keys.contains(layer.groupFeature)) {
-                acc[layer.groupFeature] = index
+            if (!acc.keys.contains(layer.isSharedLayer)) {
+                acc[layer.isSharedLayer] = index
             }
             acc
         }
@@ -41,7 +41,7 @@ class HeaderItemDecorator(layers: List<LayerItem>, val context: Context,
 
     private val rectPaint = Paint().apply {
         color = ResourcesCompat.getColor(context
-            .resources, R.color.blue_grey_900, context.theme)
+            .resources, R.color.surface_color, context.theme)
 
     }
 
@@ -98,6 +98,6 @@ class HeaderItemDecorator(layers: List<LayerItem>, val context: Context,
 
     private fun convertSpToPixel(sp: Int): Float {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
-    }
+    }*/
 
 }

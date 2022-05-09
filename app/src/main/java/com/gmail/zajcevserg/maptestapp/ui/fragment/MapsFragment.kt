@@ -33,7 +33,7 @@ class MapsFragment : Fragment() {
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) {
             with(googleMap) {
                 clear()
-                if (it.first().visibleOnMap) {
+                if (it.first().turnedOn) {
                     val polygon = addPolygon(mViewModel.getCoordinates())
                     val alpha = 255 * it.first().transparency / 100
                     val color = Color.argb(alpha, 255, 0, 0)

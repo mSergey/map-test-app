@@ -59,10 +59,9 @@ class LayersSettingsFragment : Fragment() {
         helper.attachToRecyclerView(binding.layersRecyclerView)
 
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
-            log("${layers[2].id}")
-            log("${layers[2].expanded}")
+
             mAdapter.submitList(layers)
-            decorator ?: run {
+            /*decorator ?: run {
                 decorator = HeaderItemDecorator(layers, requireContext())
                 binding.layersRecyclerView.addItemDecoration(
                     HeaderItemDecorator(
@@ -70,7 +69,7 @@ class LayersSettingsFragment : Fragment() {
                         requireContext()
                     )
                 )
-            }
+            }*/
 
             binding.undefinedImageView.setOnClickListener {
                 it as ImageView

@@ -14,7 +14,7 @@
          Customize your theme here. -->
 
         <!--<item name="colorSurface">@color/dark_blue_20</item>-->
-        <item name="colorSurface">@color/dark_blue_20</item>
+        <item name="colorSurface">@color/surface_color</item>
 
 
     </style>

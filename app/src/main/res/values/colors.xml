@@ -1,43 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_300">#FF4db6ac</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="teal_800">#FF00695c</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="red">#FFFF0000</color>
-    <color name="light_grey_transparent">#80CCCCCC</color>
-    <color name="dark_grey">#FF303030</color>
-    <color name="blue_grey_600">#546e7a</color>
-    <color name="blue_grey_700">#455a64</color>
-    <color name="blue_grey_800">#37474f</color>
-    <color name="blue_grey_900">#263238</color>
+    <!--Panels colors-->
+
+    <color name="expand_field_color">#4D566F</color>
+    <color name="surface_color">#383F55</color>
+
+    <!--Slider colors-->
+
+    <color name="slider_thumb_color">#FAFAFA</color>
+    <color name="slider_track_active_color">#59BD87</color>
+    <color name="slider_track_inactive_color">#C4C4C4</color>
 
 
+    <!--Switch colors-->
+
+    <color name="disabled_switch_thumb_color">#999FAA</color>
+    <color name="checked_switch_thumb_color">#59BD87</color>
+    <color name="unchecked_switch_thumb_color">#FAFAFA</color>
+
+    <color name="disabled_switch_track_color">#5B6476</color>
+    <color name="checked_switch_track_color">#8059BD87</color>
+    <color name="unchecked_switch_track_color">#61FFFFFF</color>
 
 
+    <!--Layer icon colors-->
+    <color name="icon_normal_color">#FFFFFF</color>
+    <color name="icon_disabled_color">#9C9FAA</color>
+    <color name="icon_expanded_color">#59BD87</color>
 
 
-
-
-    <color name="dark_blue_15">#4D566F</color>
-    <color name="dark_blue_20">#252D45</color>
-    <color name="green_35">#59BD87</color>
-    <color name="green_35_opacity_50">#8059BD87</color>
-    <color name="white_38">#61FFFFFF</color>
-    <color name="inactive_switch_thumb">#999FAA</color>
-    <color name="inactive_switch_track">#5B6476</color>
-    <color name="white_250">#FAFAFA</color>
-    <color name="black_33">#33000000</color>
-
-
-
-
-
+    <!--Layer title text colors-->
+    <color name="text_normal_color">#FFFFFF</color>
+    <color name="text_disabled_color">#9C9FAA</color>
+    <color name="text_expanded_color">#67E4A1</color>
 
 
 </resources>

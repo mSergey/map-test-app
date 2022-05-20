@@ -9,7 +9,7 @@
     <string name="transparency">Прозрачность: %1$d%%</string>
     <string name="sync_date">Синхр.: %1$s</string>
     <string name="elements_num">Эл-тов: 23</string>
-    <string name="zoom_range">Зум: 16-18</string>
+    <string name="zoom_range">Зум: 16–18</string>
     <string name="scheme">Схема</string>
     <string name="satellite">Спутник</string>
     <string name="hybrid">Гибрид</string>
@@ -21,4 +21,6 @@
     </string-array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="shared_layers">Общие слои</string>
+    <string name="_11_03_2022">11.03.2022</string>
 </resources>

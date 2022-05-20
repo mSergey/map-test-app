@@ -5,11 +5,11 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
-
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.doOnLayout
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.DiffUtil
@@ -18,17 +18,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.ItemLayerLayoutBinding
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
+import com.gmail.zajcevserg.maptestapp.ui.custom.OnItemMoveListener
+import com.gmail.zajcevserg.maptestapp.ui.custom.OnStartDragListener
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-
 import com.google.android.material.slider.Slider
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class LayersAdapter(val mViewModel: LayersVM, val context: Context
-) : ListAdapter<LayerItem, LayersAdapter.LayerItemViewHolder>(LayersDiff) {
+class LayersAdapter(val mViewModel: LayersVM,
+                    val context: Context,
+                    val startDragListener: OnStartDragListener
+) : ListAdapter<LayerItem, LayersAdapter.LayerItemViewHolder>(LayersDiff),
+    OnItemMoveListener {
 
     companion object LayersDiff : DiffUtil.ItemCallback<LayerItem>() {
 
@@ -48,8 +51,6 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
     }
 
 
-
-
     @SuppressLint("ClickableViewAccessibility")
     inner class LayerItemViewHolder(
         val binding: ItemLayerLayoutBinding
@@ -65,6 +66,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
         init {
 
             with(binding) {
+
 
                 transparencySlider.setOnTouchListener { view, motionEvent ->
                     view.parent.requestDisallowInterceptTouchEvent(true)
@@ -109,7 +111,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                     } catch(exception: IndexOutOfBoundsException) {
                         return@setOnCheckedChangeListener
                     }
-                    mViewModel.activateLayer(idToUpdate, checked)
+                    mViewModel.turnOn(idToUpdate, checked)
                 }
 
                 val mListener = View.OnClickListener {
@@ -130,7 +132,6 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
 
                 }
 
-
                 layerTitle.setOnClickListener(mListener)
                 expandImage.setOnClickListener(mListener)
 
@@ -150,12 +151,25 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                 backgroundButtonsLayer.scaleY = 0f
 
                 //icon
-                val mainIconId =
-                    context.resources.getIdentifier(
-                        layerItemModel.layerIconResName, "drawable", context.packageName)
-                layerIcon.setImageResource(mainIconId)
-                layerIcon.isActivated = layerItemModel.expanded
+                setLayerIcon(layerItemModel, layerIcon)
 
+                binding.bgTop.isSelected = layerItemModel.selectedToRemove
+
+                //long click to select
+                binding.layerIcon.setOnLongClickListener {
+                    setSelectionToRemove(layerItemModel, layerIcon)
+                    true
+                }
+
+                binding.layerIcon.setOnClickListener {
+
+                    val isSelectionMode =
+                        mViewModel.liveDataLayers.value?.any {
+                        it.selectedToRemove
+                    }!!
+
+                    if (isSelectionMode) setSelectionToRemove(layerItemModel, layerIcon)
+                }
 
                 //title
                 layerTitle.text = layerItemModel.title
@@ -185,16 +199,47 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
 
                 setDragMode(mViewModel.liveDataDragMode.value!!)
 
+                dragImageView.setOnTouchListener { view, motionEvent ->
+                    if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN
+                        && mViewModel.liveDataDragMode.value!!) {
+                        startDragListener.onStartDrag(this@LayerItemViewHolder)
+                    }
+                    false
+                }
+
+
             }
+        }
+
+        private fun setSelectionToRemove(itemModel: LayerItem,
+                                         imageView: AppCompatImageView) {
+            //itemModel.selectedToRemove = !itemModel.selectedToRemove
+            mViewModel.liveDataLayers.value?.forEach {
+                if (it.id == itemModel.id) it.selectedToRemove = !it.selectedToRemove
+            }
+            setLayerIcon(itemModel, imageView)
+            binding.bgTop.isSelected = !binding.bgTop.isSelected
+        }
+
+        private fun setLayerIcon(itemModel: LayerItem, imageView: AppCompatImageView) {
+            val mainIconId =
+                if (!itemModel.selectedToRemove) {
+                    context.resources.getIdentifier(
+                        itemModel.layerIconResName,
+                        "drawable",
+                        context.packageName
+                    )
+                } else R.drawable.check_circle
+            imageView.setImageResource(mainIconId)
+            imageView.isActivated = itemModel.expanded
         }
 
         fun isLayerEnabled(): Boolean {
             return currentList[adapterPosition].enabled
         }
 
-
         fun setDragMode(isDragMode: Boolean) {
-
+            //log("pos $adapterPosition $isDragMode")
             if (isDragMode) {
                 binding.switchActivate.visibility = View.INVISIBLE
                 binding.dragImageView.visibility = View.VISIBLE
@@ -203,31 +248,14 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
                 binding.dragImageView.visibility = View.INVISIBLE
             }
         }
+    }
 
-
-        /*private fun setExpanded(binding: ItemLayerLayoutBinding, expanded: Boolean) {
-
-            with (binding) {
-
-                if (expanded) {
-                    expandImage.isSelected = true
-                    layerIcon.isSelected = true
-                    bottomPanelGroup.visibility = View.VISIBLE
-                    layerTitle.typeface = Typeface.DEFAULT_BOLD
-                    val color = ResourcesCompat.getColor(context.resources, R.color.teal_200, context.theme)
-                    layerTitle.setTextColor(color)
-                } else {
-                    expandImage.isSelected = false
-                    layerIcon.isSelected = false
-                    bottomPanelGroup.visibility = View.GONE
-                    layerTitle.typeface = Typeface.DEFAULT
-                    layerTitle.setTextColor(Color.LTGRAY)
-                }
-            }
-        }*/
+    override fun onViewAttachedToWindow(holder: LayerItemViewHolder) {
+        holder.setDragMode(mViewModel.liveDataDragMode.value!!)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LayerItemViewHolder {
+
         val inflater = LayoutInflater.from(parent.context)
         val binding: ItemLayerLayoutBinding =
             ItemLayerLayoutBinding.inflate(inflater, parent, false)
@@ -235,7 +263,7 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
     }
 
     override fun onBindViewHolder(holder: LayerItemViewHolder, position: Int) {
-        log("onBindViewHolder $position")
+        //log("onBindViewHolder $position")
         holder.bindView(position)
 
     }
@@ -243,4 +271,16 @@ class LayersAdapter(val mViewModel: LayersVM, val context: Context
     override fun getItemCount(): Int {
         return currentList.size
     }
+
+
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        val layers = mViewModel.liveDataLayers.value!!
+        Collections.swap(layers, fromPosition, toPosition)
+        mViewModel.liveDataLayers.value = layers
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+
 }

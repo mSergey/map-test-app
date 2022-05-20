@@ -32,30 +32,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
-    <!--<ImageView
-        android:id="@+id/background_top"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@color/blue_grey_900"/>
-
-    <ImageView
-        android:id="@+id/background_bottom"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline_h1"
-        android:src="@color/blue_grey_900"/>-->
-
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_h1"
         android:layout_width="match_parent"
@@ -70,6 +46,16 @@
         android:orientation="vertical"
         app:layout_constraintGuide_end="56dp" />
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/bg_top"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/bg_layer_item" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/layer_icon"
@@ -284,7 +270,7 @@
         android:id="@+id/motion_layer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="guideline_h1, guideline_v1, layer_icon, middle_divider, layer_title, sleep_image, expand_image, drag_image_view, switch_activate, expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button "
+        app:constraint_referenced_ids="guideline_h1, guideline_v1, bg_top, layer_icon, middle_divider, layer_title, sleep_image, expand_image, drag_image_view, switch_activate, expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

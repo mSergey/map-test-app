@@ -2,6 +2,8 @@
 <resources>
     <!--Panels colors-->
     <color name="expand_field_color">#4D566F</color>
+    <color name="bg_item_layer_color">#4D566F</color>
+    <color name="bg_item_layer_color_selected">#687495</color>
     <color name="surface_color">#383F55</color>
 
     <!--Slider colors-->
@@ -33,7 +35,6 @@
     <!--Drug button for panel colors-->
     <color name="drag_bg_activate_color">#59BD87</color>
     <color name="drag_icon_activate_color">#FFFFFF</color>
-    <color name="drag_bg_inactivate_color">#00000000</color>
     <color name="drag_icon_inactivate_color">#DBDDE2</color>
 
 

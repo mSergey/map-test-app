@@ -6,19 +6,21 @@ import com.gmail.zajcevserg.maptestapp.model.application.App
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 
 import com.gmail.zajcevserg.maptestapp.model.database.LayersDao
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
+import io.reactivex.Observer
+import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
+import io.reactivex.internal.observers.SubscriberCompletableObserver
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 
 class Repository(private val dao: LayersDao = App.database.getDao()) {
 
-    //private val layersCache: MutableList<LayerItem>? = null
-
-    //private lateinit var disposable: Disposable
     val polygonOptions = PolygonOptions()
         .add(LatLng(55.82344398214789, 37.71777048265712))
         .add(LatLng(55.823955375520974, 37.7159497389675))
@@ -45,19 +47,6 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
         .strokeColor(Color.RED)
         .fillColor(Color.RED)
 
-
-
-    /*@SuppressLint("CheckResult")
-    fun observeLayers(callback: (List<LayerItem>) -> Unit): Disposable {
-        disposable = dao.getLayersFlowable()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                callback.invoke(it)
-            }
-        return disposable
-    }*/
-
     @SuppressLint("CheckResult")
     fun requestLayers(callback: (MutableList<LayerItem>) -> Unit) {
         dao.getLayersSingle()
@@ -68,48 +57,36 @@ class Repository(private val dao: LayersDao = App.database.getDao()) {
             })
     }
 
-    fun save(layers: List<LayerItem>) {
-        dao.updateAllLayers(layers)
+
+    fun updateLayer(id: Int, checked: Boolean) {
+        dao.updateChecked(id, if (checked) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-    /*fun saveLayer(toSave: LayerItem) {
-        dao.insert(toSave)
+    fun updateLayer(id: Int, transparency: Int) {
+        dao.updateTransparency(id, transparency)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-    fun deleteLayer(toDelete: LayerItem) {
-        dao.delete(toDelete)
+    fun deleteLayers(list: List<Int>) {
+        dao.delete(list.toIntArray())
             .subscribeOn(Schedulers.io())
-            .subscribe()
-    }*/
+            .subscribe(object : SingleObserver<Int> {
+                override fun onSubscribe(d: Disposable) {
+                    log("onSubscribe")
+                }
 
-    /*fun updateAllLayers(layers: List<LayerItem>) {
-        layersCache?.let {
-            it.clear()
-            it.addAll(layers)
-        }
+                override fun onSuccess(t: Int) {
+                    log("onSuccess ${t}")
+                }
+
+                override fun onError(e: Throwable) {
+                    log("onSuccess $e")
+                }
+
+            })
     }
-
-    fun updateLayer(index: Int, toUpdate: LayerItem) {
-        layersCache?.let {
-            it.removeAt(index)
-            it.add(index, toUpdate)
-        }
-    }*/
-
-    /*fun stopObserve() {
-        disposable.dispose()
-    }*/
-
-    /*fun updateActiveStateAll(active: Boolean) {
-        dao.updateActiveStateAll(if (active) 1 else 0)
-            .subscribeOn(Schedulers.io())
-            .subscribe()
-    }*/
-
-
 
 }

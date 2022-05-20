@@ -47,7 +47,7 @@
         android:layout_height="48dp"
         android:elevation="8dp"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/search_level_list"
+        android:src="@drawable/search_button_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_add" />
 
@@ -62,16 +62,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_search" />
 
-    <!--<ImageView
-        android:id="@+id/undefined_image_view_background"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
-        android:elevation="2dp"
-        android:background="@color/teal_300"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />-->
-
 
     <ImageButton
         android:id="@+id/button_drag"
@@ -79,7 +69,7 @@
         android:layout_height="48dp"
         android:elevation="8dp"
         android:background="?attr/selectableItemBackground"
-        android:src="@drawable/drag_button_for_panel"
+        android:src="@drawable/drag_button_for_panel_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/undefined_image_view" />
 
@@ -95,35 +85,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottom_background_image_view" />
-
-    <!--<androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_h"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="48dp" />
-
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_v1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="48dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_v2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="96dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_v3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="144dp" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

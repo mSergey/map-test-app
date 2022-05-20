@@ -31,6 +31,8 @@ data class LayerItem(
     @ColumnInfo(name = "is_shared_layer")
     var isSharedLayer: Boolean = false,
     @Ignore
-    var expanded: Boolean = false
+    var expanded: Boolean = false,
+    @Ignore
+    var selectedToRemove: Boolean = false
 
 )

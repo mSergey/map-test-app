@@ -1,23 +1,12 @@
 package com.gmail.zajcevserg.maptestapp.ui.custom
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.util.DisplayMetrics
-import android.util.TypedValue
-import android.view.View
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
-import com.gmail.zajcevserg.maptestapp.R
-
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
-import kotlin.collections.set
 
 
-class HeaderItemDecorator(layers: List<LayerItem>, val context: Context,
+class HeaderItemDecorator(
+    layers: List<LayerItem>, val context: Context,
 ) : RecyclerView.ItemDecoration() {
 
     /*private val headersSchema =

@@ -17,6 +17,7 @@ import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.RecyclerView
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 
@@ -28,8 +29,10 @@ import kotlin.math.abs
 
 @SuppressLint("ClickableViewAccessibility")
 class SwipeCallback(
-    private val mRecyclerView: RecyclerView, private val mViewModel: LayersVM
-) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+    private val mRecyclerView: RecyclerView,
+    private val mViewModel: LayersVM,
+    private val onItemMoveListener: OnItemMoveListener
+) : ItemTouchHelper.SimpleCallback(0, 0) {
 
     private var threshold: Float = 0f
     private var mFrom = 0f
@@ -61,6 +64,13 @@ class SwipeCallback(
         }
     }
 
+    override fun isLongPressDragEnabled(): Boolean {
+        return false
+    }
+
+    override fun isItemViewSwipeEnabled(): Boolean {
+        return mViewModel.liveDataDragMode.value!!.not()
+    }
 
     override fun onChildDraw(
         c: Canvas,
@@ -72,19 +82,24 @@ class SwipeCallback(
         isCurrentlyActive: Boolean
     ) {
         viewHolder as LayersAdapter.LayerItemViewHolder
-
-        if (!viewHolder.isLayerEnabled()) return
-        subject.onNext(dX)
-        val viewToAnimate = viewHolder.binding.motionLayer
-        if (isCurrentlyActive) {
-            viewToAnimate.translationX = dX
-            if (dX == 0f) {
-                swiped.forEach {
-                    swipeClose(it, -threshold)
+        when (actionState) {
+            ItemTouchHelper.ACTION_STATE_SWIPE -> {
+                if (!viewHolder.isLayerEnabled()) return
+                subject.onNext(dX)
+                val viewToAnimate = viewHolder.binding.motionLayer
+                if (isCurrentlyActive) {
+                    viewToAnimate.translationX = dX
+                    if (dX == 0f) {
+                        swiped.forEach {
+                            swipeClose(it, -threshold)
+                        }
+                    }
+                } else if (dX == 0f) {
+                    swipeOpen(viewHolder, mFrom)
                 }
             }
-        } else if (dX == 0f) {
-            swipeOpen(viewHolder, mFrom)
+            else -> super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+
         }
     }
 
@@ -170,7 +185,6 @@ class SwipeCallback(
                                             false
                                         }
                                     }
-
                                 }
 
                                 MotionEvent.ACTION_UP -> {
@@ -186,6 +200,34 @@ class SwipeCallback(
                 start()
             }
     }
+
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
+        val isDragMode = mViewModel.liveDataDragMode.value!!
+        return if (isDragMode) {
+            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+            val swipeFlags = 0
+            makeMovementFlags(dragFlags, swipeFlags)
+        } else {
+            val dragFlags = 0
+            val swipeFlags = ItemTouchHelper.START
+            makeMovementFlags(dragFlags, swipeFlags)
+        }
+    }
+
+    override fun getAnimationDuration(
+        recyclerView: RecyclerView,
+        animationType: Int,
+        animateDx: Float,
+        animateDy: Float
+    ): Long {
+        return if (animationType == ItemTouchHelper.ANIMATION_TYPE_SWIPE_CANCEL) 0 else
+            super.getAnimationDuration(recyclerView, animationType, animateDx, animateDy)
+    }
+
+
     private fun swipeClose(viewHolder: LayersAdapter.LayerItemViewHolder, from: Float) {
         val mDuration = 120 * abs(threshold - from) / threshold
         val viewToAnimate = viewHolder.binding.motionLayer
@@ -229,12 +271,7 @@ class SwipeCallback(
             dp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
         }
     }
-    override fun getAnimationDuration(
-        recyclerView: RecyclerView,
-        animationType: Int,
-        animateDx: Float,
-        animateDy: Float
-    ): Long = 0
+
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder) = Float.MAX_VALUE
     override fun getSwipeEscapeVelocity(defaultValue: Float) = Float.MAX_VALUE
     override fun getSwipeVelocityThreshold(defaultValue: Float) = Float.MAX_VALUE
@@ -244,6 +281,8 @@ class SwipeCallback(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
-    ) = false
+    ): Boolean {
+        return onItemMoveListener.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+    }
 
 }

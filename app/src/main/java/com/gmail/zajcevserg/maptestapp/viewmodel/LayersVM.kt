@@ -5,19 +5,17 @@ import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
-import com.gmail.zajcevserg.maptestapp.ui.custom.SwitchStates
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
+
 
 
 class LayersVM : ViewModel() {
 
     private val repository: Repository = Repository()
-    private var state: SwitchStates = SwitchStates.STATE_NONE
+    //private var state: SwitchStates = SwitchStates.STATE_NONE
     private val savedLayers = mutableListOf<LayerItem>()
-    //private var mLayers = mutableListOf<LayerItem>()
     private var needToSaveCurrentLayers = true
     private var modeWithoutUndefineState = false
-
-    //private val layersCache: List<LayerItem> = mutableListOf()
 
     val liveDataLayers by lazy {
         MutableLiveData<MutableList<LayerItem>>()
@@ -31,9 +29,9 @@ class LayersVM : ViewModel() {
         MutableLiveData<Int>()
     }
 
-    val liveDataSwitchControlAllAppearance by lazy {
+    /*val liveDataSwitchControlAllAppearance by lazy {
         MutableLiveData<SwitchStates>()
-    }
+    }*/
 
     val liveDataSearchMode by lazy {
         MutableLiveData<Boolean>().apply {
@@ -51,18 +49,13 @@ class LayersVM : ViewModel() {
         MutableLiveData<String>()
     }
 
-    /*val liveDataCurrentTab by lazy {
-        MutableLiveData<TabLayout.Tab>()
-    }*/
-    /*val liveDataPolygonOptions by lazy {
-        MutableLiveData<List<PolygonOptions>>()
-    }*/
-
-
     init {
         repository.requestLayers { layers ->
-            layers.forEach { it.expanded = false }
-            liveDataLayers.value = layers.sortedBy { it.isSharedLayer }.toMutableList()
+
+
+            liveDataLayers.value = layers
+                .sortedBy { !it.isSharedLayer }
+                .toMutableList()
 
             val isAllActive = layers.all { it.turnedOn }
             val isAllInactive = layers.none { it.turnedOn }
@@ -74,26 +67,35 @@ class LayersVM : ViewModel() {
 
             modeWithoutUndefineState = needToSaveCurrentLayers && (isAllActive || isAllInactive)
 
-            state = when {
+            /*state = when {
                 isAllActive -> SwitchStates.STATE_ALL_ACTIVE
                 isAllInactive -> SwitchStates.STATE_ALL_INACTIVE
                 else -> SwitchStates.STATE_UNDEFINED
             }
-
-            liveDataSwitchControlAllAppearance.value = state
-
-
+            liveDataSwitchControlAllAppearance.value = state*/
         }
 
     }
 
-    fun activateLayer(idToUpdate: Int, checked: Boolean) {
+    fun turnOn(idToUpdate: Int, checked: Boolean) {
+        repository.updateLayer(idToUpdate, checked)
         liveDataLayers.value?.let { layers ->
             layers.forEach {
                 if (it.id == idToUpdate) {
                     it.turnedOn = checked
                 }
             }
+        }
+    }
+
+    fun removeLayers() {
+        val idsToRemove =
+            liveDataLayers.value?.filter { it.selectedToRemove }?.map { it.id }
+
+        if (idsToRemove != null && idsToRemove.isNotEmpty()) {
+            repository.deleteLayers(idsToRemove)
+            val notToRemove = liveDataLayers.value?.filter { !it.selectedToRemove }
+            liveDataLayers.value = notToRemove?.toMutableList()
         }
     }
 
@@ -126,15 +128,12 @@ class LayersVM : ViewModel() {
             val layerItem = list.find { it.id == layerId }
             val index = list.indexOf(layerItem)
             list[index].transparency = transparency
+            repository.updateLayer(layerId, transparency)
         }
     }
 
     fun getCoordinates() = repository.polygonOptions
 
-    override fun onCleared() {
-        super.onCleared()
-        liveDataLayers.value?.let { repository.save(it) }
-    }
 
     fun onLayerBackgroundButtonClicked(viewId: Int, position: Int) {
 

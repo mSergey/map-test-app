@@ -22,13 +22,11 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.window.layout.WindowMetricsCalculator
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.ActivityMainBinding
-import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
-
 import com.gmail.zajcevserg.maptestapp.ui.fragment.LayersSettingsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.MissionsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.SubstratesFragment
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-import com.google.android.material.animation.AnimatorSetCompat
+
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

@@ -1,13 +1,16 @@
 <vector android:height="48dp"
     android:viewportHeight="48" android:viewportWidth="56"
     android:width="56dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path
+        android:fillColor="@color/drag_bg_activate_color"
+        android:pathData="M0,0h56v48h-56z" />
 
     <path
-        android:fillColor="@color/drag_icon_inactivate_color"
+        android:fillColor="@color/drag_icon_activate_color"
         android:pathData="M16,20h24v2h-24z"/>
 
     <path
-        android:fillColor="@color/drag_icon_inactivate_color"
+        android:fillColor="@color/drag_icon_activate_color"
         android:pathData="M16,26h24v2h-24z"/>
 
 </vector>

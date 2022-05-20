@@ -6,12 +6,19 @@
     tools:context=".ui.fragment.MissionsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--<TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/missions_fragment_text"
         android:textAlignment="center"
-        android:textSize="20sp" />
+        android:textSize="20sp" />-->
+
+    <com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
+        android:id="@+id/mSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
 
 </FrameLayout>

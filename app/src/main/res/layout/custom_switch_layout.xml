@@ -6,31 +6,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/root_vg"
         android:layout_width="48dp"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:focusable="true">
 
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/track_start"
-            android:layout_width="15dp"
+            android:layout_width="12dp"
             android:layout_height="14dp"
+            android:layout_marginStart="1dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/track_end"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/custom_switch_track_start" />
 
 
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/track_end"
-            android:layout_width="15dp"
+            android:layout_width="12dp"
             android:layout_height="14dp"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/track_start"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/custom_switch_track_end" />
@@ -45,12 +50,11 @@
             app:layout_constraintTop_toTopOf="@+id/thumb"
             app:srcCompat="@drawable/custom_switch_thumb_shadow" />
 
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/thumb"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginStart="-2dp"
+            android:layout_marginStart="-8dp"
             android:elevation="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/track_start"
@@ -58,13 +62,16 @@
             app:srcCompat="@drawable/custom_switch_thumb" />
 
         <androidx.constraintlayout.helper.widget.Layer
+            android:id="@+id/motion_layer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            app:constraint_referenced_ids="thumb, shadow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:constraint_referenced_ids="thumb, shadow"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

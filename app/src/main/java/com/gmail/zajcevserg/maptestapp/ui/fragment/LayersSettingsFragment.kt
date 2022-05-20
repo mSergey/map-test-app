@@ -59,7 +59,6 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         itemTouchHelper.attachToRecyclerView(binding.layersRecyclerView)
 
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
-            log("size ${layers.size}")
             mAdapter.submitList(layers)
 
             /*binding.undefinedImageView.setOnClickListener {
@@ -104,6 +103,14 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
         }
 
+        binding.undefinedImageView.switchPosition = Switch3Way.SwitchPositions.START
+        binding.undefinedImageView.isTreeWay = true
+        binding.undefinedImageView.onPositionChangeListener =
+            object : Switch3Way.OnSwitchPositionChangeListener {
+                override fun onSwitchPositionChange(position: Switch3Way.SwitchPositions) {
+                    log("$position")
+                }
+        }
     }
 
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {

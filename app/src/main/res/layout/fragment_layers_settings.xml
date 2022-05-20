@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/bottom_background_image_view"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_background_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +74,18 @@
         app:layout_constraintEnd_toStartOf="@+id/undefined_image_view" />
 
 
-    <ImageView
+    <com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
+        android:id="@+id/undefined_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bottom_background_image_view" />
+
+
+    <!--<ImageView
         android:id="@+id/undefined_image_view"
         android:layout_width="56dp"
         android:layout_height="0dp"
@@ -84,7 +95,7 @@
         android:src="@drawable/toggle_level_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bottom_background_image_view" />
+        app:layout_constraintTop_toTopOf="@id/bottom_background_image_view" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

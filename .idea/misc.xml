@@ -64,6 +64,7 @@
         <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/layout_settings.xml" value="0.33" />
         <entry key="..\:/Users/Sergey/AndroidStudioProjects/MapTestApp/app/src/main/res/layout/stub_image.xml" value="0.5" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable-v24/to_expand_selector.xml" value="0.1" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/_custom_switch_track.xml" value="0.237" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/bg_layer_item.xml" value="0.1655" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/check_circle.xml" value="0.194" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_path.xml" value="0.194" />
@@ -71,6 +72,8 @@
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_thumb_shadow.xml" value="0.2325" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_end.xml" value="0.2325" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_middle.xml" value="0.2905" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_off.xml" value="0.237" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_off_clip.xml" value="0.237" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_right.xml" value="0.194" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/custom_switch_track_start.xml" value="0.2325" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/delete.xml" value="0.1" />
@@ -127,7 +130,7 @@
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/to_expand_less_icon.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/to_expand_selector.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/custom_switch_layout.xml" value="2.0" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/custom_switch_layout.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/divider_shared_layers.xml" value="0.5" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/fragment_layers_settings.xml" value="0.5" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/fragment_maps.xml" value="0.1" />

@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 
 import androidx.fragment.app.activityViewModels
@@ -86,7 +85,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                 holder?.setDragMode(isDragMode)
             }
             binding.buttonDrag.isActivated = isDragMode
-            binding.undefinedImageView.visibility = if (isDragMode) View.GONE else View.VISIBLE
+            binding.mainSwitch.visibility = if (isDragMode) View.GONE else View.VISIBLE
         }
 
         mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
@@ -103,13 +102,21 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
         }
 
-        binding.undefinedImageView.switchPosition = Switch3Way.SwitchPositions.START
-        binding.undefinedImageView.isTreeWay = true
-        binding.undefinedImageView.onPositionChangeListener =
-            object : Switch3Way.OnSwitchPositionChangeListener {
-                override fun onSwitchPositionChange(position: Switch3Way.SwitchPositions) {
-                    log("$position")
-                }
+        //binding.undefinedImageView.switchPosition = Switch3Way.SwitchPositions.START
+        binding.mainSwitch.isThreeWay = false
+        binding.buttonAdd.setOnClickListener {
+            binding.mainSwitch.isThreeWay = true
+        }
+        binding.buttonDel.setOnClickListener {
+            binding.mainSwitch.isThreeWay = false
+        }
+
+        binding.mainSwitch.addPositionChangeListener {
+            log("$it")
+        }
+        //binding.undefinedImageView.isThreeWay = false
+        binding.mainSwitch.addCheckListener {
+            log("$it")
         }
     }
 

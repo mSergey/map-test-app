@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.forEach
 
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.zajcevserg.maptestapp.R
 
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
-
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
@@ -46,8 +45,8 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
             layersRecyclerView.adapter = mAdapter
             layersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             layersRecyclerView.isScrollbarFadingEnabled = false
-
         }
+
         return binding.root
     }
 
@@ -59,18 +58,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
             mAdapter.submitList(layers)
-
-            /*binding.undefinedImageView.setOnClickListener {
-                it as ImageView
-                val currentSwitchStateLevel = SwitchStates.values()[it.drawable.level]
-                //mViewModel.onSwitchControlAllLayersClick(currentSwitchStateLevel)
-            }*/
         }
-
-        /*mViewModel.liveDataSwitchControlAllAppearance.observe(viewLifecycleOwner) {
-            if (it == SwitchStates.STATE_NONE || it == null) return@observe
-            binding.undefinedImageView.drawable.level = it.ordinal
-        }*/
 
         binding.buttonSearch.setOnClickListener(this)
         binding.buttonDrag.setOnClickListener(this)
@@ -99,24 +87,68 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
             it ?: return@observe
             toast.setText(it)
             toast.show()
-
         }
 
-        //binding.undefinedImageView.switchPosition = Switch3Way.SwitchPositions.START
-        binding.mainSwitch.isThreeWay = false
+        mViewModel.liveDataMainSwitchPosition.observe(viewLifecycleOwner) {
+            binding.mainSwitch.switchPosition = it
+        }
+
+        binding.mainSwitch.setOnPositionChangeByClickListener { position ->
+            when(position) {
+                Switch3Way.SwitchPositions.START -> {
+                    mViewModel.setCheckedStatesForAll(false)
+                    setSwitchPositionsOnViewHolders(position)
+                }
+                Switch3Way.SwitchPositions.MIDDLE -> {
+                    mViewModel.setSavedCheckedStates()
+                    setSavedCheckedStatesOnViewHolders(mViewModel.mSavedCheckedStates)
+                }
+                Switch3Way.SwitchPositions.END -> {
+                    mViewModel.setCheckedStatesForAll(true)
+                    setSwitchPositionsOnViewHolders(position)
+                }
+            }
+        }
+
+        mViewModel.liveDataIsSwitchTreeWay.observe(viewLifecycleOwner) {
+            binding.mainSwitch.isThreeWay = it
+        }
+
         binding.buttonAdd.setOnClickListener {
-            binding.mainSwitch.isThreeWay = true
+
+            // add layer
         }
-        binding.buttonDel.setOnClickListener {
-            binding.mainSwitch.isThreeWay = false
+    }
+
+    private fun setSwitchPositionsOnViewHolders(position: Switch3Way.SwitchPositions) {
+        mViewModel.liveDataLayers.value?.forEachIndexed { adapterPosition, item ->
+            val holder =
+                binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
+                        as? LayersAdapter.LayerItemViewHolder
+            holder?.binding?.layerSwitch?.switchPosition = position
         }
 
-        binding.mainSwitch.addPositionChangeListener {
-            log("$it")
+
+
+
+    }
+
+
+    private fun setSavedCheckedStatesOnViewHolders(idFlagsDic: Map<Int, Boolean>) {
+
+        val holdersToSetSwitchByFlag = mutableListOf<LayersAdapter.LayerItemViewHolder>()
+        binding.layersRecyclerView.forEach { view ->
+            val holder = binding.layersRecyclerView.findContainingViewHolder(view)
+                    as? LayersAdapter.LayerItemViewHolder?
+            if (holder != null) holdersToSetSwitchByFlag.add(holder)
         }
-        //binding.undefinedImageView.isThreeWay = false
-        binding.mainSwitch.addCheckListener {
-            log("$it")
+
+        holdersToSetSwitchByFlag.forEach {
+            val itemModel = mAdapter.currentList[it.adapterPosition]
+            val flag = idFlagsDic[itemModel.id]
+            if (flag != null)
+            it.binding.layerSwitch.switchPosition =
+                if (flag) Switch3Way.SwitchPositions.END else Switch3Way.SwitchPositions.START
         }
     }
 

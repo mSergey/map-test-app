@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/motion_layout"
+    android:id="@+id/main_item_vg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.activity.MainActivity"
-    tools:showPaths="true">
+    tools:context=".ui.activity.MainActivity">
 
     <ImageButton
         android:id="@+id/button_one"
@@ -134,8 +133,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
-        android:id="@+id/switch_activate"
+    <!--<com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/layer_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
@@ -144,8 +143,23 @@
         app:trackTint="@color/switch_track_selector"
         app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
 
+
+    <com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
+        android:id="@+id/layer_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:is_three_way="false"
+        app:thumb_color_end="@color/switch_thumb_color_end"
+        app:thumb_color_middle="@color/switch_thumb_color_middle"
+        app:thumb_color_start="@color/switch_thumb_color_start"
+        app:track_color_end="@color/switch_end_side_track_color"
+        app:track_color_start="@color/switch_start_side_track_color" />
 
     <ImageView
         android:id="@+id/expanded_field_background"
@@ -192,7 +206,7 @@
         app:trackColorInactive="@color/slider_track_inactive_color"
         app:haloColor="@color/slider_thumb_color"
         app:thumbColor="@color/slider_thumb_color"
-        app:layout_constraintEnd_toEndOf="@id/switch_activate"
+        app:layout_constraintEnd_toEndOf="@id/layer_switch"
         app:layout_constraintStart_toStartOf="@+id/layer_title"
         app:layout_constraintTop_toBottomOf="@+id/transparency_text_view" />
 
@@ -270,7 +284,7 @@
         android:id="@+id/motion_layer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="guideline_h1, guideline_v1, bg_top, layer_icon, middle_divider, layer_title, sleep_image, expand_image, drag_image_view, switch_activate, expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button "
+        app:constraint_referenced_ids="guideline_h1, guideline_v1, bg_top, layer_icon, middle_divider, layer_title, sleep_image, expand_image, drag_image_view, layer_switch, expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

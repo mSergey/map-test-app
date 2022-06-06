@@ -71,7 +71,7 @@
         android:background="?attr/selectableItemBackground"
         android:src="@drawable/drag_button_for_panel_selector"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/main_switch" />
+        app:layout_constraintEnd_toStartOf="@id/main_switch" />
 
 
     <com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
@@ -83,11 +83,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottom_background_image_view"
-        app:track_color_start="@color/checked_switch_track_color"
-        app:track_color_end="@color/unchecked_switch_track_color"
-        app:thumb_color_start="@color/unchecked_switch_thumb_color"
-        app:thumb_color_middle="@color/unchecked_switch_thumb_color"
-        app:thumb_color_end="@color/checked_switch_thumb_color"/>
+        app:thumb_color_end="@color/switch_thumb_color_end"
+        app:thumb_color_middle="@color/switch_thumb_color_middle"
+        app:thumb_color_start="@color/switch_thumb_color_start"
+        app:track_color_end="@color/switch_end_side_track_color"
+        app:track_color_start="@color/switch_start_side_track_color" />
 
 
     <!--<ImageView

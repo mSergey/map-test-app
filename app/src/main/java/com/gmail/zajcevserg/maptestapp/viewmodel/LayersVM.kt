@@ -1,21 +1,22 @@
 package com.gmail.zajcevserg.maptestapp.viewmodel
 
+import androidx.collection.ArrayMap
+import androidx.collection.arrayMapOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
-
+import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 
 
 class LayersVM : ViewModel() {
 
     private val repository: Repository = Repository()
-    //private var state: SwitchStates = SwitchStates.STATE_NONE
-    private val savedLayers = mutableListOf<LayerItem>()
-    private var needToSaveCurrentLayers = true
-    private var modeWithoutUndefineState = false
+    //val checkedStates = mutableListOf<Boolean>()
+    val mSavedCheckedStates = mutableMapOf<Int, Boolean>()
+
 
     val liveDataLayers by lazy {
         MutableLiveData<MutableList<LayerItem>>()
@@ -29,9 +30,9 @@ class LayersVM : ViewModel() {
         MutableLiveData<Int>()
     }
 
-    /*val liveDataSwitchControlAllAppearance by lazy {
-        MutableLiveData<SwitchStates>()
-    }*/
+    val liveDataMainSwitchPosition by lazy {
+        MutableLiveData<Switch3Way.SwitchPositions>()
+    }
 
     val liveDataSearchMode by lazy {
         MutableLiveData<Boolean>().apply {
@@ -49,41 +50,101 @@ class LayersVM : ViewModel() {
         MutableLiveData<String>()
     }
 
+    val liveDataIsSwitchTreeWay by lazy {
+        MutableLiveData<Boolean>().apply {
+             value = true
+        }
+    }
+
     init {
         repository.requestLayers { layers ->
-
 
             liveDataLayers.value = layers
                 .sortedBy { !it.isSharedLayer }
                 .toMutableList()
 
-            val isAllActive = layers.all { it.turnedOn }
-            val isAllInactive = layers.none { it.turnedOn }
 
-            if (needToSaveCurrentLayers) {
-                savedLayers.clear()
-                savedLayers.addAll(layers)
+            mSavedCheckedStates.clear()
+            liveDataLayers.value?.forEach {
+                mSavedCheckedStates[it.id] = it.turnedOn
             }
 
-            modeWithoutUndefineState = needToSaveCurrentLayers && (isAllActive || isAllInactive)
-
-            /*state = when {
-                isAllActive -> SwitchStates.STATE_ALL_ACTIVE
-                isAllInactive -> SwitchStates.STATE_ALL_INACTIVE
-                else -> SwitchStates.STATE_UNDEFINED
-            }
-            liveDataSwitchControlAllAppearance.value = state*/
+            liveDataMainSwitchPosition.value = defineMainSwitchPosition(layers)
+            liveDataIsSwitchTreeWay.value = isDifferent(layers)
         }
-
     }
 
-    fun turnOn(idToUpdate: Int, checked: Boolean) {
+
+
+    fun onLayerSwitchClicked(idToUpdate: Int, checked: Boolean) {
+        log("id $idToUpdate")
         repository.updateLayer(idToUpdate, checked)
+
         liveDataLayers.value?.let { layers ->
-            layers.forEach {
-                if (it.id == idToUpdate) {
-                    it.turnedOn = checked
+
+            val isAllCheckedBefore = layers.all { it.turnedOn }
+            val isNoneCheckedBefore = layers.none { it.turnedOn }
+            val isDifferentCheckedBefore = !isAllCheckedBefore && !isNoneCheckedBefore
+
+            layers.find { it.id == idToUpdate }?.turnedOn = checked
+
+            val isAllCheckedAfter = layers.all { it.turnedOn }
+            val isNoneCheckedAfter = layers.none { it.turnedOn }
+            val isDifferentCheckedAfter = !isAllCheckedAfter && !isNoneCheckedAfter
+
+            when {
+                isAllCheckedBefore && isDifferentCheckedAfter -> {
+                    mSavedCheckedStates.clear()
+                    layers.forEach {
+                        mSavedCheckedStates[it.id] = it.turnedOn
+                    }
+                    liveDataIsSwitchTreeWay.value = true
+                    liveDataMainSwitchPosition.value = Switch3Way.SwitchPositions.MIDDLE
                 }
+                isNoneCheckedBefore && isDifferentCheckedAfter -> {
+                    mSavedCheckedStates.clear()
+                    layers.forEach {
+                        mSavedCheckedStates[it.id] = it.turnedOn
+                    }
+                    liveDataIsSwitchTreeWay.value = true
+                    liveDataMainSwitchPosition.value = Switch3Way.SwitchPositions.MIDDLE
+                }
+                isDifferentCheckedBefore && isAllCheckedAfter -> {
+                    liveDataIsSwitchTreeWay.value = false
+                    liveDataMainSwitchPosition.value = Switch3Way.SwitchPositions.END
+                }
+                isDifferentCheckedBefore && isNoneCheckedAfter -> {
+                    liveDataIsSwitchTreeWay.value = false
+                    liveDataMainSwitchPosition.value = Switch3Way.SwitchPositions.START
+                }
+                isDifferentCheckedBefore && isDifferentCheckedAfter -> {
+                    mSavedCheckedStates.clear()
+                    layers.forEach {
+                        mSavedCheckedStates[it.id] = it.turnedOn
+                    }
+                    liveDataIsSwitchTreeWay.value = true
+                    liveDataMainSwitchPosition.value = Switch3Way.SwitchPositions.MIDDLE
+                }
+            }
+        }
+    }
+
+
+    fun setCheckedStatesForAll(checked: Boolean) {
+        repository.updateCheckedStateAll(checked)
+        liveDataLayers.value?.forEach {
+            it.turnedOn = checked
+        }
+    }
+
+    fun setSavedCheckedStates() {
+        //repository.updateCheckedByFlags(mCheckedStates)
+        mSavedCheckedStates.forEach { mapEntry ->
+            val item = liveDataLayers.value?.find {
+                it.id == mapEntry.key
+            }
+            item?.let {
+                it.turnedOn = mapEntry.value
             }
         }
     }
@@ -96,7 +157,11 @@ class LayersVM : ViewModel() {
             repository.deleteLayers(idsToRemove)
             val notToRemove = liveDataLayers.value?.filter { !it.selectedToRemove }
             liveDataLayers.value = notToRemove?.toMutableList()
+            idsToRemove.forEach {
+                mSavedCheckedStates.remove(it)
+            }
         }
+
     }
 
     fun expandLayer(idToUpdate: Int) {
@@ -128,7 +193,7 @@ class LayersVM : ViewModel() {
             val layerItem = list.find { it.id == layerId }
             val index = list.indexOf(layerItem)
             list[index].transparency = transparency
-            repository.updateLayer(layerId, transparency)
+            //repository.updateLayer(layerId, transparency)
         }
     }
 
@@ -144,44 +209,30 @@ class LayersVM : ViewModel() {
         liveDataBackgroundBtn.value = null
     }
 
-    /*fun onSwitchControlAllLayersClick(currentSwitchStateLevel: SwitchStates) {
-        if (!modeWithoutUndefineState) needToSaveCurrentLayers = false
-        //log("currentSwitchStateLevel $currentSwitchStateLevel")
-        if (modeWithoutUndefineState) {
-            state = when (currentSwitchStateLevel) {
-                SwitchStates.STATE_ALL_ACTIVE -> {
-                    repository.updateActiveStateAll(false)
-                    SwitchStates.STATE_ALL_INACTIVE
-                }
+    fun updateLayersOrderInDB() {
+        repository.updateLayers(liveDataLayers.value!!)
+    }
 
-                SwitchStates.STATE_ALL_INACTIVE -> {
-                    repository.updateActiveStateAll(true)
-                    SwitchStates.STATE_ALL_ACTIVE
-                }
-                SwitchStates.STATE_UNDEFINED -> return
-                SwitchStates.STATE_NONE -> return
-            }
-        } else {
-            state = when (currentSwitchStateLevel) {
-                SwitchStates.STATE_ALL_ACTIVE -> {
-                    repository.updateActiveStateAll(false)
-                    SwitchStates.STATE_ALL_INACTIVE
-                }
+    override fun onCleared() {
+        super.onCleared()
+        repository.disposable.dispose()
+    }
 
-                SwitchStates.STATE_ALL_INACTIVE -> {
-                    repository.updateAllLayers(savedLayers)
-                    SwitchStates.STATE_UNDEFINED
-                }
+    private fun isDifferent(list: List<LayerItem>): Boolean {
+        val isAllActive = list.all { it.turnedOn }
+        val isAllInactive = list.none { it.turnedOn }
+        return !isAllActive && !isAllInactive
+    }
 
-                SwitchStates.STATE_UNDEFINED -> {
-                    repository.updateActiveStateAll(true)
-                    SwitchStates.STATE_ALL_ACTIVE
-                }
-                SwitchStates.STATE_NONE -> return
-            }
+    private fun defineMainSwitchPosition(layers: List<LayerItem>
+    ): Switch3Way.SwitchPositions {
+        val isAllActive = layers.all { it.turnedOn }
+        val isAllInactive = layers.none { it.turnedOn }
+        return when {
+            isAllActive -> Switch3Way.SwitchPositions.END
+            isAllInactive -> Switch3Way.SwitchPositions.START
+            else -> Switch3Way.SwitchPositions.MIDDLE
         }
-
-        liveDataSwitchControlAllAppearance.value = state
-    }*/
+    }
 
 }

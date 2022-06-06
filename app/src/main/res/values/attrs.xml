@@ -9,12 +9,26 @@
     </declare-styleable>
 
     <declare-styleable name="Switch3Way">
+        <attr name="switch_position" format="enum">
+            <enum name="position_start" value="0"/>
+            <enum name="position_middle" value="1"/>
+            <enum name="position_end" value="2"/>
+        </attr>
         <attr name="is_three_way" format="boolean" />
         <attr name="thumb_color_start" format="color" />
         <attr name="thumb_color_middle" format="color" />
         <attr name="thumb_color_end" format="color" />
         <attr name="track_color_start" format="color" />
         <attr name="track_color_end" format="color" />
+
+    </declare-styleable>
+
+    <declare-styleable name="Switch2Way">
+        <attr name="checked" format="boolean" />
+        <attr name="thumb_color_checked" format="color" />
+        <attr name="thumb_color_unchecked" format="color" />
+        <attr name="track_color_unchecked" format="color" />
+        <attr name="track_color_checked" format="color" />
 
     </declare-styleable>
 

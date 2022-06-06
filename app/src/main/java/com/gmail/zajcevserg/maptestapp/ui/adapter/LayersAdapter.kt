@@ -20,6 +20,7 @@ import com.gmail.zajcevserg.maptestapp.databinding.ItemLayerLayoutBinding
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.ui.custom.OnItemMoveListener
 import com.gmail.zajcevserg.maptestapp.ui.custom.OnStartDragListener
+import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 import com.google.android.material.slider.Slider
 import java.text.DateFormat
@@ -105,13 +106,21 @@ class LayersAdapter(val mViewModel: LayersVM,
                     transparencyTextView.text = currentTransparencySliderValue
                 }
 
-                switchActivate.setOnCheckedChangeListener { view, checked ->
+                layerSwitch.setOnPositionChangeByClickListener { switchPosition ->
+
+                    val mChecked = when (switchPosition) {
+                        Switch3Way.SwitchPositions.START -> false
+                        Switch3Way.SwitchPositions.MIDDLE -> false
+                        Switch3Way.SwitchPositions.END -> true
+                    }
                     val idToUpdate = try {
+                        //currentList[adapterPosition].turnedOn = mChecked
                         currentList[adapterPosition].id
                     } catch(exception: IndexOutOfBoundsException) {
-                        return@setOnCheckedChangeListener
+                        return@setOnPositionChangeByClickListener
                     }
-                    mViewModel.turnOn(idToUpdate, checked)
+                    mViewModel.onLayerSwitchClicked(idToUpdate, mChecked)
+
                 }
 
                 val mListener = View.OnClickListener {
@@ -135,6 +144,7 @@ class LayersAdapter(val mViewModel: LayersVM,
                 layerTitle.setOnClickListener(mListener)
                 expandImage.setOnClickListener(mListener)
 
+
                 goToLayerCenterButton.setOnClickListener {
                     mViewModel.liveDataMapInteraction.value = adapterPosition
                     mViewModel.liveDataMapInteraction.value = null
@@ -143,9 +153,9 @@ class LayersAdapter(val mViewModel: LayersVM,
         }
 
         fun bindView(position: Int) {
-
+            val layerItemModel = currentList[position]
             with (binding) {
-                val layerItemModel = currentList[position]
+
                 motionLayer.translationX = 0f
                 backgroundButtonsLayer.scaleX = 0f
                 backgroundButtonsLayer.scaleY = 0f
@@ -163,10 +173,9 @@ class LayersAdapter(val mViewModel: LayersVM,
 
                 binding.layerIcon.setOnClickListener {
 
-                    val isSelectionMode =
-                        mViewModel.liveDataLayers.value?.any {
-                        it.selectedToRemove
-                    }!!
+                    /*val isSelectionMode =
+                        mViewModel.liveDataLayers.value?.any { it.selectedToRemove }!!*/
+                    val isSelectionMode = currentList.any { it.selectedToRemove }
 
                     if (isSelectionMode) setSelectionToRemove(layerItemModel, layerIcon)
                 }
@@ -187,12 +196,14 @@ class LayersAdapter(val mViewModel: LayersVM,
                 expandImage.isActivated = layerItemModel.expanded
 
                 //disabled
-                motionLayout.forEach {
+                mainItemVg.forEach {
                     it.isEnabled = layerItemModel.enabled
                 }
 
                 //switch
-                switchActivate.isChecked = layerItemModel.turnedOn
+                layerSwitch.switchPosition =
+                    if (layerItemModel.turnedOn) Switch3Way.SwitchPositions.END
+                    else Switch3Way.SwitchPositions.START
 
                 //slider
                 transparencySlider.value = layerItemModel.transparency.toFloat()
@@ -200,23 +211,23 @@ class LayersAdapter(val mViewModel: LayersVM,
                 setDragMode(mViewModel.liveDataDragMode.value!!)
 
                 dragImageView.setOnTouchListener { view, motionEvent ->
-                    if (motionEvent.actionMasked == MotionEvent.ACTION_DOWN
-                        && mViewModel.liveDataDragMode.value!!) {
-                        startDragListener.onStartDrag(this@LayerItemViewHolder)
+
+                    when {
+                        motionEvent.actionMasked == MotionEvent.ACTION_DOWN
+                                && mViewModel.liveDataDragMode.value!! ->
+                            startDragListener.onStartDrag(this@LayerItemViewHolder)
                     }
                     false
                 }
-
-
             }
         }
 
         private fun setSelectionToRemove(itemModel: LayerItem,
                                          imageView: AppCompatImageView) {
-            //itemModel.selectedToRemove = !itemModel.selectedToRemove
-            mViewModel.liveDataLayers.value?.forEach {
+            /*mViewModel.liveDataLayers.value?.forEach {
                 if (it.id == itemModel.id) it.selectedToRemove = !it.selectedToRemove
-            }
+            }*/
+            itemModel.selectedToRemove = !itemModel.selectedToRemove
             setLayerIcon(itemModel, imageView)
             binding.bgTop.isSelected = !binding.bgTop.isSelected
         }
@@ -239,12 +250,11 @@ class LayersAdapter(val mViewModel: LayersVM,
         }
 
         fun setDragMode(isDragMode: Boolean) {
-            //log("pos $adapterPosition $isDragMode")
             if (isDragMode) {
-                binding.switchActivate.visibility = View.INVISIBLE
+                binding.layerSwitch.visibility = View.INVISIBLE
                 binding.dragImageView.visibility = View.VISIBLE
             } else {
-                binding.switchActivate.visibility = View.VISIBLE
+                binding.layerSwitch.visibility = View.VISIBLE
                 binding.dragImageView.visibility = View.INVISIBLE
             }
         }
@@ -252,6 +262,9 @@ class LayersAdapter(val mViewModel: LayersVM,
 
     override fun onViewAttachedToWindow(holder: LayerItemViewHolder) {
         holder.setDragMode(mViewModel.liveDataDragMode.value!!)
+        holder.binding.layerSwitch.switchPosition =
+           if (currentList[holder.adapterPosition].turnedOn) Switch3Way.SwitchPositions.END
+           else Switch3Way.SwitchPositions.START
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LayerItemViewHolder {
@@ -273,11 +286,21 @@ class LayersAdapter(val mViewModel: LayersVM,
     }
 
 
+    override fun onItemMove(fromPosition: Int,
+                            toPosition: Int): Boolean {
 
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
-        val layers = mViewModel.liveDataLayers.value!!
-        Collections.swap(layers, fromPosition, toPosition)
-        mViewModel.liveDataLayers.value = layers
+        val idFrom = currentList[fromPosition].id
+        val valueFrom = currentList[fromPosition].turnedOn
+        val idTo = currentList[toPosition].id
+        val valueTo = currentList[toPosition].turnedOn
+        mViewModel.mSavedCheckedStates[idFrom] = valueTo
+        mViewModel.mSavedCheckedStates[idTo] = valueFrom
+        currentList[fromPosition].id = idTo
+        currentList[toPosition].id = idFrom
+        Collections.swap(mViewModel.liveDataLayers.value!!, fromPosition, toPosition)
+
+        //Collections.swap(mViewModel.checkedStates, fromPosition, toPosition)
+        mViewModel.updateLayersOrderInDB()
         notifyItemMoved(fromPosition, toPosition)
         return true
     }

@@ -14,11 +14,14 @@
 
     <!--Switch colors-->
     <color name="disabled_switch_thumb_color">#999FAA</color>
-    <color name="checked_switch_thumb_color">#59BD87</color>
-    <color name="unchecked_switch_thumb_color">#FAFAFA</color>
     <color name="disabled_switch_track_color">#5B6476</color>
-    <color name="checked_switch_track_color">#497E6E</color>
-    <color name="unchecked_switch_track_color">#838895</color>
+
+    <color name="switch_thumb_color_end">#59BD87</color>
+    <color name="switch_thumb_color_start">#FAFAFA</color>
+    <color name="switch_thumb_color_middle">#FAFAFA</color>
+    <color name="switch_start_side_track_color">#497E6E</color>
+    <color name="switch_end_side_track_color">#838895</color>
+
 
 
     <!--Layer icon colors-->

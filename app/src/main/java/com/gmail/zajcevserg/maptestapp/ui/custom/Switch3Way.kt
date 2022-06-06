@@ -5,85 +5,86 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.os.Bundle
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateInterpolator
-
+import android.widget.TextView
+import androidx.constraintlayout.motion.utils.ViewState
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.zajcevserg.maptestapp.R
-
 import com.gmail.zajcevserg.maptestapp.databinding.CustomSwitchLayoutBinding
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 
 
 class Switch3Way : ConstraintLayout {
 
+
+
     var isThreeWay = true
         set(value) {
-            if (field == value) return
-            field = value
-            if (!value && switchPosition == SwitchPositions.MIDDLE) {
-                checked = false
-            } else if (!value && switchPosition == SwitchPositions.END) {
-                checked = true
-            }
-        }
 
+            if (field == value) return
+            /*if (!value && switchPosition == SwitchPositions.MIDDLE) {
+                switchPosition = SwitchPositions.START
+            }*/
+            field = value
+        }
 
     var switchPosition: SwitchPositions = SwitchPositions.MIDDLE
         set(value) {
             if (field == value) return
             when {
                 field == SwitchPositions.START && value == SwitchPositions.MIDDLE -> {
-                    setThumbColor(thumbMiddlePositionColor)
                     moveThumb(mStartPos, mMiddlePos, 120L)
                 }
                 field == SwitchPositions.START && value == SwitchPositions.END -> {
-                    setThumbColor(thumbEndPositionColor)
                     moveThumb(mStartPos, mEndPos, 240L)
                 }
                 field == SwitchPositions.MIDDLE && value == SwitchPositions.END -> {
-                    setThumbColor(thumbEndPositionColor)
                     moveThumb(mMiddlePos, mEndPos, 120L)
                 }
                 field == SwitchPositions.MIDDLE && value == SwitchPositions.START -> {
-                    setThumbColor(thumbStartPositionColor)
                     moveThumb(mMiddlePos, mStartPos, 120L)
                 }
                 field == SwitchPositions.END && value == SwitchPositions.MIDDLE -> {
-                    setThumbColor(thumbMiddlePositionColor)
                     moveThumb(mEndPos, mMiddlePos, 120L)
                 }
                 field == SwitchPositions.END && value == SwitchPositions.START -> {
-                    setThumbColor(thumbStartPositionColor)
                     moveThumb(mEndPos, mStartPos, 240L)
                 }
             }
-            isThreeWay = true
             field = value
         }
 
-    var checked = false
-        set(value) {
-            switchPosition = if (value) SwitchPositions.END else SwitchPositions.START
-            isThreeWay = false
-            field = value
-        }
 
     private lateinit var binding: CustomSwitchLayoutBinding
-    private var onPositionChangeListener: ((SwitchPositions)-> Unit)? = null
-    private var onSwitchCheckListener: ((Boolean)-> Unit)? = null
+    private var bundle = Bundle()
+    private var mOnPositionChangeListener: ((SwitchPositions) -> Unit)? = null
+    private val mClickListener: SwitchClickListener = SwitchClickListener()
     private var mIsAnimationRunning = false
     private val mStartPos = convertDpToPixel(0)
     private val mMiddlePos = convertDpToPixel(9)
     private val mEndPos = convertDpToPixel(18)
-    private val mClickListener: SwitchClickListener = SwitchClickListener()
     private var thumbStartPositionColor: Int = 0
     private var thumbMiddlePositionColor: Int = 0
     private var thumbEndPositionColor: Int = 0
-
+    private var disabledThumbColor: Int = 0
+    private val mInitialStartTrackLevel: Int = 10000 * 8 / 34
+    private val mInitialEndTrackLevel: Int = 10000 * 26 / 34
+    private val mInitialMiddleTrackLevel: Int = 10000 / 2
+    private val mTrackLevelDelta: ((Float) -> Int) = {
+        (10000 * it / convertDpToPixel(34)).toInt()
+    }
 
     constructor(context: Context) : super(context)
 
@@ -91,7 +92,8 @@ class Switch3Way : ConstraintLayout {
         binding = CustomSwitchLayoutBinding.inflate(LayoutInflater.from(context), this)
         parseAttrs(context, attrs)
         setListeners()
-        setup()
+        this.isClickable = true
+        this.isFocusable = true
     }
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int
@@ -99,117 +101,153 @@ class Switch3Way : ConstraintLayout {
         binding = CustomSwitchLayoutBinding.inflate(LayoutInflater.from(context), this)
         parseAttrs(context, attrs)
         setListeners()
-        setup()
+        this.isClickable = true
+        this.isFocusable = true
     }
 
-    fun addPositionChangeListener(listener: (position: SwitchPositions)-> Unit) {
-        onPositionChangeListener = listener
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val side = convertDpToPixel(48).toInt()
+        val mSideMeasureSpec = MeasureSpec.makeMeasureSpec(side, MeasureSpec.EXACTLY)
+        super.onMeasure(mSideMeasureSpec, mSideMeasureSpec)
     }
 
-    fun addCheckListener(listener: (checked: Boolean)-> Unit) {
-        onSwitchCheckListener = listener
+    fun setOnPositionChangeByClickListener(listener: ((SwitchPositions) -> Unit)?) {
+        mOnPositionChangeListener = listener
     }
 
 
     private fun parseAttrs(context: Context, attrs: AttributeSet?) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.Switch3Way)
-        isThreeWay = attributes.getBoolean(R.styleable.Switch3Way_is_three_way, true)
         val trackColorStart = attributes.getColor(R.styleable.Switch3Way_track_color_start, 0)
         val trackColorEnd = attributes.getColor(R.styleable.Switch3Way_track_color_end, 0)
         thumbStartPositionColor = attributes.getColor(R.styleable.Switch3Way_thumb_color_start, 0)
         thumbMiddlePositionColor = attributes.getColor(R.styleable.Switch3Way_thumb_color_middle, 0)
         thumbEndPositionColor = attributes.getColor(R.styleable.Switch3Way_thumb_color_end, 0)
+        isThreeWay = attributes.getBoolean(R.styleable.Switch3Way_is_three_way, true)
+        val position = attributes.getInt(R.styleable.Switch3Way_switch_position, 1)
         attributes.recycle()
 
+        switchPosition = SwitchPositions.values()[position]
+        when (switchPosition) {
+            SwitchPositions.START -> setupStartPosition()
+            SwitchPositions.MIDDLE -> setupMiddlePosition()
+            SwitchPositions.END -> setupEndPosition()
+        }
+        val disabledTrackColor =
+            ResourcesCompat.getColor(resources, R.color.disabled_switch_track_color, null)
+        disabledThumbColor =
+            ResourcesCompat.getColor(resources, R.color.disabled_switch_thumb_color, null)
         binding.trackStart.imageTintList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(trackColorStart)
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(trackColorStart, disabledTrackColor)
         )
 
         binding.trackEnd.imageTintList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(trackColorEnd)
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(trackColorEnd, disabledTrackColor)
         )
-    }
 
-
-
-
-    private fun setup() {
-        if (isThreeWay) {
-            when (switchPosition) {
-                SwitchPositions.START -> setupStartPosition()
-                SwitchPositions.MIDDLE -> setupMiddlePosition()
-                SwitchPositions.END -> setupEndPosition()
-            }
-        } else {
-            if (checked) setupStartPosition()
-            else setupEndPosition()
-        }
-    }
-
-    private fun setupStartPosition() {
-        binding.trackStart.drawable.level = 10000 / 34 * 8
-        binding.motionLayer.translationX = mStartPos
-        setThumbColor(thumbStartPositionColor)
-    }
-
-    private fun setupMiddlePosition() {
-        binding.trackStart.drawable.level = 10000 / 2
-        binding.motionLayer.translationX = mMiddlePos
-        setThumbColor(thumbMiddlePositionColor)
-    }
-
-    private fun setupEndPosition() {
-        binding.trackStart.drawable.level = 10000 / 34 * 26
-        binding.motionLayer.translationX = mEndPos
-        setThumbColor(thumbEndPositionColor)
+        setThumbColor(when(switchPosition) {
+            SwitchPositions.START -> thumbStartPositionColor
+            SwitchPositions.MIDDLE -> thumbMiddlePositionColor
+            SwitchPositions.END -> thumbEndPositionColor
+        })
     }
 
     private fun setListeners() {
-        binding.rootVg.setOnClickListener(mClickListener)
-        binding.rootVg.forEach { child ->
-            child.setOnClickListener(mClickListener)
+        this.setOnClickListener(mClickListener)
+        this.forEach {
+            it.setOnClickListener(mClickListener)
         }
     }
 
+    override fun setEnabled(enabled: Boolean) {
+        this.forEach { it.isEnabled = enabled }
+        super.setEnabled(enabled)
+    }
+
     private fun setThumbColor(color: Int) {
-       binding.thumb.imageTintList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(color)
-       )
+        binding.thumb.imageTintList = ColorStateList(
+            arrayOf(
+                intArrayOf(android.R.attr.state_enabled),
+                intArrayOf(-android.R.attr.state_enabled)
+            ),
+            intArrayOf(color, disabledThumbColor)
+        )
     }
 
     private fun moveThumb(from: Float,
                           to: Float,
                           _duration: Long
     ) {
-        ObjectAnimator
-            .ofFloat(binding.motionLayer, "translationX", from, to)
-            .apply {
-                interpolator = AccelerateInterpolator()
-                duration = _duration
-                setEvaluator { completePart, startPos, endPos ->
-                    startPos as Float; endPos as Float
-                    val translationX = startPos + (endPos - startPos) * completePart
-                    binding.trackStart.drawable.level = (10000 / mEndPos * translationX).toInt()
-                    translationX
-                }
-                addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationStart(animation: Animator?) {
-                        mIsAnimationRunning = true
-                    }
-
-                    override fun onAnimationEnd(animation: Animator?) {
-                        mIsAnimationRunning = false
-                    }
-
-                    override fun onAnimationCancel(animation: Animator?) {
-                        mIsAnimationRunning = false
-                    }
-                })
-                start()
+        if (windowToken != null && ViewCompat.isLaidOut(this)) {
+            when (to) {
+                mStartPos -> setThumbColor(thumbStartPositionColor)
+                mMiddlePos -> setThumbColor(thumbMiddlePositionColor)
+                mEndPos -> setThumbColor(thumbEndPositionColor)
             }
+            ObjectAnimator
+                .ofFloat(binding.thumbMotionLayer, "translationX", from, to)
+                .apply {
+                    interpolator = AccelerateInterpolator()
+                    duration = _duration
+                    setEvaluator { completePart, startPos, endPos ->
+                        startPos as Float; endPos as Float
+                        val translationX = startPos + (endPos - startPos) * completePart
+                        binding.trackStart.drawable.level = mInitialStartTrackLevel + mTrackLevelDelta(translationX)
+                        binding.trackEnd.drawable.level = mInitialEndTrackLevel - mTrackLevelDelta(translationX)
+                        translationX
+                    }
+                    addListener(object : AnimatorListenerAdapter() {
+                        override fun onAnimationStart(animation: Animator?) {
+                            mIsAnimationRunning = true
+                        }
+
+                        override fun onAnimationEnd(animation: Animator?) {
+                            mIsAnimationRunning = false
+                        }
+
+                        override fun onAnimationCancel(animation: Animator?) {
+                            mIsAnimationRunning = false
+                        }
+                    })
+                    start()
+                }
+        } else {
+            when (to) {
+                mStartPos -> setupStartPosition()
+                mMiddlePos -> setupMiddlePosition()
+                mEndPos -> setupEndPosition()
+            }
+        }
+    }
+
+    private fun setupStartPosition() {
+        binding.trackStart.drawable.level = mInitialStartTrackLevel
+        binding.trackEnd.drawable.level = mInitialEndTrackLevel
+        binding.thumbMotionLayer.translationX = mStartPos
+        setThumbColor(thumbStartPositionColor)
+    }
+
+    private fun setupMiddlePosition() {
+        binding.trackStart.drawable.level = mInitialMiddleTrackLevel
+        binding.trackEnd.drawable.level = mInitialMiddleTrackLevel
+        binding.thumbMotionLayer.translationX = mMiddlePos
+        setThumbColor(thumbMiddlePositionColor)
+    }
+
+    private fun setupEndPosition() {
+        binding.trackStart.drawable.level = mInitialEndTrackLevel
+        binding.trackEnd.drawable.level = mInitialStartTrackLevel
+        binding.thumbMotionLayer.translationX = mEndPos
+        setThumbColor(thumbEndPositionColor)
     }
 
 
@@ -224,45 +262,25 @@ class Switch3Way : ConstraintLayout {
     private inner class SwitchClickListener : OnClickListener {
         override fun onClick(view: View) {
             if (mIsAnimationRunning) return
-
-            if (isThreeWay) {
+            switchPosition = if (isThreeWay) {
                 when (switchPosition) {
-                    SwitchPositions.START -> {
-                        switchPosition = SwitchPositions.MIDDLE
-                        /*setThumbColor(thumbMiddlePositionColor)
-                        moveThumb(mStartPos, mMiddlePos, 120L)*/
-                    }
-                    SwitchPositions.MIDDLE -> {
-
-                        switchPosition = SwitchPositions.END
-                        /*setThumbColor(thumbEndPositionColor)
-                        moveThumb(mMiddlePos, mEndPos, 120L)*/
-                    }
-                    SwitchPositions.END -> {
-
-                        switchPosition = SwitchPositions.START
-                        /*setThumbColor(thumbStartPositionColor)
-                        moveThumb(mEndPos, mStartPos, 240L)*/
-                    }
+                    SwitchPositions.START -> SwitchPositions.MIDDLE
+                    SwitchPositions.MIDDLE -> SwitchPositions.END
+                    SwitchPositions.END -> SwitchPositions.START
                 }
-                onPositionChangeListener?.invoke(switchPosition)
             } else {
-                if (checked) {
-                    setThumbColor(thumbStartPositionColor)
-                    checked = false
-                    moveThumb(mEndPos, mStartPos, 240L)
-                } else {
-                    setThumbColor(thumbEndPositionColor)
-                    checked = true
-                    moveThumb(mStartPos, mEndPos, 240L)
+                when (switchPosition) {
+                    SwitchPositions.START -> SwitchPositions.END
+                    SwitchPositions.END -> SwitchPositions.START
+                    SwitchPositions.MIDDLE -> SwitchPositions.START
                 }
-                onSwitchCheckListener?.invoke(checked)
             }
-
+            mOnPositionChangeListener?.invoke(switchPosition)
         }
     }
-    enum class SwitchPositions {
-        START, MIDDLE, END
+
+    enum class SwitchPositions(posLevel: Int) {
+        START(1), MIDDLE(1), END(3)
     }
 
 }

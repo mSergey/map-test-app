@@ -121,8 +121,11 @@
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/layer_icon_polygon_hatched.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/layer_icon_waypoint.xml" value="0.1085" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search.xml" value="0.1" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_bar_icon.xml" value="0.2055" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_bar_text_input_field.xml" value="0.2475" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_button.xml" value="0.1655" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_button_background.xml" value="0.1" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_button_selector.xml" value="0.2475" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/search_colored.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/selector_delany_layer.xml" value="0.1" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/drawable/selector_drag.xml" value="0.251" />
@@ -139,6 +142,7 @@
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/fragment_missions.xml" value="0.5541666666666667" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/fragment_substrates.xml" value="0.23596730245231606" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/item_layer_layout.xml" value="0.3213367609254499" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/search_layout.xml" value="0.4" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/stub_image.xml" value="0.1" />
       </map>
     </option>

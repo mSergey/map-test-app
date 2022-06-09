@@ -63,6 +63,10 @@ class LayersVM : ViewModel() {
                 .sortedBy { !it.isSharedLayer }
                 .toMutableList()
 
+            liveDataLayers.value?.forEach {
+                log("${it.id} ${it.turnedOn}")
+            }
+
 
             mSavedCheckedStates.clear()
             liveDataLayers.value?.forEach {
@@ -138,7 +142,7 @@ class LayersVM : ViewModel() {
     }
 
     fun setSavedCheckedStates() {
-        //repository.updateCheckedByFlags(mCheckedStates)
+        repository.updateCheckedByFlags(mSavedCheckedStates)
         mSavedCheckedStates.forEach { mapEntry ->
             val item = liveDataLayers.value?.find {
                 it.id == mapEntry.key
@@ -215,7 +219,8 @@ class LayersVM : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        repository.disposable.dispose()
+        repository.layerItemSubjectDisposable.dispose()
+        repository.checkedFlagsSubjectDisposable.dispose()
     }
 
     private fun isDifferent(list: List<LayerItem>): Boolean {

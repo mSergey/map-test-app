@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.CustomSwitchLayoutBinding
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
+import com.google.android.gms.common.util.Hex
 
 
 class Switch3Way : ConstraintLayout {
@@ -173,7 +174,12 @@ class Switch3Way : ConstraintLayout {
         super.setEnabled(enabled)
     }
 
+
     private fun setThumbColor(color: Int) {
+        log("${color}")
+
+
+
         binding.thumb.imageTintList = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_enabled),
@@ -181,6 +187,7 @@ class Switch3Way : ConstraintLayout {
             ),
             intArrayOf(color, disabledThumbColor)
         )
+
     }
 
     private fun moveThumb(from: Float,

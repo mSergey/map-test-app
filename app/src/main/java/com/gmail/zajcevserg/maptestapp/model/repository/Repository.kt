@@ -3,6 +3,7 @@ package com.gmail.zajcevserg.maptestapp.model.repository
 import android.annotation.SuppressLint
 import android.graphics.Color
 import androidx.collection.arrayMapOf
+import androidx.room.Transaction
 import com.gmail.zajcevserg.maptestapp.model.application.App
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 
@@ -22,20 +23,30 @@ import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
 
-class Repository(private val dao: LayersDao = App.database.getDao(),
-                 private val subject: PublishSubject<MutableList<LayerItem>> = PublishSubject.create()) {
+class Repository(
+    private val dao: LayersDao = App.database.getDao(),
+    private val layerItemSubject: PublishSubject<MutableList<LayerItem>> = PublishSubject.create(),
+    private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create())
+{
 
 
 
-    val disposable: Disposable = subject
+    val layerItemSubjectDisposable: Disposable =
+        layerItemSubject
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
             .debounce(300, TimeUnit.MILLISECONDS)
             .subscribe {
-                log("save")
                 dao.updateAllLayers(it)
             }
 
+    val checkedFlagsSubjectDisposable: Disposable =
+        checkedFlagsSubject
+            .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
+            .subscribe {
+                dao.updateCheckedColumn(it)
+            }
 
     val polygonOptions = PolygonOptions()
         .add(LatLng(55.82344398214789, 37.71777048265712))
@@ -65,6 +76,7 @@ class Repository(private val dao: LayersDao = App.database.getDao(),
 
     @SuppressLint("CheckResult")
     fun requestLayers(callback: (MutableList<LayerItem>) -> Unit) {
+
         dao.getLayersSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -92,56 +104,20 @@ class Repository(private val dao: LayersDao = App.database.getDao(),
             .subscribe()
     }
 
-    @SuppressLint("CheckResult")
-
     fun updateCheckedByFlags(flagsMap: Map<Int, Boolean>) {
-        flagsMap.forEach {
-            log("key ${it.key} value ${it.value} ${Math.random()}")
-        }
-
-        val mMap = arrayMapOf<Int, Int>()
-        flagsMap.forEach {
-            mMap[it.key] = if (it.value) 1 else 0
-        }
-
-
-        val source = Flowable.create(FlowableOnSubscribe<Map.Entry<Int, Int>> { emitter ->
-            mMap.forEach {
-                emitter.onNext(it)
-            }
-        }, BackpressureStrategy.BUFFER)
-
-        source.subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
-            .subscribe {
-
-                updateLayer(it.key, it.value)
-            }
-        //dao.updateCheckedByFlags(map)
+        log("updateCheckedByFlags")
+        checkedFlagsSubject.onNext(flagsMap)
     }
 
     fun deleteLayers(ids: List<Int>) {
         dao.delete(ids.toIntArray())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : SingleObserver<Int> {
-                override fun onSubscribe(d: Disposable) {
-                    //log("onSubscribe")
-                }
-
-                override fun onSuccess(t: Int) {
-                    //log("onSuccess ${t}")
-                }
-
-                override fun onError(e: Throwable) {
-                    //log("onSuccess $e")
-                }
-
-            })
+            .subscribe()
     }
 
 
     fun updateLayers(layers: MutableList<LayerItem>) {
-        subject.onNext(layers)
+        layerItemSubject.onNext(layers)
     }
 
 

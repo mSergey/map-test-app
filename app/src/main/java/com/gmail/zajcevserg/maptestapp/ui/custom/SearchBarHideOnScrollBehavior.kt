@@ -20,13 +20,17 @@ class SearchBarHideOnScrollBehavior(context: Context,
                                     attributeSet: AttributeSet
 ) : CoordinatorLayout.Behavior<ViewGroup>(context, attributeSet) {
 
-    private val hideSearchFieldSubject: PublishSubject<Pair<View, Int>> = PublishSubject.create()
-    private lateinit var searchLayout: ConstraintLayout
+    private val hideSearchFieldSubject: PublishSubject<Int> = PublishSubject.create()
+    private var searchLayout: ConstraintLayout? = null
 
-    var isSearchMode = false
+    var isSearchMode = true
     set(value) {
         if (field == value) return
-
+        if (value) {
+            searchLayout?.let { showAnim(it) }
+        } else {
+            searchLayout?.let { hideAnim(it) }
+        }
         field = value
     }
 
@@ -34,17 +38,16 @@ class SearchBarHideOnScrollBehavior(context: Context,
     val searchBarHideDisposable: Disposable =
         hideSearchFieldSubject
             .distinctUntilChanged { previous, current ->
-                val previousConsume = previous.second
-                val currentConsume = current.second
-                previousConsume < 0 && currentConsume < 0
-                        || previousConsume > 0 && currentConsume > 0
-                        || previousConsume != 0 && currentConsume == 0
-                        || previousConsume == currentConsume
+                previous < 0 && current < 0
+                        || previous > 0 && current > 0
+                        || previous != 0 && current == 0
+                        || previous == current
 
             }.subscribe {
                 log ("consume it $it")
-                if (it.second > 0) showAnim(it.first)
-                else hideAnim(it.first)
+
+                if (it > 0) showAnim(searchLayout)
+                else hideAnim(searchLayout)
             }
 
     override fun onLayoutChild(
@@ -52,22 +55,23 @@ class SearchBarHideOnScrollBehavior(context: Context,
         child: ViewGroup,
         layoutDirection: Int
     ): Boolean {
+        searchLayout = child as? ConstraintLayout
         if (isSearchMode) show(child) else hide(child)
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
-    private fun hide(view: View) {
-        val params = view.layoutParams as CoordinatorLayout.LayoutParams
+    private fun hide(view: View?) {
+        val params = view?.layoutParams as CoordinatorLayout.LayoutParams
         val mY = -(view.height + params.bottomMargin).toFloat()
         view.translationY = mY
     }
 
-    private fun show(view: View) {
-        view.translationY = 0f
+    private fun show(view: View?) {
+        view?.translationY = 0f
     }
 
-    private fun hideAnim(view: View) {
-        val params = view.layoutParams as CoordinatorLayout.LayoutParams
+    private fun hideAnim(view: View?) {
+        val params = view?.layoutParams as CoordinatorLayout.LayoutParams
         view.animate().apply {
             translationY(-(view.height + params.bottomMargin).toFloat())
             duration = EXIT_ANIMATION_DURATION
@@ -76,8 +80,8 @@ class SearchBarHideOnScrollBehavior(context: Context,
         }
     }
 
-    private fun showAnim(view: View) {
-        view.animate().apply {
+    private fun showAnim(view: View?) {
+        view?.animate()?.apply {
             translationY(0f)
             duration = ENTER_ANIMATION_DURATION
             interpolator = DecelerateInterpolator()
@@ -107,7 +111,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
             type,
             consumed
         )
-        hideSearchFieldSubject.onNext(child to dyConsumed)
+        hideSearchFieldSubject.onNext(dyConsumed)
     }
 
     override fun onStartNestedScroll(
@@ -118,7 +122,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
         axes: Int,
         type: Int
     ): Boolean {
-        return axes == ViewCompat.SCROLL_AXIS_VERTICAL
+        return axes == ViewCompat.SCROLL_AXIS_VERTICAL && isSearchMode
     }
 
 

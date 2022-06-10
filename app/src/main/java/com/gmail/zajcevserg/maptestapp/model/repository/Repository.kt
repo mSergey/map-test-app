@@ -26,12 +26,22 @@ import java.util.concurrent.TimeUnit
 class Repository(
     private val dao: LayersDao = App.database.getDao(),
     private val layerItemSubject: PublishSubject<MutableList<LayerItem>> = PublishSubject.create(),
-    private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create())
-{
+    private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create(),
+    private val searchTextSubject: PublishSubject<String> = PublishSubject.create()
+) {
+    private val searchDisposable: Disposable =
+        searchTextSubject
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .debounce(600, TimeUnit.MILLISECONDS)
+            .map { dao.find(it) }
+            .subscribe { list ->
+                list.forEach {
+                    log("${it.id} ${it.title}")
+                }
+            }
 
-
-
-    val layerItemSubjectDisposable: Disposable =
+    private val layerItemSubjectDisposable: Disposable =
         layerItemSubject
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -40,7 +50,7 @@ class Repository(
                 dao.updateAllLayers(it)
             }
 
-    val checkedFlagsSubjectDisposable: Disposable =
+    private val checkedFlagsSubjectDisposable: Disposable =
         checkedFlagsSubject
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
@@ -49,7 +59,7 @@ class Repository(
             }
 
     val polygonOptions = PolygonOptions()
-        .add(LatLng(55.82344398214789, 37.71777048265712))
+        .add(LatLng(55.82344398214790, 37.71777048265712))
         .add(LatLng(55.823955375520974, 37.7159497389675))
         .add(LatLng(55.820750532781155, 37.71206548576296))
         .add(LatLng(55.82017090537237, 37.70878814712162))
@@ -98,7 +108,7 @@ class Repository(
             .subscribe()
     }
 
-    fun updateCheckedStateAll(checked: Boolean){
+    fun updateCheckedStateAll(checked: Boolean) {
         dao.updateCheckedStateAll(if (checked) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
@@ -119,5 +129,14 @@ class Repository(
         layerItemSubject.onNext(layers)
     }
 
+    fun find(searchQuery: String) {
+        searchTextSubject.onNext(searchQuery)
+    }
+
+    fun clear() {
+        layerItemSubjectDisposable.dispose()
+        checkedFlagsSubjectDisposable.dispose()
+        searchDisposable.dispose()
+    }
 
 }

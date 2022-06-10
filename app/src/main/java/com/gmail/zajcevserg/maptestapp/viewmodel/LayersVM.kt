@@ -1,20 +1,20 @@
 package com.gmail.zajcevserg.maptestapp.viewmodel
 
-import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
+import io.reactivex.subjects.PublishSubject
 
 
 class LayersVM : ViewModel() {
 
     private val repository: Repository = Repository()
-    //val checkedStates = mutableListOf<Boolean>()
+    private val searchTextSubject: PublishSubject<Int> = PublishSubject.create()
+
+
     val mSavedCheckedStates = mutableMapOf<Int, Boolean>()
 
 
@@ -213,8 +213,7 @@ class LayersVM : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        repository.layerItemSubjectDisposable.dispose()
-        repository.checkedFlagsSubjectDisposable.dispose()
+        repository.clear()
     }
 
     private fun isDifferent(list: List<LayerItem>): Boolean {
@@ -231,6 +230,13 @@ class LayersVM : ViewModel() {
             isAllActive -> Switch3Way.SwitchPositions.END
             isAllInactive -> Switch3Way.SwitchPositions.START
             else -> Switch3Way.SwitchPositions.MIDDLE
+        }
+    }
+
+    fun onSearchTextChange(text: CharSequence) {
+        if (text.isNotEmpty()) {
+            val searchQuery = "%" + text.toString() + "%"
+            repository.find(searchQuery)
         }
     }
 

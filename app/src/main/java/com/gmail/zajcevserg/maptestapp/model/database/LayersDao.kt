@@ -15,6 +15,8 @@ interface LayersDao {
         }
     }
 
+    @Query("SELECT * FROM layers WHERE title LIKE :query")
+    fun find(query: String): List<LayerItem>
 
     @Insert
     fun insert(toSave: LayerItem): Completable

@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.forEach
+import androidx.core.widget.doOnTextChanged
 
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -77,7 +79,15 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
+            val params = binding.searchInclude.searchBar.layoutParams
+                    as CoordinatorLayout.LayoutParams
+            val behavior = params.behavior as SearchBarHideOnScrollBehavior
+            behavior.isSearchMode = isSearchMode
             binding.buttonSearch.isActivated = isSearchMode
+        }
+
+        binding.searchInclude.searchEt.doOnTextChanged { text, start, before, count ->
+            if (text != null) mViewModel.onSearchTextChange(text)
         }
 
         val toast = Toast
@@ -118,6 +128,14 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
             // add layer
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val params = binding.searchInclude.searchBar.layoutParams
+                as CoordinatorLayout.LayoutParams
+        val behavior = params.behavior as SearchBarHideOnScrollBehavior
+        behavior.searchBarHideDisposable.dispose()
     }
 
     private fun setSwitchPositionsOnViewHolders(position: Switch3Way.SwitchPositions) {

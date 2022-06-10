@@ -116,5 +116,5 @@ class MainActivity : AppCompatActivity() {
 
 
 fun log(text: String){
-    Log.v("myLog", text)
+    Log.d("myLog", text)
 }

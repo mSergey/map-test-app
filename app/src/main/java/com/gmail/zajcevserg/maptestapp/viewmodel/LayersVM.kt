@@ -63,11 +63,6 @@ class LayersVM : ViewModel() {
                 .sortedBy { !it.isSharedLayer }
                 .toMutableList()
 
-            liveDataLayers.value?.forEach {
-                log("${it.id} ${it.turnedOn}")
-            }
-
-
             mSavedCheckedStates.clear()
             liveDataLayers.value?.forEach {
                 mSavedCheckedStates[it.id] = it.turnedOn
@@ -81,7 +76,6 @@ class LayersVM : ViewModel() {
 
 
     fun onLayerSwitchClicked(idToUpdate: Int, checked: Boolean) {
-        log("id $idToUpdate")
         repository.updateLayer(idToUpdate, checked)
 
         liveDataLayers.value?.let { layers ->

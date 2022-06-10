@@ -105,7 +105,6 @@ class Repository(
     }
 
     fun updateCheckedByFlags(flagsMap: Map<Int, Boolean>) {
-        log("updateCheckedByFlags")
         checkedFlagsSubject.onNext(flagsMap)
     }
 

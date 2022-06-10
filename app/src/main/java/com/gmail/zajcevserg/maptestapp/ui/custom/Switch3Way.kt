@@ -176,9 +176,6 @@ class Switch3Way : ConstraintLayout {
 
 
     private fun setThumbColor(color: Int) {
-        log("${color}")
-
-
 
         binding.thumb.imageTintList = ColorStateList(
             arrayOf(

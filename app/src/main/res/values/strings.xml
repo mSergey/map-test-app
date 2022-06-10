@@ -23,4 +23,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="shared_layers">Общие слои</string>
     <string name="_11_03_2022">11.03.2022</string>
+    <string name="search_hint">Лесничество / уч. лесничество / кв. 2 / в. 3-5</string>
 </resources>

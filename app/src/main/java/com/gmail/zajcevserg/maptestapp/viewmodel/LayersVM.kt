@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 import io.reactivex.subjects.PublishSubject
 
@@ -12,8 +13,6 @@ import io.reactivex.subjects.PublishSubject
 class LayersVM : ViewModel() {
 
     private val repository: Repository = Repository()
-    private val searchTextSubject: PublishSubject<Int> = PublishSubject.create()
-
 
     val mSavedCheckedStates = mutableMapOf<Int, Boolean>()
 
@@ -56,6 +55,10 @@ class LayersVM : ViewModel() {
         }
     }
 
+    val liveDataSearch by lazy {
+        MutableLiveData<List<LayerItem>>()
+    }
+
     init {
         repository.requestLayers { layers ->
 
@@ -70,6 +73,9 @@ class LayersVM : ViewModel() {
 
             liveDataMainSwitchPosition.value = defineMainSwitchPosition(layers)
             liveDataIsSwitchTreeWay.value = isDifferent(layers)
+        }
+        repository.observeSearchResult {
+            liveDataSearch.value = it
         }
     }
 
@@ -234,10 +240,8 @@ class LayersVM : ViewModel() {
     }
 
     fun onSearchTextChange(text: CharSequence) {
-        if (text.isNotEmpty()) {
-            val searchQuery = "%" + text.toString() + "%"
-            repository.find(searchQuery)
-        }
+        val searchQuery = "%$text%"
+        repository.find(searchQuery)
     }
 
 }

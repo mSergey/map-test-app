@@ -59,6 +59,9 @@
     <color name="tab_text_color">#9C9FAA</color>
 
 
+    <!--Divider color-->
+    <color name="search_divider_color">#B6B9C4</color>
+    <color name="tabs_divider_color">#FFFFFF</color>
 
 
 

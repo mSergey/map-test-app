@@ -9,6 +9,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -49,6 +50,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
                 if (it > 0) showAnim(searchLayout)
                 else hideAnim(searchLayout)
             }
+
 
     override fun onLayoutChild(
         parent: CoordinatorLayout,
@@ -122,7 +124,10 @@ class SearchBarHideOnScrollBehavior(context: Context,
         axes: Int,
         type: Int
     ): Boolean {
-        return axes == ViewCompat.SCROLL_AXIS_VERTICAL && isSearchMode
+        log("onStartNestedScroll $target")
+        return axes == ViewCompat.SCROLL_AXIS_VERTICAL
+                && isSearchMode
+                && target.id == R.id.layers_recycler_view
     }
 
 

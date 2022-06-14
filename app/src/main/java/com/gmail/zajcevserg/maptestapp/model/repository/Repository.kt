@@ -29,22 +29,23 @@ class Repository(
     private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create(),
     private val searchTextSubject: PublishSubject<String> = PublishSubject.create()
 ) {
+
     private val searchDisposable: Disposable =
         searchTextSubject
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .debounce(600, TimeUnit.MILLISECONDS)
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .filter { it.length > 2 }
             .map { dao.find(it) }
-            .subscribe { list ->
-                list.forEach {
-                    log("${it.id} ${it.title}")
-                }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                searchCallback?.invoke(it)
             }
+
+    private var searchCallback: ((List<LayerItem>) -> Unit)? = null
 
     private val layerItemSubjectDisposable: Disposable =
         layerItemSubject
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .debounce(300, TimeUnit.MILLISECONDS)
             .subscribe {
                 dao.updateAllLayers(it)
@@ -53,7 +54,6 @@ class Repository(
     private val checkedFlagsSubjectDisposable: Disposable =
         checkedFlagsSubject
             .subscribeOn(Schedulers.io())
-            .observeOn(Schedulers.io())
             .subscribe {
                 dao.updateCheckedColumn(it)
             }
@@ -86,7 +86,6 @@ class Repository(
 
     @SuppressLint("CheckResult")
     fun requestLayers(callback: (MutableList<LayerItem>) -> Unit) {
-
         dao.getLayersSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -132,6 +131,12 @@ class Repository(
     fun find(searchQuery: String) {
         searchTextSubject.onNext(searchQuery)
     }
+
+    fun observeSearchResult(callback: (List<LayerItem>) -> Unit) {
+        this.searchCallback = callback
+    }
+
+
 
     fun clear() {
         layerItemSubjectDisposable.dispose()

@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            />
 
         <include
             android:id="@+id/search_include"
@@ -103,18 +103,6 @@
         app:track_color_end="@color/switch_end_side_track_color"
         app:track_color_start="@color/switch_start_side_track_color" />
 
-
-    <!--<ImageView
-        android:id="@+id/undefined_image_view"
-        android:layout_width="56dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="8dp"
-        android:src="@drawable/toggle_level_list"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bottom_background_image_view" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

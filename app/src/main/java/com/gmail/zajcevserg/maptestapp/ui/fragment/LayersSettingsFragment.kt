@@ -18,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.gmail.zajcevserg.maptestapp.R
 
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
+import com.gmail.zajcevserg.maptestapp.ui.adapter.SearchAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 
@@ -78,8 +80,19 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
             binding.mainSwitch.visibility = if (isDragMode) View.GONE else View.VISIBLE
         }
 
+        // search
+        val searchAdapter = SearchAdapter(mViewModel, requireContext())
+        searchAdapter.setOnSearchItemClickListener {
+            log("$it")
+        }
+
+        with(binding.searchInclude.searchResultRv) {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchAdapter
+        }
+
         mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
-            val params = binding.searchInclude.searchBar.layoutParams
+            val params = binding.searchInclude.itemSearchCl.layoutParams
                     as CoordinatorLayout.LayoutParams
             val behavior = params.behavior as SearchBarHideOnScrollBehavior
             behavior.isSearchMode = isSearchMode
@@ -89,6 +102,14 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         binding.searchInclude.searchEt.doOnTextChanged { text, start, before, count ->
             if (text != null) mViewModel.onSearchTextChange(text)
         }
+
+        mViewModel.liveDataSearch.observe(viewLifecycleOwner) {
+            it ?: return@observe
+            binding.searchInclude.searchGroup.visibility =
+                if (it.isNotEmpty()) View.VISIBLE else View.GONE
+            searchAdapter.submitList(it)
+        }
+
 
         val toast = Toast
             .makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
@@ -128,11 +149,13 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
             // add layer
         }
+
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        val params = binding.searchInclude.searchBar.layoutParams
+        val params = binding.searchInclude.itemSearchCl.layoutParams
                 as CoordinatorLayout.LayoutParams
         val behavior = params.behavior as SearchBarHideOnScrollBehavior
         behavior.searchBarHideDisposable.dispose()

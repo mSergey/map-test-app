@@ -3,6 +3,7 @@ package com.gmail.zajcevserg.maptestapp.ui.activity
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.res.Configuration
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -91,6 +92,7 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
 
     private inner class SettingsPageAdapter
         : FragmentStateAdapter(supportFragmentManager, lifecycle) {

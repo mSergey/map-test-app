@@ -1,5 +1,6 @@
 package com.gmail.zajcevserg.maptestapp.ui.fragment
 
+
 import android.graphics.Color
 import androidx.fragment.app.Fragment
 
@@ -10,6 +11,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentMapsBinding
+import com.gmail.zajcevserg.maptestapp.model.application.findExceptHeader
+import com.gmail.zajcevserg.maptestapp.model.database.DataItem
+import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
@@ -26,29 +30,30 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
 
-        binding.stubImage.hide()
-
         mGoogleMap ?: run { mGoogleMap = googleMap }
 
-        mViewModel.liveDataLayers.observe(viewLifecycleOwner) {
+        mViewModel.liveDataLayersFlowable.observe(viewLifecycleOwner) {
             with(googleMap) {
                 clear()
-                if (it.first().turnedOn) {
+                if (it.isEmpty()) return@observe
+                val layer = it.findExceptHeader { it.id == 1 }
+                layer ?: return@observe
+                if (layer.turnedOn) {
                     val polygon = addPolygon(mViewModel.getCoordinates())
-                    val alpha = 255 * it.first().transparency / 100
+                    val alpha = 255 * layer.transparency / 100
                     val color = Color.argb(alpha, 255, 0, 0)
                     polygon.fillColor = color
                 }
             }
         }
 
-
         mViewModel.liveDataMapType.observe(viewLifecycleOwner) {
             mGoogleMap?.mapType = it
         }
-        mViewModel.liveDataMapInteraction.observe(viewLifecycleOwner) { adapterPosition ->
-            adapterPosition ?: return@observe
-            if (adapterPosition == 0) {
+
+        mViewModel.liveDataMapInteraction.observe(viewLifecycleOwner) { layerId ->
+            layerId ?: return@observe
+            if (layerId == 1) {
                 val minS: Double = mViewModel.getCoordinates().points.minOf { it.latitude }
                 val minW: Double = mViewModel.getCoordinates().points.minOf { it.longitude }
                 val maxN: Double = mViewModel.getCoordinates().points.maxOf { it.latitude }

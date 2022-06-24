@@ -9,6 +9,16 @@
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/search_result_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/layer_icon_polygon"/>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/item_title"
         android:layout_width="0dp"
@@ -20,7 +30,9 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/search_result_icon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Объект_11"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

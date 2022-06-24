@@ -11,14 +11,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.forEach
 import androidx.core.widget.doOnTextChanged
 
+
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.zajcevserg.maptestapp.R
-
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
+import com.gmail.zajcevserg.maptestapp.model.application.noneExceptHeader
+import com.gmail.zajcevserg.maptestapp.model.database.DataItem
+
+
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 import com.gmail.zajcevserg.maptestapp.ui.adapter.SearchAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
@@ -30,13 +33,22 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
     private var _binding: FragmentLayersSettingsBinding? = null
     private val binding get() = _binding!!
     private val mViewModel: LayersVM by activityViewModels()
-    private lateinit var mAdapter: LayersAdapter
+    private lateinit var mLayersAdapter: LayersAdapter
+    private lateinit var mSearchAdapter: SearchAdapter
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var swipeCallback: SwipeCallback
+    private lateinit var mToast: Toast
+    //private var decorator: HeaderItemDecorator? = null
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mAdapter = LayersAdapter(mViewModel, context, this)
+        mLayersAdapter = LayersAdapter(mViewModel, context, this)
+        mSearchAdapter = SearchAdapter(context)
+        mToast = Toast.makeText(
+            requireActivity().applicationContext,
+            "",
+            Toast.LENGTH_SHORT)
     }
 
     override fun onCreateView(
@@ -46,7 +58,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         _binding = FragmentLayersSettingsBinding.inflate(inflater, container, false)
 
         with(binding) {
-            layersRecyclerView.adapter = mAdapter
+            layersRecyclerView.adapter = mLayersAdapter
             layersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             layersRecyclerView.isScrollbarFadingEnabled = false
         }
@@ -55,23 +67,40 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        itemTouchHelper =
-            ItemTouchHelper(SwipeCallback(binding.layersRecyclerView, mViewModel, mAdapter))
+        swipeCallback =
+            SwipeCallback(binding.layersRecyclerView, mViewModel, mLayersAdapter)
+
+        itemTouchHelper = ItemTouchHelper(swipeCallback)
 
         itemTouchHelper.attachToRecyclerView(binding.layersRecyclerView)
 
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
-            mAdapter.submitList(layers)
+            mLayersAdapter.submitList(layers)
+
+
+            /*decorator ?: run {
+                decorator = HeaderItemDecorator(layers, requireContext())
+                binding.layersRecyclerView.addItemDecoration(decorator!!)
+                swipeCallback.addOnItemMoveListener(decorator!!)
+                mViewModel.liveDataSharedLayerIds
+                    .observe(viewLifecycleOwner) { decorator?.setSharedLayersIds(it) }
+            }*/
         }
+
+        /*mViewModel.liveDataSharedLayerIds.observe(viewLifecycleOwner) {
+            mViewModel.liveDataLayers.value?.add(it.size, DataItem.Header(Int.MAX_VALUE))
+        }*/
+
 
         binding.buttonSearch.setOnClickListener(this)
         binding.buttonDrag.setOnClickListener(this)
         binding.buttonDel.setOnClickListener(this)
-        binding.buttonAdd.setOnClickListener(this)
+        binding.buttonAddNewLayer.setOnClickListener(this)
+
 
         mViewModel.liveDataDragMode.observe(viewLifecycleOwner) { isDragMode ->
 
-            mAdapter.currentList.forEachIndexed { adapterPosition, item ->
+            mLayersAdapter.currentList.forEachIndexed { adapterPosition, item ->
                 val holder = binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
                         as? LayersAdapter.LayerItemViewHolder
                 holder?.setDragMode(isDragMode)
@@ -80,44 +109,67 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
             binding.mainSwitch.visibility = if (isDragMode) View.GONE else View.VISIBLE
         }
 
-        // search
-        val searchAdapter = SearchAdapter(mViewModel, requireContext())
-        searchAdapter.setOnSearchItemClickListener {
-            log("$it")
-        }
-
-        with(binding.searchInclude.searchResultRv) {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = searchAdapter
-        }
-
+        //search mode on/off
         mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
             val params = binding.searchInclude.itemSearchCl.layoutParams
                     as CoordinatorLayout.LayoutParams
             val behavior = params.behavior as SearchBarHideOnScrollBehavior
             behavior.isSearchMode = isSearchMode
             binding.buttonSearch.isActivated = isSearchMode
+
+            setRVAdapter(
+                binding.layersRecyclerView,
+                if (isSearchMode && mSearchAdapter.currentList.isNotEmpty()) mSearchAdapter
+                else mLayersAdapter
+            )
         }
 
+        // search
+        //val searchClickToast = Toast
+            //.makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
+
+        mSearchAdapter.setOnSearchItemClickListener {
+            val text = "${mSearchAdapter.currentList[it].objectName} is clicked"
+            mToast.setText(text)
+            mToast.show()
+        }
+
+        var nothingFoundToast: Toast? = Toast
+            .makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
+
         binding.searchInclude.searchEt.doOnTextChanged { text, start, before, count ->
-            if (text != null) mViewModel.onSearchTextChange(text)
+            text ?: return@doOnTextChanged
+            if (!mViewModel.liveDataSearchMode.value!!) return@doOnTextChanged
+            mViewModel.onSearchTextChange(text)
+            val notFoundText = "\"$text\" not found"
+            nothingFoundToast = if (text.isNotEmpty())
+                Toast.makeText(
+                    requireActivity().applicationContext,
+                    notFoundText,
+                    Toast.LENGTH_SHORT
+                ) else null
         }
 
         mViewModel.liveDataSearch.observe(viewLifecycleOwner) {
             it ?: return@observe
-            binding.searchInclude.searchGroup.visibility =
-                if (it.isNotEmpty()) View.VISIBLE else View.GONE
-            searchAdapter.submitList(it)
+            if (!mViewModel.liveDataSearchMode.value!!) return@observe
+            if (it.isEmpty()) {
+                setRVAdapter(binding.layersRecyclerView, mLayersAdapter)
+                nothingFoundToast?.show()
+            } else {
+                setRVAdapter(binding.layersRecyclerView, mSearchAdapter)
+                mSearchAdapter.submitList(it)
+            }
         }
 
-
-        val toast = Toast
-            .makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
+        //background buttons click
+        //val toast = Toast
+            //.makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
 
         mViewModel.liveDataBackgroundBtn.observe(viewLifecycleOwner) {
             it ?: return@observe
-            toast.setText(it)
-            toast.show()
+            mToast.setText(it)
+            mToast.show()
         }
 
         mViewModel.liveDataMainSwitchPosition.observe(viewLifecycleOwner) {
@@ -145,12 +197,6 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
             binding.mainSwitch.isThreeWay = it
         }
 
-        binding.buttonAdd.setOnClickListener {
-
-            // add layer
-        }
-
-
     }
 
     override fun onDestroy() {
@@ -168,10 +214,13 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                         as? LayersAdapter.LayerItemViewHolder
             holder?.binding?.layerSwitch?.switchPosition = position
         }
+    }
 
-
-
-
+    private fun setRVAdapter(rv: RecyclerView,
+                             _adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
+    ) {
+        if (_adapter.javaClass == rv.adapter?.javaClass) return
+        else rv.adapter = _adapter
     }
 
 
@@ -185,7 +234,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         holdersToSetSwitchByFlag.forEach {
-            val itemModel = mAdapter.currentList[it.adapterPosition]
+            val itemModel = mLayersAdapter.currentList[it.adapterPosition]
             val flag = idFlagsDic[itemModel.id]
             if (flag != null)
             it.binding.layerSwitch.switchPosition =
@@ -197,16 +246,31 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         itemTouchHelper.startDrag(viewHolder)
     }
 
+
+
     override fun onClick(view: View) {
+
         when (view.id) {
             R.id.button_del -> {
-                mViewModel.removeLayers()
+                if (mLayersAdapter.currentList.noneExceptHeader { it.selectedToRemove }) {
+                    val text = "Nothing selected to remove." +
+                            "\nTo select perform long click on layer icon."
+                    mToast.setText(text)
+                    mToast.duration = Toast.LENGTH_LONG
+                    mToast.show()
+                } else mViewModel.removeLayers()
             }
             R.id.button_search -> {
                 mViewModel.liveDataSearchMode.value = mViewModel.liveDataSearchMode.value?.not()
             }
-            R.id.button_add -> {
+            R.id.button_add_new_layer -> {
 
+                mViewModel.addNewLayer()
+
+                /*mViewModel.liveDataLayers.value?.forEachIndexed { index, layerItem ->
+                    val text = if(index == layerItem.id - 1) "TRUE" else "FALSE"
+                    log(text)
+                }*/
             }
             R.id.button_drag -> {
                 mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()

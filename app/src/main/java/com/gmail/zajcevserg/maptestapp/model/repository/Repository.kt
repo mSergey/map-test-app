@@ -2,21 +2,16 @@ package com.gmail.zajcevserg.maptestapp.model.repository
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import androidx.collection.arrayMapOf
-import androidx.room.Transaction
-import com.gmail.zajcevserg.maptestapp.model.application.App
-import com.gmail.zajcevserg.maptestapp.model.database.LayerItem
 
-import com.gmail.zajcevserg.maptestapp.model.database.LayersDao
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
+import com.gmail.zajcevserg.maptestapp.model.application.App
+import com.gmail.zajcevserg.maptestapp.model.database.*
+
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
-import io.reactivex.*
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.Consumer
-
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
@@ -25,27 +20,27 @@ import java.util.concurrent.TimeUnit
 
 class Repository(
     private val dao: LayersDao = App.database.getDao(),
-    private val layerItemSubject: PublishSubject<MutableList<LayerItem>> = PublishSubject.create(),
+    private val layerItemSubject: PublishSubject<List<DataItem.LayerItem>> = PublishSubject.create(),
     private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create(),
     private val searchTextSubject: PublishSubject<String> = PublishSubject.create()
 ) {
+    private var searchCallback: ((List<LayerObject>) -> Unit)? = null
 
     private val searchDisposable: Disposable =
         searchTextSubject
             .subscribeOn(Schedulers.io())
-            .debounce(500, TimeUnit.MILLISECONDS)
-            .filter { it.length > 2 }
-            .map { dao.find(it) }
+            .debounce(700, TimeUnit.MILLISECONDS)
+            .map { if (it == "%%") emptyList() else dao.find(it) }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 searchCallback?.invoke(it)
             }
 
-    private var searchCallback: ((List<LayerItem>) -> Unit)? = null
 
     private val layerItemSubjectDisposable: Disposable =
         layerItemSubject
             .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
             .debounce(300, TimeUnit.MILLISECONDS)
             .subscribe {
                 dao.updateAllLayers(it)
@@ -54,6 +49,7 @@ class Repository(
     private val checkedFlagsSubjectDisposable: Disposable =
         checkedFlagsSubject
             .subscribeOn(Schedulers.io())
+            .observeOn(Schedulers.io())
             .subscribe {
                 dao.updateCheckedColumn(it)
             }
@@ -85,7 +81,7 @@ class Repository(
         .fillColor(Color.RED)
 
     @SuppressLint("CheckResult")
-    fun requestLayers(callback: (MutableList<LayerItem>) -> Unit) {
+    fun requestLayers(callback: (MutableList<DataItem.LayerItem>) -> Unit) {
         dao.getLayersSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -94,18 +90,34 @@ class Repository(
             })
     }
 
+    fun observeLayers(
+        callback: (MutableList<DataItem.LayerItem>) -> Unit
+    ): Disposable {
+        return dao.getLayersFlowable()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                callback.invoke(it)
+            }
+    }
 
-    fun updateLayer(id: Int, checked: Boolean) {
+    fun updateLayerChecked(id: Int, checked: Boolean) {
         dao.updateChecked(id, if (checked) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-    fun updateLayer(id: Int, transparency: Int) {
+    fun updateLayerTransparency(id: Int, transparency: Int) {
         dao.updateTransparency(id, transparency)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
+    fun updateIsSharedLayer(id: Int, isShared: Boolean) {
+        dao.updateIsShared(id, if (isShared) 1 else 0)
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+    }
+
 
     fun updateCheckedStateAll(checked: Boolean) {
         dao.updateCheckedStateAll(if (checked) 1 else 0)
@@ -123,8 +135,8 @@ class Repository(
             .subscribe()
     }
 
-
-    fun updateLayers(layers: MutableList<LayerItem>) {
+    fun updateLayers(layers: List<DataItem.LayerItem>?) {
+        layers ?: return
         layerItemSubject.onNext(layers)
     }
 
@@ -132,16 +144,23 @@ class Repository(
         searchTextSubject.onNext(searchQuery)
     }
 
-    fun observeSearchResult(callback: (List<LayerItem>) -> Unit) {
+    fun observeSearchResult(callback: (List<LayerObject>) -> Unit) {
         this.searchCallback = callback
     }
-
-
 
     fun clear() {
         layerItemSubjectDisposable.dispose()
         checkedFlagsSubjectDisposable.dispose()
         searchDisposable.dispose()
+    }
+
+    fun addLayer(newLayer: DataItem.LayerItem, callback: (Long) -> Unit) {
+        dao.addLayer(newLayer)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { id ->
+                callback.invoke(id)
+            }
     }
 
 }

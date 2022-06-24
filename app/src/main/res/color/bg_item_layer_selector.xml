@@ -4,5 +4,5 @@
     <item android:color="@color/bg_item_layer_color_selected"
         android:state_selected="true"/>
 
-    <item android:color="@color/bg_item_layer_color"/>
+    <item android:color="@color/surface_color"/>
 </selector>

@@ -18,18 +18,5 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragment.MapsFragment" />
 
-    <com.gmail.zajcevserg.maptestapp.ui.custom.StubImageView
-        android:id="@+id/stub_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        app:si_background_color="@color/text_expanded_color"
-        app:si_image_src="@drawable/layer_icon_waypoint"
-        app:si_text="Map is loading ..."
-        tools:visibility="gone" />
-
-
-
 
 </FrameLayout>

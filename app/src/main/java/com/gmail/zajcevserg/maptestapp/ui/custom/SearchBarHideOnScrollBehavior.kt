@@ -9,6 +9,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnLayout
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import io.reactivex.disposables.Disposable
@@ -24,7 +25,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
     private val hideSearchFieldSubject: PublishSubject<Int> = PublishSubject.create()
     private var searchLayout: ConstraintLayout? = null
 
-    var isSearchMode = true
+    var isSearchMode = false
     set(value) {
         if (field == value) return
         if (value) {
@@ -45,8 +46,6 @@ class SearchBarHideOnScrollBehavior(context: Context,
                         || previous == current
 
             }.subscribe {
-                log ("consume it $it")
-
                 if (it > 0) showAnim(searchLayout)
                 else hideAnim(searchLayout)
             }
@@ -58,7 +57,10 @@ class SearchBarHideOnScrollBehavior(context: Context,
         layoutDirection: Int
     ): Boolean {
         searchLayout = child as? ConstraintLayout
-        if (isSearchMode) show(child) else hide(child)
+        searchLayout?.doOnLayout {
+            if (isSearchMode) show(it) else hide(it)
+        }
+
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
@@ -113,7 +115,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
             type,
             consumed
         )
-        hideSearchFieldSubject.onNext(dyConsumed)
+        hideSearchFieldSubject.onNext(if (dyUnconsumed == 0) dyConsumed else dyUnconsumed)
     }
 
     override fun onStartNestedScroll(
@@ -124,7 +126,6 @@ class SearchBarHideOnScrollBehavior(context: Context,
         axes: Int,
         type: Int
     ): Boolean {
-        log("onStartNestedScroll $target")
         return axes == ViewCompat.SCROLL_AXIS_VERTICAL
                 && isSearchMode
                 && target.id == R.id.layers_recycler_view

@@ -5,23 +5,12 @@
     android:layout_gravity="top|center"
     android:id="@+id/item_search_cl"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="74dp"
     android:clickable="true"
     android:focusable="true"
     android:elevation="2dp"
-    android:background="@drawable/search_result_background_drawable"
+    android:background="@color/surface_color"
     app:layout_behavior=".ui.custom.SearchBarHideOnScrollBehavior">
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/search_top_bg"
-        android:layout_width="0dp"
-        android:layout_height="74dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:srcCompat="@color/bg_item_layer_color"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/search_et"
@@ -56,44 +45,6 @@
         app:layout_constraintEnd_toEndOf="@id/search_et"
         app:srcCompat="@drawable/search_bar_icon" />
 
-    <!--<com.google.android.material.textfield.MaterialAutoCompleteTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>-->
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/result_divider"
-        app:dividerColor="@color/search_divider_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/search_top_bg" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_result_rv"
-        android:layout_width="0dp"
-        android:layout_height="120dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toBottomOf="@id/result_divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-    <androidx.constraintlayout.helper.widget.Layer
-        android:id="@+id/search_move_layer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:constraint_referenced_ids="result_divider, search_result_rv"/>
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/search_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="result_divider, search_result_rv" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

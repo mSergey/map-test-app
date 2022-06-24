@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.RecyclerView
 import com.gmail.zajcevserg.maptestapp.ui.activity.log
-
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
+
 
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 import io.reactivex.subjects.PublishSubject
@@ -39,6 +39,7 @@ class SwipeCallback(
     private val subject: PublishSubject<Float> = PublishSubject.create()
     private var mSlop = 0
     private val swiped = mutableListOf<LayersAdapter.LayerItemViewHolder>()
+
 
 
     init {
@@ -81,7 +82,7 @@ class SwipeCallback(
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-        viewHolder as LayersAdapter.LayerItemViewHolder
+        if (viewHolder !is LayersAdapter.LayerItemViewHolder) return
         when (actionState) {
             ItemTouchHelper.ACTION_STATE_SWIPE -> {
                 if (!viewHolder.isLayerEnabled()) return

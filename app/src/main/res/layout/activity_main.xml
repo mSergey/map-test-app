@@ -26,6 +26,7 @@ tools:openDrawer="start">
         android:layout_width="330dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:background="@color/surface_color"
         android:fitsSystemWindows="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,17 +37,17 @@ tools:openDrawer="start">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_settings"
                 android:layout_width="wrap_content"
-                app:tabIndicatorColor="@color/tab_selected_color"
                 android:layout_height="56dp"
-                android:background="@android:color/transparent"
-                app:tabSelectedTextColor="@color/tab_selected_color"
-                app:tabTextColor="@color/tab_text_color"
-                app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:background="@color/tab_layout_bg_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tabMode="auto">
+                app:tabGravity="start"
+                app:tabIndicatorColor="@color/tab_selected_color"
+                app:tabMode="auto"
+                app:tabTextAppearance="@style/TabTextAppearance"
+                app:tabSelectedTextColor="@color/tab_selected_color"
+                app:tabTextColor="@color/tab_text_color" />
 
-            </com.google.android.material.tabs.TabLayout>
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider"
@@ -68,18 +69,6 @@ tools:openDrawer="start">
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider"/>
 
-
-            <!--<fragment
-                android:id="@+id/settings_nav_host"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:defaultNavHost="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider"
-                app:navGraph="@navigation/settings_navigation" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

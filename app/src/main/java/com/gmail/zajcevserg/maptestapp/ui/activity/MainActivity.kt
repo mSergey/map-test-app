@@ -3,31 +3,23 @@ package com.gmail.zajcevserg.maptestapp.ui.activity
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.res.Configuration
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AccelerateInterpolator
 import androidx.activity.viewModels
-import androidx.core.view.WindowCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.window.layout.WindowMetricsCalculator
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.ActivityMainBinding
+import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 import com.gmail.zajcevserg.maptestapp.ui.fragment.LayersSettingsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.MissionsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.SubstratesFragment
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-
 
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -80,13 +72,9 @@ class MainActivity : AppCompatActivity() {
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
         })
 
-
-
-
-
         mViewModel.liveDataMapInteraction.observe(this) {
             it ?: return@observe
-            if (it == 0) {
+            if (it == 1) {
                 binding.drawerLayout.close()
             }
         }
@@ -117,6 +105,8 @@ class MainActivity : AppCompatActivity() {
 }
 
 
+
 fun log(text: String){
     Log.d("myLog", text)
 }
+

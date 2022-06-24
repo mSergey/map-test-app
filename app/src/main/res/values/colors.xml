@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--Panels colors-->
-    <color name="expand_field_color">#4D566F</color>
-    <color name="bg_item_layer_color">#4D566F</color>
-    <color name="bg_item_layer_color_selected">#687495</color>
     <color name="surface_color">#383F55</color>
+    <color name="expand_field_color">#4D566F</color>
+    <color name="bg_item_layer_color_selected">#687495</color>
+
 
     <!--Slider colors-->
     <color name="slider_thumb_color">#FAFAFA</color>
@@ -21,7 +21,6 @@
     <color name="switch_thumb_color_middle">#FAFAFA</color>
     <color name="switch_start_side_track_color">#497E6E</color>
     <color name="switch_end_side_track_color">#838895</color>
-
 
 
     <!--Layer icon colors-->
@@ -57,12 +56,13 @@
     <!--Tab layout colors-->
     <color name="tab_selected_color">#FFFFFF</color>
     <color name="tab_text_color">#9C9FAA</color>
-
+    <color name="tab_layout_bg_color">#383F55</color>
 
     <!--Divider color-->
     <color name="search_divider_color">#B6B9C4</color>
+    <color name="shares_layers_divider_color">#B6B9C4</color>
+    <color name="shares_layers_divider_bg_color">#383F55</color>
     <color name="tabs_divider_color">#FFFFFF</color>
-
 
 
 </resources>

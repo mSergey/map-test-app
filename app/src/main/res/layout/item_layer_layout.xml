@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main_item_vg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_item_vg"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".ui.activity.MainActivity">
@@ -15,9 +15,10 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_round_thumb_up_alt_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
-        app:layout_constraintEnd_toStartOf="@id/button_two"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
+        app:layout_constraintEnd_toStartOf="@id/button_two"
+
         tools:visibility="invisible" />
 
     <ImageButton
@@ -26,34 +27,18 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_round_thumb_down_alt_24"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_h1"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_h1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="64dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_v1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="56dp" />
-
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/bg_top"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        android:layout_height="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/bg_layer_item" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -62,17 +47,10 @@
         android:layout_height="32dp"
         android:layout_marginStart="16dp"
         android:tint="@color/layer_icon_selector"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/expand_field_center_to_gps_icon" />
-
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/middle_divider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/layer_icon" />
 
 
     <com.google.android.material.textview.MaterialTextView
@@ -81,198 +59,278 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:textColor="@color/layer_title_text_selector"
         android:clickable="true"
+        android:ellipsize="end"
         android:focusable="true"
         android:fontFamily="@font/pt_sans"
-        android:maxLines="3"
-        android:textSize="16sp"
-        android:ellipsize="end"
-        android:lineSpacingExtra="-3sp"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        android:lineSpacingExtra="-3sp"
+        android:maxLines="3"
+        android:textColor="@color/layer_title_text_selector"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintEnd_toStartOf="@+id/sleep_image"
         app:layout_constraintStart_toEndOf="@id/layer_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Сигналы о лесоизменениях, тестовая выборка с ув-ным шагом" />
 
-
     <ImageView
         android:id="@+id/sleep_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintEnd_toStartOf="@+id/expand_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_sleep_24dp" />
+        app:srcCompat="@drawable/layer_sleep" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/expand_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:clickable="true"
         android:focusable="true"
         android:tint="@color/expand_icon_selector"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_v1"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/to_expand_selector" />
+        app:layout_constraintEnd_toStartOf="@id/barrier"
+        app:srcCompat="@drawable/to_expand_selector"
+        tools:layout_editor_absoluteX="319dp" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/drag_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tint="@color/drug_button_for_list_selector"
-        android:visibility="invisible"
         android:src="@drawable/drag_button_for_list"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        android:tint="@color/drug_button_for_list_selector"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Space
+        android:id="@+id/space"
+        android:layout_width="17dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
+        app:layout_constraintEnd_toStartOf="@id/layer_switch"/>
 
     <com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
         android:id="@+id/layer_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="11dp"
-        app:layout_constraintBottom_toBottomOf="@+id/guideline_h1"
+        android:visibility="visible"
+        app:is_three_way="false"
+        app:layout_constraintBottom_toBottomOf="@+id/bg_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:is_three_way="false"
         app:thumb_color_end="@color/switch_thumb_color_end"
         app:thumb_color_middle="@color/switch_thumb_color_middle"
         app:thumb_color_start="@color/switch_thumb_color_start"
         app:track_color_end="@color/switch_end_side_track_color"
         app:track_color_start="@color/switch_start_side_track_color" />
 
+
+    <!--Expanded field-->
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/middle_divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/bg_top" />
+
+
     <ImageView
         android:id="@+id/expanded_field_background"
         android:layout_width="0dp"
-        android:layout_height="103dp"
-        android:paddingBottom="8dp"
+        android:layout_height="119dp"
         android:layout_marginStart="16dp"
+        android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h1"
+        app:layout_constraintTop_toBottomOf="@id/middle_divider"
         app:srcCompat="@drawable/expanded_layer_item_drawable" />
 
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/transparency_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/pt_sans_caption"
+        android:gravity="center_vertical"
+        tools:text="Видимость: 60%"
+        android:textColor="#B6B9C4"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@id/transparency_slider"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h1"
-        android:text="Прозрачность: 0 %" />
+        app:layout_constraintStart_toStartOf="@+id/expanded_field_background"
+        app:layout_constraintTop_toTopOf="@+id/expanded_field_background" />
 
-    <TextView
-        android:id="@+id/sync_date_text_view"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/element_count_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/pt_sans_caption"
+        android:gravity="center_vertical"
+        tools:text="Эл-ов: 241"
+        android:textColor="#B6B9C4"
         android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@id/transparency_slider"
-        app:layout_constraintTop_toBottomOf="@id/guideline_h1"
-        tools:text="Синхр.: 12.02.2022" />
+        app:layout_constraintEnd_toStartOf="@+id/eye_image"
+        app:layout_constraintTop_toTopOf="@+id/expanded_field_background" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/eye_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/layer_eye"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="13dp"
+        app:layout_constraintEnd_toStartOf="@+id/number_of_views"
+        app:layout_constraintTop_toTopOf="@+id/expanded_field_background" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/number_of_views"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="13dp"
+        android:fontFamily="@font/pt_sans_caption"
+        android:gravity="center_vertical"
+        android:textColor="#FFFFFF"
+        tools:text="24"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/expanded_field_background"
+        app:layout_constraintTop_toTopOf="@+id/expanded_field_background" />
+
 
     <com.google.android.material.slider.Slider
         android:id="@+id/transparency_slider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="2dp"
         android:valueFrom="0"
         android:valueTo="100"
+        app:haloColor="@android:color/transparent"
         app:labelBehavior="gone"
+        app:layout_constraintEnd_toEndOf="@+id/expanded_field_background"
+        app:layout_constraintStart_toStartOf="@+id/expanded_field_background"
+        app:layout_constraintTop_toTopOf="@+id/transparency_text_view"
+        app:thumbColor="@color/slider_thumb_color"
         app:trackColorActive="@color/slider_track_active_color"
         app:trackColorInactive="@color/slider_track_inactive_color"
-        app:haloColor="@color/slider_thumb_color"
-        app:thumbColor="@color/slider_thumb_color"
-        app:layout_constraintEnd_toEndOf="@id/layer_switch"
-        app:layout_constraintStart_toStartOf="@+id/layer_title"
-        app:layout_constraintTop_toBottomOf="@+id/transparency_text_view" />
+        tools:value="20" />
 
-
-    <TextView
-        android:id="@+id/element_count_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="@string/elements_num"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
-        app:layout_constraintStart_toStartOf="@id/transparency_slider" />
-
-    <TextView
-        android:id="@+id/zoom_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="@string/zoom_range"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
-        app:layout_constraintStart_toEndOf="@+id/element_count_text_view" />
 
     <ImageButton
-        android:id="@+id/eye_image"
+        android:id="@+id/zoom_to_fit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
-        app:layout_constraintEnd_toStartOf="@+id/doc_image"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="-5dp"
+        app:layout_constraintStart_toStartOf="@+id/transparency_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/transparency_text_view"
         app:srcCompat="@drawable/expand_field_zoom_to_fit_icon" />
 
-    <ImageButton
-        android:id="@+id/doc_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
-        app:layout_constraintEnd_toStartOf="@+id/go_to_layer_center_button"
-        app:srcCompat="@drawable/expand_field_table_view_icon" />
 
     <ImageButton
-        android:id="@+id/go_to_layer_center_button"
+        android:id="@+id/center_to_gps_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/expanded_field_background"
-        app:layout_constraintEnd_toEndOf="@id/transparency_slider"
+        app:layout_constraintBottom_toBottomOf="@+id/zoom_to_fit_button"
+        app:layout_constraintStart_toEndOf="@+id/zoom_to_fit_button"
+        app:layout_constraintTop_toTopOf="@+id/zoom_to_fit_button"
         app:srcCompat="@drawable/expand_field_center_to_gps_icon" />
 
 
+    <ImageButton
+        android:id="@+id/table_view_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/center_to_gps_button"
+        app:layout_constraintStart_toEndOf="@+id/center_to_gps_button"
+        app:layout_constraintTop_toTopOf="@+id/center_to_gps_button"
+        app:srcCompat="@drawable/expand_field_table_view_icon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/zoom"
+        android:layout_width="48dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/expand_field_zoom_rectangle_icon"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/pt_sans_caption"
+        android:gravity="center"
+        tools:text="16-18"
+        android:maxLines="1"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/table_view_button"
+        app:layout_constraintEnd_toEndOf="@+id/expanded_field_background"
+        app:layout_constraintTop_toTopOf="@+id/table_view_button" />
 
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/bottom_panel_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button, middle_divider" />
+        app:constraint_referenced_ids=
+            "middle_divider,
+            expanded_field_background,
+            transparency_text_view,
+            element_count_text_view,
+            number_of_views,
+            eye_image,
+            transparency_slider,
+            zoom_to_fit_button,
+            center_to_gps_button,
+            table_view_button,
+            zoom" />
 
 
     <androidx.constraintlayout.helper.widget.Layer
         android:id="@+id/motion_layer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="guideline_h1, guideline_v1, bg_top, layer_icon, middle_divider, layer_title, sleep_image, expand_image, drag_image_view, layer_switch, expanded_field_background, transparency_text_view, sync_date_text_view, transparency_slider, element_count_text_view, zoom_text_view, eye_image, doc_image, go_to_layer_center_button "
+        app:constraint_referenced_ids=
+            "bg_top,
+            layer_icon,
+            layer_title,
+            expand_image,
+            space,
+            layer_switch,
+            drag_image_view,
+            middle_divider,
+            expanded_field_background,
+            transparency_text_view,
+            element_count_text_view,
+            number_of_views,
+            eye_image,
+            transparency_slider,
+            zoom_to_fit_button,
+            center_to_gps_button,
+            table_view_button,
+            zoom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -280,15 +338,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <androidx.constraintlayout.helper.widget.Layer
         android:id="@+id/background_buttons_layer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:constraint_referenced_ids="button_one, button_two"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:constraint_referenced_ids="button_one, button_two" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="layer_switch, drag_image_view, space" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,19 +13,22 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.DividerSharedLayersBinding
 import com.gmail.zajcevserg.maptestapp.databinding.ItemLayerLayoutBinding
 import com.gmail.zajcevserg.maptestapp.model.application.anyExceptHeader
 import com.gmail.zajcevserg.maptestapp.model.application.findExceptHeader
-import com.gmail.zajcevserg.maptestapp.model.application.log
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem.LayerItem
 import com.gmail.zajcevserg.maptestapp.ui.custom.OnItemMoveListener
@@ -33,8 +36,6 @@ import com.gmail.zajcevserg.maptestapp.ui.custom.OnStartDragListener
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 import com.google.android.material.slider.Slider
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -62,8 +63,9 @@ class LayersAdapter(val mViewModel: LayersVM,
     }
 
     inner class DividerViewHolder(
-        val binding: DividerSharedLayersBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+        binding: DividerSharedLayersBinding
+    ) : RecyclerView.ViewHolder(binding.root
+    ) {
         init {
             val currentDate = Date()
             val dateFormat: DateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
@@ -78,14 +80,13 @@ class LayersAdapter(val mViewModel: LayersVM,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-
             with(binding) {
-
 
                 transparencySlider.setOnTouchListener { view, motionEvent ->
                     view.parent.requestDisallowInterceptTouchEvent(true)
                     view.performClick()
                 }
+
                 transparencySlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                     @SuppressLint("RestrictedApi")
                     override fun onStartTrackingTouch(slider: Slider) {
@@ -114,12 +115,13 @@ class LayersAdapter(val mViewModel: LayersVM,
                         Switch3Way.SwitchPositions.MIDDLE -> false
                         Switch3Way.SwitchPositions.END -> true
                     }
+
                     val idToUpdate = try {
-                        //currentList[adapterPosition].turnedOn = mChecked
                         currentList[adapterPosition].id
                     } catch(exception: IndexOutOfBoundsException) {
                         return@setOnPositionChangeByClickListener
                     }
+
                     mViewModel.onLayerSwitchClicked(idToUpdate, mChecked)
 
                 }
@@ -139,12 +141,10 @@ class LayersAdapter(val mViewModel: LayersVM,
                     notifyItemChanged(indexToCollapse)
                     notifyItemChanged(adapterPosition)
                     mViewModel.expandLayer(idToUpdate)
-
                 }
 
                 layerTitle.setOnClickListener(mListener)
                 expandImage.setOnClickListener(mListener)
-
 
                 zoomToFitButton.setOnClickListener {
                     mViewModel.liveDataMapInteraction.value = currentList[adapterPosition].id
@@ -153,7 +153,8 @@ class LayersAdapter(val mViewModel: LayersVM,
             }
         }
 
-        fun bindView(position: Int) {
+        fun bindView(position: Int
+        ) {
 
             val layerItemModel = currentList[position] as LayerItem
             with (binding) {
@@ -161,7 +162,6 @@ class LayersAdapter(val mViewModel: LayersVM,
                 motionLayer.translationX = 0f
                 backgroundButtonsLayer.scaleX = 0f
                 backgroundButtonsLayer.scaleY = 0f
-
 
                 //transparency value
                 setColoredFormatText(layerItemModel.transparency, transparencyTextView)
@@ -181,7 +181,6 @@ class LayersAdapter(val mViewModel: LayersVM,
                 viewsSpannable.insert(7, layerItemModel.elementCount.toString())
                 binding.elementCountTextView.setText(viewsSpannable, TextView.BufferType.SPANNABLE)
 
-
                 //icon
                 setLayerIcon(layerItemModel, layerIcon)
 
@@ -194,11 +193,9 @@ class LayersAdapter(val mViewModel: LayersVM,
                 }
 
                 binding.layerIcon.setOnClickListener {
-
                     val isSelectionMode = currentList.anyExceptHeader {
                         it.selectedToRemove
                     }
-
                     if (isSelectionMode) setSelectionToRemove(layerItemModel, layerIcon)
                 }
 
@@ -247,9 +244,11 @@ class LayersAdapter(val mViewModel: LayersVM,
             }
         }
 
-        private fun setColoredFormatText(formatValue: Int, textView: TextView) {
+        private fun setColoredFormatText(formatValue: Int,
+                                         textView: TextView
+        ) {
             SpannableString(
-                context.getString(R.string.format_text, formatValue)
+                context.getString(R.string.visibility_format_string, formatValue)
             ).apply {
                 setSpan(
                     ForegroundColorSpan(Color.WHITE),11, length,
@@ -262,7 +261,8 @@ class LayersAdapter(val mViewModel: LayersVM,
         }
 
         private fun setSelectionToRemove(itemModel: LayerItem,
-                                         imageView: AppCompatImageView) {
+                                         imageView: AppCompatImageView
+        ) {
 
             itemModel.selectedToRemove = !itemModel.selectedToRemove
             setLayerIcon(itemModel, imageView)
@@ -270,7 +270,8 @@ class LayersAdapter(val mViewModel: LayersVM,
         }
 
         private fun setLayerIcon(itemModel: LayerItem,
-                                 imageView: AppCompatImageView) {
+                                 imageView: AppCompatImageView
+        ) {
             val mainIconId =
                 if (!itemModel.selectedToRemove) {
                     context.resources.getIdentifier(
@@ -287,7 +288,8 @@ class LayersAdapter(val mViewModel: LayersVM,
             return (currentList[adapterPosition] as LayerItem).enabled
         }
 
-        fun setDragMode(isDragMode: Boolean) {
+        fun setDragMode(isDragMode: Boolean
+        ) {
             if (isDragMode) {
                 binding.layerSwitch.visibility = View.GONE
                 binding.dragImageView.visibility = View.VISIBLE
@@ -299,7 +301,9 @@ class LayersAdapter(val mViewModel: LayersVM,
         }
     }
 
-    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+    override fun onViewAttachedToWindow(
+        holder: RecyclerView.ViewHolder
+    ) {
         if (holder is LayerItemViewHolder) {
             holder.setDragMode(mViewModel.liveDataDragMode.value!!)
             holder.binding.layerSwitch.switchPosition =
@@ -310,7 +314,8 @@ class LayersAdapter(val mViewModel: LayersVM,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup,
-                                    viewType: Int): RecyclerView.ViewHolder {
+                                    viewType: Int
+    ): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == 0) {
             val binding: ItemLayerLayoutBinding =
@@ -324,19 +329,20 @@ class LayersAdapter(val mViewModel: LayersVM,
 
     }
 
-
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder,
-                                  position: Int) {
+                                  position: Int
+    ) {
         if (holder is LayerItemViewHolder) holder.bindView(position)
     }
 
-    override fun getItemViewType(position: Int): Int {
+    override fun getItemViewType(position: Int
+    ): Int {
         return if (currentList[position] is LayerItem) 0 else 1
     }
 
-
     override fun onItemMove(fromPosition: Int,
-                            toPosition: Int): Boolean {
+                            toPosition: Int
+    ): Boolean {
 
         val itemFrom = currentList[fromPosition]
         val itemTo = currentList[toPosition]

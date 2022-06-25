@@ -6,14 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
+
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
-import com.gmail.zajcevserg.maptestapp.R
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
+
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
+
+import com.gmail.zajcevserg.maptestapp.R
+
 
 private const val ENTER_ANIMATION_DURATION = 500L
 private const val EXIT_ANIMATION_DURATION = 500L
@@ -36,7 +39,6 @@ class SearchBarHideOnScrollBehavior(context: Context,
         field = value
     }
 
-
     val searchBarHideDisposable: Disposable =
         hideSearchFieldSubject
             .distinctUntilChanged { previous, current ->
@@ -50,7 +52,6 @@ class SearchBarHideOnScrollBehavior(context: Context,
                 else hideAnim(searchLayout)
             }
 
-
     override fun onLayoutChild(
         parent: CoordinatorLayout,
         child: ViewGroup,
@@ -60,7 +61,6 @@ class SearchBarHideOnScrollBehavior(context: Context,
         searchLayout?.doOnLayout {
             if (isSearchMode) show(it) else hide(it)
         }
-
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
@@ -130,6 +130,5 @@ class SearchBarHideOnScrollBehavior(context: Context,
                 && isSearchMode
                 && target.id == R.id.layers_recycler_view
     }
-
 
 }

@@ -1,17 +1,19 @@
 package com.gmail.zajcevserg.maptestapp.ui.fragment
 
-import android.content.Context
+
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
+
+import com.google.android.gms.maps.GoogleMap
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentSubstratesBinding
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-import com.google.android.gms.maps.GoogleMap
 
 
 class SubstratesFragment : Fragment() {
@@ -29,7 +31,6 @@ class SubstratesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mViewModel.liveDataMapType.observe(viewLifecycleOwner) {
             binding.mapTypeRadioGroup.check(when(it) {
                 GoogleMap.MAP_TYPE_NORMAL -> R.id.scheme
@@ -38,9 +39,7 @@ class SubstratesFragment : Fragment() {
                 else -> R.id.scheme
             })
         }
-
         binding.mapTypeRadioGroup.setOnCheckedChangeListener { radioGroup, i ->
-
             mViewModel.liveDataMapType.value = when(i) {
                 R.id.scheme -> GoogleMap.MAP_TYPE_NORMAL
                 R.id.satellite -> GoogleMap.MAP_TYPE_SATELLITE
@@ -48,11 +47,5 @@ class SubstratesFragment : Fragment() {
                 else -> GoogleMap.MAP_TYPE_NONE
             }
         }
-
-
-
-
-
     }
-
 }

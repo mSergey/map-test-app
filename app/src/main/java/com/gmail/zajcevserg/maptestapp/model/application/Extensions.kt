@@ -5,11 +5,9 @@ import android.util.Log
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 
 
-fun String.log() {
-    Log.d("myLog", this)
-}
-
-inline fun Iterable<DataItem>.noneExceptHeader(predicate: (DataItem.LayerItem) -> Boolean): Boolean {
+inline fun Iterable<DataItem>.noneExceptHeader(
+    predicate: (DataItem.LayerItem) -> Boolean
+): Boolean {
     if (this is Collection && isEmpty()) return true
     for (element in this) {
         if (element is DataItem.LayerItem) {
@@ -19,7 +17,10 @@ inline fun Iterable<DataItem>.noneExceptHeader(predicate: (DataItem.LayerItem) -
     return true
 }
 
-inline fun Iterable<DataItem>.allExceptHeader(predicate: (DataItem.LayerItem) -> Boolean): Boolean {
+
+inline fun Iterable<DataItem>.allExceptHeader(
+    predicate: (DataItem.LayerItem) -> Boolean
+): Boolean {
     if (this is Collection && isEmpty()) return true
     for (element in this) {
         if (element is DataItem.LayerItem) {
@@ -29,7 +30,9 @@ inline fun Iterable<DataItem>.allExceptHeader(predicate: (DataItem.LayerItem) ->
     return true
 }
 
-inline fun Iterable<DataItem>.forEachExceptHeader(action: (DataItem.LayerItem) -> Unit) {
+inline fun Iterable<DataItem>.forEachExceptHeader(
+    action: (DataItem.LayerItem) -> Unit
+) {
     for (element in this) {
         if (element is DataItem.LayerItem) action(element)
     }
@@ -45,7 +48,6 @@ inline fun Iterable<DataItem>.findExceptHeader(
     }
     return null
 }
-
 
 inline fun Iterable<DataItem>.filterExceptHeader(
     predicate: (DataItem.LayerItem) -> Boolean
@@ -69,5 +71,9 @@ inline fun Iterable<DataItem>.anyExceptHeader(
         }
     }
     return false
+}
+
+fun log(text: String) {
+    Log.d("myLog", text)
 }
 

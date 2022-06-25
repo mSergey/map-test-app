@@ -10,9 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 import com.gmail.zajcevserg.maptestapp.databinding.ItemSearchLayoutBinding
-
 import com.gmail.zajcevserg.maptestapp.model.database.LayerObject
-
 
 
 class SearchAdapter(val context: Context
@@ -36,13 +34,14 @@ class SearchAdapter(val context: Context
             return oldItem.id == newItem.id
         }
     }
-    fun setOnSearchItemClickListener(listener: (id: Int) -> Unit) {
+
+    fun setOnSearchItemClickListener(listener: (id: Int) -> Unit
+    ) {
         this.mOnSearchItemClickListener = listener
     }
 
-
     inner class ItemSearchViewHolder(
-        val binding: ItemSearchLayoutBinding
+        private val binding: ItemSearchLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -80,7 +79,5 @@ class SearchAdapter(val context: Context
     override fun getItemCount(): Int {
         return currentList.size
     }
-
-
 
 }

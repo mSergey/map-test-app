@@ -1,9 +1,15 @@
 package com.gmail.zajcevserg.maptestapp.model.database
 
 
-import androidx.room.*
-import io.reactivex.*
-import java.util.concurrent.Flow
+import androidx.room.Dao
+import androidx.room.Transaction
+import androidx.room.Update
+import androidx.room.Insert
+import androidx.room.Query
+
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Single
 
 
 @Dao
@@ -43,16 +49,13 @@ interface LayersDao {
     @Query("SELECT * FROM layers")
     fun getLayersSingle(): Single<MutableList<DataItem.LayerItem>>
 
-
     @Query("SELECT * FROM layers")
     fun getLayersFlowable(): Flowable<MutableList<DataItem.LayerItem>>
 
     @Insert
     fun addLayer(item: DataItem.LayerItem): Single<Long>
 
-
     @Query("UPDATE layers SET turned_on = :checked")
     fun updateCheckedStateAll(checked: Int): Completable
-
 
 }

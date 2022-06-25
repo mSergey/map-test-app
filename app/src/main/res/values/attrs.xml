@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <declare-styleable name="StubImageView">
-        <attr name="si_background_color" format="color" />
-        <attr name="si_image_src" format="integer" />
-        <attr name="si_image_padding" format="dimension" />
-        <attr name="si_text" format="string" />
-    </declare-styleable>
 
     <declare-styleable name="Switch3Way">
         <attr name="switch_position" format="enum">
@@ -22,15 +16,5 @@
         <attr name="track_color_end" format="color" />
 
     </declare-styleable>
-
-    <declare-styleable name="Switch2Way">
-        <attr name="checked" format="boolean" />
-        <attr name="thumb_color_checked" format="color" />
-        <attr name="thumb_color_unchecked" format="color" />
-        <attr name="track_color_unchecked" format="color" />
-        <attr name="track_color_checked" format="color" />
-
-    </declare-styleable>
-
 
 </resources>

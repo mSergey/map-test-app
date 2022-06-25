@@ -149,6 +149,46 @@
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/item_search_layout.xml" value="0.5" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/search_layout.xml" value="0.48783314020857477" />
         <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/MapTestApp/app/src/main/res/layout/stub_image.xml" value="0.1" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/bg_layer_item.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/check_circle.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/delete.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/drag_button_for_list.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/drag_button_for_panel.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/drag_button_for_panel_colored.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/drag_button_for_panel_selector.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expand_field_center_to_gps_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expand_field_table_view_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expand_field_visible_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expand_field_zoom_rectangle_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expand_field_zoom_to_fit_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/expanded_layer_item_drawable.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_add.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_brighter_bg.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_round_thumb_down_alt_24.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_round_thumb_up_alt_24.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_toggle_off_black_24dp.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_toggle_on_black_24dp.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/ic_toggle_undefined_black_24dp.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_eye.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_folder.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_grometry_collection.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_line.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_polygon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_polygon_hatched.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_icon_waypoint.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/layer_sleep.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/refresh.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/search_bar_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/search_bar_text_input_field.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/search_button.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/search_button_colored.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/search_button_selector.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/sleep_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/to_expand_less_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/to_expand_more_icon.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/drawable/to_expand_selector.xml" value="0.3255" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/layout/activity_main.xml" value="0.5541666666666667" />
+        <entry key="..\:/Users/Sergey/Desktop/AndroidProjects/map-test-app/app/src/main/res/layout/divider_shared_layers.xml" value="0.31354166666666666" />
       </map>
     </option>
   </component>

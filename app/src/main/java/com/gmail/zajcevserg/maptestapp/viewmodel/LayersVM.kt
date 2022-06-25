@@ -3,14 +3,15 @@ package com.gmail.zajcevserg.maptestapp.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+
+import io.reactivex.disposables.Disposable
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.model.application.*
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 import com.gmail.zajcevserg.maptestapp.model.database.LayerObject
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
-
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
-import io.reactivex.disposables.Disposable
 
 
 class LayersVM : ViewModel() {
@@ -66,7 +67,6 @@ class LayersVM : ViewModel() {
         MutableLiveData<List<LayerObject>?>()
     }
 
-
     init {
         repository.requestLayers { layers ->
             updateLiveDataSet(layers, liveDataLayers, mSavedCheckedStates)
@@ -81,7 +81,6 @@ class LayersVM : ViewModel() {
             repository.observeLayers {
             liveDataLayersFlowable.value = it
         }
-
     }
 
     override fun onCleared() {
@@ -90,23 +89,16 @@ class LayersVM : ViewModel() {
         layersFlowableDisposable?.dispose()
     }
 
-
-
     fun onLayerSwitchClicked(idToUpdate: Int, checked: Boolean) {
         repository.updateLayerChecked(idToUpdate, checked)
-
         liveDataLayers.value?.let { layers ->
-
             val isAllCheckedBefore = layers.allExceptHeader { it.turnedOn }
             val isNoneCheckedBefore = layers.noneExceptHeader { it.turnedOn }
             val isDifferentCheckedBefore = !isAllCheckedBefore && !isNoneCheckedBefore
-
             layers.findExceptHeader { it.id == idToUpdate }?.turnedOn = checked
-
             val isAllCheckedAfter = layers.allExceptHeader { it.turnedOn }
             val isNoneCheckedAfter = layers.noneExceptHeader { it.turnedOn }
             val isDifferentCheckedAfter = !isAllCheckedAfter && !isNoneCheckedAfter
-
             when {
                 isAllCheckedBefore && isDifferentCheckedAfter -> {
                     mSavedCheckedStates.clear()
@@ -143,7 +135,6 @@ class LayersVM : ViewModel() {
             }
         }
     }
-
 
     fun setCheckedStatesForAll(checked: Boolean) {
         repository.updateCheckedStateAll(checked)
@@ -226,8 +217,9 @@ class LayersVM : ViewModel() {
     fun getCoordinates() = repository.polygonOptions
 
 
-    fun onLayerBackgroundButtonClicked(viewId: Int, position: Int) {
-
+    fun onLayerBackgroundButtonClicked(viewId: Int,
+                                       position: Int
+    ) {
         when (viewId) {
             R.id.button_one -> liveDataBackgroundBtn.value = "Button one pressed on $position layer"
             R.id.button_two -> liveDataBackgroundBtn.value = "Button two pressed on $position layer"
@@ -240,12 +232,14 @@ class LayersVM : ViewModel() {
         repository.updateLayers(toUpdate)
     }
 
-    fun onSearchTextChange(text: CharSequence) {
+    fun onSearchTextChange(text: CharSequence
+    ) {
         val searchQuery = "%$text%"
         repository.find(searchQuery)
     }
 
-    fun updateIsSharedLayer(layer: DataItem.LayerItem) {
+    fun updateIsSharedLayer(layer: DataItem.LayerItem
+    ) {
         repository.updateIsSharedLayer(layer.id, layer.isSharedLayer)
     }
 
@@ -258,7 +252,6 @@ class LayersVM : ViewModel() {
             liveDataLayers.value = (updatedLayers + toInsert).toMutableList()
         }
     }
-
 
     private fun updateLiveDataSet(_layers: List<DataItem.LayerItem>,
                                   liveData: MutableLiveData<MutableList<DataItem>>,
@@ -294,7 +287,5 @@ class LayersVM : ViewModel() {
             else -> Switch3Way.SwitchPositions.MIDDLE
         }
     }
-
-
 
 }

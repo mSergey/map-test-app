@@ -3,9 +3,6 @@ package com.gmail.zajcevserg.maptestapp.model.repository
 import android.annotation.SuppressLint
 import android.graphics.Color
 
-import com.gmail.zajcevserg.maptestapp.model.application.App
-import com.gmail.zajcevserg.maptestapp.model.database.*
-
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolygonOptions
 
@@ -16,6 +13,11 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 import java.util.concurrent.TimeUnit
+
+import com.gmail.zajcevserg.maptestapp.model.application.App
+import com.gmail.zajcevserg.maptestapp.model.database.DataItem
+import com.gmail.zajcevserg.maptestapp.model.database.LayerObject
+import com.gmail.zajcevserg.maptestapp.model.database.LayersDao
 
 
 class Repository(
@@ -35,7 +37,6 @@ class Repository(
             .subscribe {
                 searchCallback?.invoke(it)
             }
-
 
     private val layerItemSubjectDisposable: Disposable =
         layerItemSubject
@@ -81,7 +82,9 @@ class Repository(
         .fillColor(Color.RED)
 
     @SuppressLint("CheckResult")
-    fun requestLayers(callback: (MutableList<DataItem.LayerItem>) -> Unit) {
+    fun requestLayers(
+        callback: (MutableList<DataItem.LayerItem>) -> Unit
+    ) {
         dao.getLayersSingle()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -101,31 +104,39 @@ class Repository(
             }
     }
 
-    fun updateLayerChecked(id: Int, checked: Boolean) {
+    fun updateLayerChecked(id: Int,
+                           checked: Boolean
+    ) {
         dao.updateChecked(id, if (checked) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-    fun updateLayerTransparency(id: Int, transparency: Int) {
+    fun updateLayerTransparency(id: Int,
+                                transparency: Int
+    ) {
         dao.updateTransparency(id, transparency)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
-    fun updateIsSharedLayer(id: Int, isShared: Boolean) {
+
+    fun updateIsSharedLayer(id: Int,
+                            isShared: Boolean
+    ) {
         dao.updateIsShared(id, if (isShared) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-
-    fun updateCheckedStateAll(checked: Boolean) {
+    fun updateCheckedStateAll(checked: Boolean
+    ) {
         dao.updateCheckedStateAll(if (checked) 1 else 0)
             .subscribeOn(Schedulers.io())
             .subscribe()
     }
 
-    fun updateCheckedByFlags(flagsMap: Map<Int, Boolean>) {
+    fun updateCheckedByFlags(flagsMap: Map<Int, Boolean>
+    ) {
         checkedFlagsSubject.onNext(flagsMap)
     }
 
@@ -135,7 +146,9 @@ class Repository(
             .subscribe()
     }
 
-    fun updateLayers(layers: List<DataItem.LayerItem>?) {
+    fun updateLayers(
+        layers: List<DataItem.LayerItem>?
+    ) {
         layers ?: return
         layerItemSubject.onNext(layers)
     }
@@ -144,7 +157,9 @@ class Repository(
         searchTextSubject.onNext(searchQuery)
     }
 
-    fun observeSearchResult(callback: (List<LayerObject>) -> Unit) {
+    fun observeSearchResult(
+        callback: (List<LayerObject>) -> Unit
+    ) {
         this.searchCallback = callback
     }
 
@@ -154,7 +169,9 @@ class Repository(
         searchDisposable.dispose()
     }
 
-    fun addLayer(newLayer: DataItem.LayerItem, callback: (Long) -> Unit) {
+    fun addLayer(newLayer: DataItem.LayerItem,
+                 callback: (Long) -> Unit
+    ) {
         dao.addLayer(newLayer)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

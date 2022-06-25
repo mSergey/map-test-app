@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 
+
 class EndDrawerLayout : DrawerLayout {
 
     constructor(context: Context) : super(context)

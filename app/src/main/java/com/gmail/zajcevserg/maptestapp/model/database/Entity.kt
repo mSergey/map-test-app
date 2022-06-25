@@ -17,7 +17,6 @@ data class LayerObject(
     var iconResName: String = ""
 )
 
-
 sealed class DataItem {
 
     abstract var id: Int

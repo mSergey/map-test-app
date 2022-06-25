@@ -1,7 +1,6 @@
 package com.gmail.zajcevserg.maptestapp.ui.custom
 
 
-
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
@@ -12,19 +11,17 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.animation.DecelerateInterpolator
+
 import androidx.core.view.doOnLayout
-
 import androidx.recyclerview.widget.ItemTouchHelper
-
 import androidx.recyclerview.widget.RecyclerView
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
-import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 
-
-import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 import io.reactivex.subjects.PublishSubject
+
 import kotlin.math.abs
 
+import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
+import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 
 
 @SuppressLint("ClickableViewAccessibility")
@@ -40,8 +37,6 @@ class SwipeCallback(
     private var mSlop = 0
     private val swiped = mutableListOf<LayersAdapter.LayerItemViewHolder>()
 
-
-
     init {
         subject.distinctUntilChanged { previous, current ->
             if (current == 0f && previous != 0f) { mFrom = previous }
@@ -52,8 +47,6 @@ class SwipeCallback(
             threshold = convertDpToPixel(152)
             val vc: ViewConfiguration = ViewConfiguration.get(view.context)
             mSlop = vc.scaledTouchSlop
-            //val mMinFlingVelocity: Int = vc.scaledMinimumFlingVelocity
-            //val mMaxFlingVelocity: Int = vc.scaledMaximumFlingVelocity
             view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
@@ -100,16 +93,12 @@ class SwipeCallback(
                 }
             }
             else -> super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
         }
     }
-
-
 
     private fun swipeOpen(viewHolder: LayersAdapter.LayerItemViewHolder, from: Float) {
         val viewToAnimate = viewHolder.binding.motionLayer
         val mDuration = 120 * abs(threshold - from) / threshold
-
         ObjectAnimator
             .ofFloat(viewToAnimate, "translationX", from, -threshold)
             .apply {
@@ -118,11 +107,8 @@ class SwipeCallback(
                 setEvaluator { completePart, startPos, endPos ->
                     startPos as Float; endPos as Float
                     val translationX = startPos + (endPos - startPos) * completePart
-
                     viewHolder.binding.backgroundButtonsLayer.scaleX = completePart
                     viewHolder.binding.backgroundButtonsLayer.scaleY = completePart
-
-
                     translationX
                 }
                 addListener(object : AnimatorListenerAdapter() {
@@ -228,7 +214,6 @@ class SwipeCallback(
             super.getAnimationDuration(recyclerView, animationType, animateDx, animateDy)
     }
 
-
     private fun swipeClose(viewHolder: LayersAdapter.LayerItemViewHolder, from: Float) {
         val mDuration = 120 * abs(threshold - from) / threshold
         val viewToAnimate = viewHolder.binding.motionLayer
@@ -247,11 +232,8 @@ class SwipeCallback(
                 setEvaluator { completePart, startPos, endPos ->
                     startPos as Float; endPos as Float
                     val translationX = startPos + (endPos - startPos) * completePart
-
                     viewHolder.binding.backgroundButtonsLayer.scaleX = 1 - completePart
                     viewHolder.binding.backgroundButtonsLayer.scaleY = 1 - completePart
-
-
                     translationX
                 }
                 addListener(object : AnimatorListenerAdapter() {
@@ -265,6 +247,7 @@ class SwipeCallback(
                 start()
             }
     }
+
     private fun convertDpToPixel(dp: Int): Float {
         return run {
             val resources = mRecyclerView.resources

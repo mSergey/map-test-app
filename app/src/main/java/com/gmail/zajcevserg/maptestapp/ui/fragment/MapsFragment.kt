@@ -2,36 +2,36 @@ package com.gmail.zajcevserg.maptestapp.ui.fragment
 
 
 import android.graphics.Color
-import androidx.fragment.app.Fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
+
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentMapsBinding
 import com.gmail.zajcevserg.maptestapp.model.application.findExceptHeader
-import com.gmail.zajcevserg.maptestapp.model.database.DataItem
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.*
+
 
 class MapsFragment : Fragment() {
-
 
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
     private var mGoogleMap: GoogleMap? = null
     private val mViewModel: LayersVM by activityViewModels()
-
-
-
     private val callback = OnMapReadyCallback { googleMap ->
-
         mGoogleMap ?: run { mGoogleMap = googleMap }
-
         mViewModel.liveDataLayersFlowable.observe(viewLifecycleOwner) {
             with(googleMap) {
                 clear()
@@ -82,7 +82,5 @@ class MapsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
-
     }
 }

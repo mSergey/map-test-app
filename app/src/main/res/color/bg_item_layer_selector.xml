@@ -5,4 +5,5 @@
         android:state_selected="true"/>
 
     <item android:color="@color/surface_color"/>
+
 </selector>

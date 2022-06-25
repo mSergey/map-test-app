@@ -1,43 +1,31 @@
 package com.gmail.zajcevserg.maptestapp.ui.custom
 
+
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Color
-import android.os.Bundle
-import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateInterpolator
-import android.widget.TextView
-import androidx.constraintlayout.motion.utils.ViewState
+
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.forEach
-import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.CustomSwitchLayoutBinding
-import com.gmail.zajcevserg.maptestapp.ui.activity.log
-import com.google.android.gms.common.util.Hex
 
 
 class Switch3Way : ConstraintLayout {
 
-
-
     var isThreeWay = true
         set(value) {
-
             if (field == value) return
-            /*if (!value && switchPosition == SwitchPositions.MIDDLE) {
-                switchPosition = SwitchPositions.START
-            }*/
             field = value
         }
 
@@ -69,7 +57,6 @@ class Switch3Way : ConstraintLayout {
 
 
     private lateinit var binding: CustomSwitchLayoutBinding
-    private var bundle = Bundle()
     private var mOnPositionChangeListener: ((SwitchPositions) -> Unit)? = null
     private val mClickListener: SwitchClickListener = SwitchClickListener()
     private var mIsAnimationRunning = false
@@ -89,7 +76,8 @@ class Switch3Way : ConstraintLayout {
 
     constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?
+    ) : super(context, attrs) {
         binding = CustomSwitchLayoutBinding.inflate(LayoutInflater.from(context), this)
         parseAttrs(context, attrs)
         setListeners()
@@ -106,8 +94,9 @@ class Switch3Way : ConstraintLayout {
         this.isFocusable = true
     }
 
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+    override fun onMeasure(widthMeasureSpec: Int,
+                           heightMeasureSpec: Int
+    ) {
         val side = convertDpToPixel(48).toInt()
         val mSideMeasureSpec = MeasureSpec.makeMeasureSpec(side, MeasureSpec.EXACTLY)
         super.onMeasure(mSideMeasureSpec, mSideMeasureSpec)
@@ -116,7 +105,6 @@ class Switch3Way : ConstraintLayout {
     fun setOnPositionChangeByClickListener(listener: ((SwitchPositions) -> Unit)?) {
         mOnPositionChangeListener = listener
     }
-
 
     private fun parseAttrs(context: Context, attrs: AttributeSet?) {
         val attributes = context.obtainStyledAttributes(attrs, R.styleable.Switch3Way)
@@ -128,7 +116,6 @@ class Switch3Way : ConstraintLayout {
         isThreeWay = attributes.getBoolean(R.styleable.Switch3Way_is_three_way, true)
         val position = attributes.getInt(R.styleable.Switch3Way_switch_position, 1)
         attributes.recycle()
-
         switchPosition = SwitchPositions.values()[position]
         when (switchPosition) {
             SwitchPositions.START -> setupStartPosition()
@@ -146,7 +133,6 @@ class Switch3Way : ConstraintLayout {
             ),
             intArrayOf(trackColorStart, disabledTrackColor)
         )
-
         binding.trackEnd.imageTintList = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_enabled),
@@ -154,7 +140,6 @@ class Switch3Way : ConstraintLayout {
             ),
             intArrayOf(trackColorEnd, disabledTrackColor)
         )
-
         setThumbColor(when(switchPosition) {
             SwitchPositions.START -> thumbStartPositionColor
             SwitchPositions.MIDDLE -> thumbMiddlePositionColor
@@ -169,14 +154,15 @@ class Switch3Way : ConstraintLayout {
         }
     }
 
-    override fun setEnabled(enabled: Boolean) {
+    override fun setEnabled(enabled: Boolean
+    ) {
         this.forEach { it.isEnabled = enabled }
         super.setEnabled(enabled)
     }
 
 
-    private fun setThumbColor(color: Int) {
-
+    private fun setThumbColor(color: Int
+    ) {
         binding.thumb.imageTintList = ColorStateList(
             arrayOf(
                 intArrayOf(android.R.attr.state_enabled),
@@ -184,7 +170,6 @@ class Switch3Way : ConstraintLayout {
             ),
             intArrayOf(color, disabledThumbColor)
         )
-
     }
 
     private fun moveThumb(from: Float,
@@ -210,17 +195,9 @@ class Switch3Way : ConstraintLayout {
                         translationX
                     }
                     addListener(object : AnimatorListenerAdapter() {
-                        override fun onAnimationStart(animation: Animator?) {
-                            mIsAnimationRunning = true
-                        }
-
-                        override fun onAnimationEnd(animation: Animator?) {
-                            mIsAnimationRunning = false
-                        }
-
-                        override fun onAnimationCancel(animation: Animator?) {
-                            mIsAnimationRunning = false
-                        }
+                        override fun onAnimationStart(animation: Animator?) { mIsAnimationRunning = true }
+                        override fun onAnimationEnd(animation: Animator?) { mIsAnimationRunning = false }
+                        override fun onAnimationCancel(animation: Animator?) { mIsAnimationRunning = false }
                     })
                     start()
                 }
@@ -254,13 +231,8 @@ class Switch3Way : ConstraintLayout {
         setThumbColor(thumbEndPositionColor)
     }
 
-
     private fun convertDpToPixel(dp: Int): Float {
         return dp * (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
-    }
-
-    private fun convertPixelToDp(px: Int): Float {
-        return px / (resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
     }
 
     private inner class SwitchClickListener : OnClickListener {

@@ -1,9 +1,7 @@
 <resources>
 
     <style name="Theme.MapTestApp" parent="Theme.MaterialComponents.NoActionBar">
-
         <item name="colorPrimary">#FFFFFF</item>
-
     </style>
 
     <style name="TabTextAppearance" parent="TextAppearance.Material3.BodySmall">
@@ -13,7 +11,6 @@
         <item name="tabSelectedTextColor">@color/tab_selected_color</item>
         <item name="android:lineSpacingExtra">-1sp</item>
         <item name="lineHeight">20sp</item>
-
     </style>
 
 </resources>

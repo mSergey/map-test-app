@@ -2,33 +2,29 @@ package com.gmail.zajcevserg.maptestapp.ui.fragment
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.forEach
 import androidx.core.widget.doOnTextChanged
-
-
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
 import com.gmail.zajcevserg.maptestapp.model.application.noneExceptHeader
-import com.gmail.zajcevserg.maptestapp.model.database.DataItem
-
-
 import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 import com.gmail.zajcevserg.maptestapp.ui.adapter.SearchAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
 
 class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickListener {
-
 
     private var _binding: FragmentLayersSettingsBinding? = null
     private val binding get() = _binding!!
@@ -38,10 +34,9 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
     private lateinit var itemTouchHelper: ItemTouchHelper
     private lateinit var swipeCallback: SwipeCallback
     private lateinit var mToast: Toast
-    //private var decorator: HeaderItemDecorator? = null
 
-
-    override fun onAttach(context: Context) {
+    override fun onAttach(context: Context
+    ) {
         super.onAttach(context)
         mLayersAdapter = LayersAdapter(mViewModel, context, this)
         mSearchAdapter = SearchAdapter(context)
@@ -56,50 +51,29 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLayersSettingsBinding.inflate(inflater, container, false)
-
         with(binding) {
             layersRecyclerView.adapter = mLayersAdapter
             layersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             layersRecyclerView.isScrollbarFadingEnabled = false
         }
-
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View,
+                               savedInstanceState: Bundle?
+    ) {
         swipeCallback =
             SwipeCallback(binding.layersRecyclerView, mViewModel, mLayersAdapter)
-
         itemTouchHelper = ItemTouchHelper(swipeCallback)
-
         itemTouchHelper.attachToRecyclerView(binding.layersRecyclerView)
-
         mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
             mLayersAdapter.submitList(layers)
-
-
-            /*decorator ?: run {
-                decorator = HeaderItemDecorator(layers, requireContext())
-                binding.layersRecyclerView.addItemDecoration(decorator!!)
-                swipeCallback.addOnItemMoveListener(decorator!!)
-                mViewModel.liveDataSharedLayerIds
-                    .observe(viewLifecycleOwner) { decorator?.setSharedLayersIds(it) }
-            }*/
         }
-
-        /*mViewModel.liveDataSharedLayerIds.observe(viewLifecycleOwner) {
-            mViewModel.liveDataLayers.value?.add(it.size, DataItem.Header(Int.MAX_VALUE))
-        }*/
-
-
         binding.buttonSearch.setOnClickListener(this)
         binding.buttonDrag.setOnClickListener(this)
         binding.buttonDel.setOnClickListener(this)
         binding.buttonAddNewLayer.setOnClickListener(this)
-
-
         mViewModel.liveDataDragMode.observe(viewLifecycleOwner) { isDragMode ->
-
             mLayersAdapter.currentList.forEachIndexed { adapterPosition, item ->
                 val holder = binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
                         as? LayersAdapter.LayerItemViewHolder
@@ -125,9 +99,6 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         // search
-        //val searchClickToast = Toast
-            //.makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
-
         mSearchAdapter.setOnSearchItemClickListener {
             val text = "${mSearchAdapter.currentList[it].objectName} is clicked"
             mToast.setText(text)
@@ -163,9 +134,6 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         //background buttons click
-        //val toast = Toast
-            //.makeText(requireActivity().applicationContext, "", Toast.LENGTH_SHORT)
-
         mViewModel.liveDataBackgroundBtn.observe(viewLifecycleOwner) {
             it ?: return@observe
             mToast.setText(it)
@@ -192,11 +160,9 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                 }
             }
         }
-
         mViewModel.liveDataIsSwitchTreeWay.observe(viewLifecycleOwner) {
             binding.mainSwitch.isThreeWay = it
         }
-
     }
 
     override fun onDestroy() {
@@ -207,7 +173,9 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         behavior.searchBarHideDisposable.dispose()
     }
 
-    private fun setSwitchPositionsOnViewHolders(position: Switch3Way.SwitchPositions) {
+    private fun setSwitchPositionsOnViewHolders(
+        position: Switch3Way.SwitchPositions
+    ) {
         mViewModel.liveDataLayers.value?.forEachIndexed { adapterPosition, item ->
             val holder =
                 binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
@@ -216,23 +184,22 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
     }
 
-    private fun setRVAdapter(rv: RecyclerView,
-                             _adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
+    private fun setRVAdapter(
+        rv: RecyclerView,
+        _adapter: RecyclerView.Adapter<out RecyclerView.ViewHolder>,
     ) {
         if (_adapter.javaClass == rv.adapter?.javaClass) return
         else rv.adapter = _adapter
     }
 
-
-    private fun setSavedCheckedStatesOnViewHolders(idFlagsDic: Map<Int, Boolean>) {
-
+    private fun setSavedCheckedStatesOnViewHolders(idFlagsDic: Map<Int, Boolean>
+    ) {
         val holdersToSetSwitchByFlag = mutableListOf<LayersAdapter.LayerItemViewHolder>()
         binding.layersRecyclerView.forEach { view ->
             val holder = binding.layersRecyclerView.findContainingViewHolder(view)
                     as? LayersAdapter.LayerItemViewHolder?
             if (holder != null) holdersToSetSwitchByFlag.add(holder)
         }
-
         holdersToSetSwitchByFlag.forEach {
             val itemModel = mLayersAdapter.currentList[it.adapterPosition]
             val flag = idFlagsDic[itemModel.id]
@@ -246,10 +213,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         itemTouchHelper.startDrag(viewHolder)
     }
 
-
-
     override fun onClick(view: View) {
-
         when (view.id) {
             R.id.button_del -> {
                 if (mLayersAdapter.currentList.noneExceptHeader { it.selectedToRemove }) {
@@ -264,13 +228,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                 mViewModel.liveDataSearchMode.value = mViewModel.liveDataSearchMode.value?.not()
             }
             R.id.button_add_new_layer -> {
-
                 mViewModel.addNewLayer()
-
-                /*mViewModel.liveDataLayers.value?.forEachIndexed { index, layerItem ->
-                    val text = if(index == layerItem.id - 1) "TRUE" else "FALSE"
-                    log(text)
-                }*/
             }
             R.id.button_drag -> {
                 mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()

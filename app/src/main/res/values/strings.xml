@@ -7,7 +7,7 @@
     <string name="satellite">Спутник</string>
     <string name="hybrid">Гибрид</string>
     <string name="shared_layers">Общие слои</string>
-    <string name="search_hint">Лесничество / уч. лесничество / кв. 2 / в. 3–5</string>
+    <string name="search_hint">Лесничество\u0020/\u0020уч.\u0020лесничество\u0020/\u0020кв.\u00202\u0020/\u0020в.\u00203–5</string>
 
     <string-array name="settings_names">
         <item>Слои</item>

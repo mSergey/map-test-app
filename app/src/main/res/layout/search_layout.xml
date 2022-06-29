@@ -26,7 +26,6 @@
         android:clickable="true"
         android:focusable="true"
         android:fontFamily="@font/pt_sans"
-        android:hint="@string/search_hint"
         android:textSize="14sp"
         android:lineSpacingExtra="0sp"
         app:layout_constraintEnd_toEndOf="parent"

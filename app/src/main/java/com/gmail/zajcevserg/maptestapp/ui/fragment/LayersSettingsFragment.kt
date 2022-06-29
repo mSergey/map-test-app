@@ -1,10 +1,16 @@
 package com.gmail.zajcevserg.maptestapp.ui.fragment
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -99,6 +105,24 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         // search
+        val spanStr = SpannableString(
+            requireContext().getString(R.string.search_hint)
+        ).apply {
+            setSpan(
+                ForegroundColorSpan(Color.WHITE), 12, 13,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            setSpan(
+                ForegroundColorSpan(Color.WHITE), 30, 31,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+            setSpan(
+                ForegroundColorSpan(Color.WHITE), 38, 39,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            )
+        }
+
+        binding.searchInclude.searchEt.hint = spanStr
         mSearchAdapter.setOnSearchItemClickListener {
             val text = "${mSearchAdapter.currentList[it].objectName} is clicked"
             mToast.setText(text)

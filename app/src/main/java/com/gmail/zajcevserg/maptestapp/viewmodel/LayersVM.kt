@@ -11,6 +11,7 @@ import com.gmail.zajcevserg.maptestapp.model.application.*
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 import com.gmail.zajcevserg.maptestapp.model.database.LayerObject
 import com.gmail.zajcevserg.maptestapp.model.repository.Repository
+import com.gmail.zajcevserg.maptestapp.ui.custom.SwipeCallback
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 
 
@@ -243,13 +244,14 @@ class LayersVM : ViewModel() {
         repository.updateIsSharedLayer(layer.id, layer.isSharedLayer)
     }
 
-    fun addNewLayer() {
+    fun addNewLayer(callback: (Int) -> Unit) {
         val toInsert = DataItem.LayerItem()
         repository.addLayer(DataItem.LayerItem()) {
             toInsert.id = it.toInt()
             val updatedLayers = mutableListOf<DataItem>()
             updatedLayers.addAll(liveDataLayers.value!!)
             liveDataLayers.value = (updatedLayers + toInsert).toMutableList()
+            callback.invoke(liveDataLayers.value!!.indexOf(toInsert))
         }
     }
 

@@ -1,16 +1,15 @@
 package com.gmail.zajcevserg.maptestapp.ui.fragment
 
+
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -91,6 +90,9 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
         //search mode on/off
         mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
+            val topRVPadding =
+                if (isSearchMode) binding.searchInclude.itemSearchCl.height else 0
+            binding.layersRecyclerView.setPadding(0, topRVPadding, 0, 0)
             val params = binding.searchInclude.itemSearchCl.layoutParams
                     as CoordinatorLayout.LayoutParams
             val behavior = params.behavior as SearchBarHideOnScrollBehavior
@@ -252,12 +254,15 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                 mViewModel.liveDataSearchMode.value = mViewModel.liveDataSearchMode.value?.not()
             }
             R.id.button_add_new_layer -> {
-                mViewModel.addNewLayer()
+                mViewModel.addNewLayer {
+                    binding.layersRecyclerView.smoothScrollToPosition(it)
+                }
             }
             R.id.button_drag -> {
                 mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()
             }
         }
     }
+
 
 }

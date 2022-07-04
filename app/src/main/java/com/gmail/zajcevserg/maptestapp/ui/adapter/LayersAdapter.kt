@@ -20,9 +20,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
+import com.google.android.material.slider.Slider
+
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-
+import java.util.*
 
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.DividerSharedLayersBinding
@@ -35,8 +37,8 @@ import com.gmail.zajcevserg.maptestapp.ui.custom.OnItemMoveListener
 import com.gmail.zajcevserg.maptestapp.ui.custom.OnStartDragListener
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
-import com.google.android.material.slider.Slider
-import java.util.*
+
+
 
 
 class LayersAdapter(val mViewModel: LayersVM,
@@ -343,10 +345,10 @@ class LayersAdapter(val mViewModel: LayersVM,
     override fun onItemMove(fromPosition: Int,
                             toPosition: Int
     ): Boolean {
-
         val itemFrom = currentList[fromPosition]
         val itemTo = currentList[toPosition]
-        if (itemFrom is LayerItem && itemTo is LayerItem) {
+        return if (itemFrom is LayerItem && itemTo is LayerItem
+            && itemTo.isSharedLayer == itemFrom.isSharedLayer) {
             val idFrom = itemFrom.id
             val idTo = itemTo.id
             val checkedStateFrom = itemFrom.turnedOn
@@ -357,16 +359,8 @@ class LayersAdapter(val mViewModel: LayersVM,
             currentList[toPosition].id = idFrom
             Collections.swap(mViewModel.liveDataLayers.value!!, fromPosition, toPosition)
             mViewModel.updateLayersOrderInDB()
-
-        } else {
-            val movedLayer = currentList[fromPosition] as LayerItem
-            movedLayer.isSharedLayer = toPosition > fromPosition
-            Collections.swap(mViewModel.liveDataLayers.value!!, fromPosition, toPosition)
-            mViewModel.updateIsSharedLayer(movedLayer)
-        }
-
-        notifyItemMoved(fromPosition, toPosition)
-        return true
+            notifyItemMoved(fromPosition, toPosition)
+            true
+        } else false
     }
-
 }

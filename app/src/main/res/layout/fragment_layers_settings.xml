@@ -19,10 +19,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/layers_recycler_view"
+            android:clipToPadding="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            />
+            android:scrollbars="vertical" />
 
         <include
             android:id="@+id/search_include"

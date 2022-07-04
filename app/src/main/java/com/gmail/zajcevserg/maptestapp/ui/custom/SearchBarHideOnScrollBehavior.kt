@@ -1,5 +1,6 @@
 package com.gmail.zajcevserg.maptestapp.ui.custom
 
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -9,13 +10,11 @@ import android.view.animation.DecelerateInterpolator
 
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
+import androidx.recyclerview.widget.RecyclerView
 
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
-
-import com.gmail.zajcevserg.maptestapp.R
 
 
 private const val ENTER_ANIMATION_DURATION = 500L
@@ -25,22 +24,23 @@ class SearchBarHideOnScrollBehavior(context: Context,
                                     attributeSet: AttributeSet
 ) : CoordinatorLayout.Behavior<ViewGroup>(context, attributeSet) {
 
-    private val hideSearchFieldSubject: PublishSubject<Int> = PublishSubject.create()
-    private var searchLayout: ConstraintLayout? = null
+    private val mHideSearchFieldSubject: PublishSubject<Int> = PublishSubject.create()
+    private var mSearchLayout: ConstraintLayout? = null
+    private var mRecyclerView: RecyclerView? = null
 
     var isSearchMode = false
     set(value) {
         if (field == value) return
         if (value) {
-            searchLayout?.let { showAnim(it) }
+            mSearchLayout?.let { showAnim(it) }
         } else {
-            searchLayout?.let { hideAnim(it) }
+            mSearchLayout?.let { hideAnim(it) }
         }
         field = value
     }
 
     val searchBarHideDisposable: Disposable =
-        hideSearchFieldSubject
+        mHideSearchFieldSubject
             .distinctUntilChanged { previous, current ->
                 previous < 0 && current < 0
                         || previous > 0 && current > 0
@@ -48,8 +48,8 @@ class SearchBarHideOnScrollBehavior(context: Context,
                         || previous == current
 
             }.subscribe {
-                if (it > 0) showAnim(searchLayout)
-                else hideAnim(searchLayout)
+                if (it > 0) showAnim(mSearchLayout)
+                else hideAnim(mSearchLayout)
             }
 
     override fun onLayoutChild(
@@ -57,10 +57,11 @@ class SearchBarHideOnScrollBehavior(context: Context,
         child: ViewGroup,
         layoutDirection: Int
     ): Boolean {
-        searchLayout = child as? ConstraintLayout
-        searchLayout?.doOnLayout {
+        mSearchLayout = child as? ConstraintLayout
+        mSearchLayout?.doOnLayout {
             if (isSearchMode) show(it) else hide(it)
         }
+        mRecyclerView = child as? RecyclerView
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
@@ -80,6 +81,9 @@ class SearchBarHideOnScrollBehavior(context: Context,
             translationY(-(view.height + params.bottomMargin).toFloat())
             duration = EXIT_ANIMATION_DURATION
             interpolator = AccelerateInterpolator()
+            setListener(object : AnimatorListenerAdapter() {
+
+            })
             start()
         }
     }
@@ -89,6 +93,9 @@ class SearchBarHideOnScrollBehavior(context: Context,
             translationY(0f)
             duration = ENTER_ANIMATION_DURATION
             interpolator = DecelerateInterpolator()
+            setListener(object : AnimatorListenerAdapter() {
+
+            })
             start()
         }
     }
@@ -115,7 +122,7 @@ class SearchBarHideOnScrollBehavior(context: Context,
             type,
             consumed
         )
-        hideSearchFieldSubject.onNext(if (dyUnconsumed == 0) dyConsumed else dyUnconsumed)
+        mHideSearchFieldSubject.onNext(if (dyUnconsumed == 0) dyConsumed else dyUnconsumed)
     }
 
     override fun onStartNestedScroll(
@@ -126,9 +133,9 @@ class SearchBarHideOnScrollBehavior(context: Context,
         axes: Int,
         type: Int
     ): Boolean {
-        return axes == ViewCompat.SCROLL_AXIS_VERTICAL
-                && isSearchMode
-                && target.id == R.id.layers_recycler_view
+        return false
     }
+
+
 
 }

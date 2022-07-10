@@ -1,6 +1,8 @@
 package com.gmail.zajcevserg.maptestapp.ui.custom
 
+import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.gmail.zajcevserg.maptestapp.model.application.log
 
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.PublishSubject
@@ -57,22 +60,35 @@ class SearchBarHideOnScrollBehavior(context: Context,
         child: ViewGroup,
         layoutDirection: Int
     ): Boolean {
+
         mSearchLayout = child as? ConstraintLayout
         mSearchLayout?.doOnLayout {
             if (isSearchMode) show(it) else hide(it)
         }
-        mRecyclerView = child as? RecyclerView
+
         return super.onLayoutChild(parent, child, layoutDirection)
+    }
+
+    override fun layoutDependsOn(
+        parent: CoordinatorLayout,
+        child: ViewGroup,
+        dependency: View
+    ): Boolean {
+        if (mRecyclerView == null) mRecyclerView = dependency as? RecyclerView
+        return super.layoutDependsOn(parent, child, dependency)
     }
 
     private fun hide(view: View?) {
         val params = view?.layoutParams as CoordinatorLayout.LayoutParams
         val mY = -(view.height + params.bottomMargin).toFloat()
         view.translationY = mY
+        mRecyclerView?.setPadding(0, 0, 0, 0)
     }
 
     private fun show(view: View?) {
         view?.translationY = 0f
+        mRecyclerView?.setPadding(0, mSearchLayout!!.height, 0, 0)
+
     }
 
     private fun hideAnim(view: View?) {
@@ -82,7 +98,9 @@ class SearchBarHideOnScrollBehavior(context: Context,
             duration = EXIT_ANIMATION_DURATION
             interpolator = AccelerateInterpolator()
             setListener(object : AnimatorListenerAdapter() {
-
+                override fun onAnimationEnd(animation: Animator?) {
+                    mRecyclerView?.setPadding(0, 0, 0, 0)
+                }
             })
             start()
         }
@@ -94,7 +112,9 @@ class SearchBarHideOnScrollBehavior(context: Context,
             duration = ENTER_ANIMATION_DURATION
             interpolator = DecelerateInterpolator()
             setListener(object : AnimatorListenerAdapter() {
-
+                override fun onAnimationEnd(animation: Animator?) {
+                    mRecyclerView?.setPadding(0, mSearchLayout!!.height, 0, 0)
+                }
             })
             start()
         }

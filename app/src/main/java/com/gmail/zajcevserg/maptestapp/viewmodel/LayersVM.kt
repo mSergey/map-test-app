@@ -15,12 +15,16 @@ import com.gmail.zajcevserg.maptestapp.ui.custom.SwipeCallback
 import com.gmail.zajcevserg.maptestapp.ui.custom.Switch3Way
 
 
-class LayersVM : ViewModel() {
+class LayersVM(
+    private val repository: Repository,
+    val mSavedCheckedStates: MutableMap<Int, Boolean>
+) : ViewModel() {
 
-    private val repository: Repository = Repository()
+    private var layersFlowableDisposable: Disposable? = null
+    /*private val repository: Repository = Repository()
     private var layersFlowableDisposable: Disposable? = null
 
-    val mSavedCheckedStates = mutableMapOf<Int, Boolean>()
+    val mSavedCheckedStates = mutableMapOf<Int, Boolean>()*/
 
     val liveDataLayers by lazy {
         MutableLiveData<MutableList<DataItem>>()

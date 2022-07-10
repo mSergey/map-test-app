@@ -16,10 +16,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.forEach
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+
+//import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 import com.gmail.zajcevserg.maptestapp.R
 import com.gmail.zajcevserg.maptestapp.databinding.FragmentLayersSettingsBinding
@@ -28,12 +29,13 @@ import com.gmail.zajcevserg.maptestapp.ui.adapter.LayersAdapter
 import com.gmail.zajcevserg.maptestapp.ui.adapter.SearchAdapter
 import com.gmail.zajcevserg.maptestapp.ui.custom.*
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
+import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
+
 
 class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickListener {
 
     private var _binding: FragmentLayersSettingsBinding? = null
     private val binding get() = _binding!!
-    private val mViewModel: LayersVM by activityViewModels()
     private lateinit var mLayersAdapter: LayersAdapter
     private lateinit var mSearchAdapter: SearchAdapter
     private lateinit var itemTouchHelper: ItemTouchHelper
@@ -43,7 +45,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
     override fun onAttach(context: Context
     ) {
         super.onAttach(context)
-        mLayersAdapter = LayersAdapter(mViewModel, context, this)
+        mLayersAdapter = LayersAdapter(getSharedViewModel<LayersVM>(), context, this)
         mSearchAdapter = SearchAdapter(context)
         mToast = Toast.makeText(
             requireActivity().applicationContext,
@@ -68,17 +70,17 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                                savedInstanceState: Bundle?
     ) {
         swipeCallback =
-            SwipeCallback(binding.layersRecyclerView, mViewModel, mLayersAdapter)
+            SwipeCallback(binding.layersRecyclerView, getSharedViewModel<LayersVM>(), mLayersAdapter)
         itemTouchHelper = ItemTouchHelper(swipeCallback)
         itemTouchHelper.attachToRecyclerView(binding.layersRecyclerView)
-        mViewModel.liveDataLayers.observe(viewLifecycleOwner) { layers ->
+        getSharedViewModel<LayersVM>().liveDataLayers.observe(viewLifecycleOwner) { layers ->
             mLayersAdapter.submitList(layers)
         }
         binding.buttonSearch.setOnClickListener(this)
         binding.buttonDrag.setOnClickListener(this)
         binding.buttonDel.setOnClickListener(this)
         binding.buttonAddNewLayer.setOnClickListener(this)
-        mViewModel.liveDataDragMode.observe(viewLifecycleOwner) { isDragMode ->
+        getSharedViewModel<LayersVM>().liveDataDragMode.observe(viewLifecycleOwner) { isDragMode ->
             mLayersAdapter.currentList.forEachIndexed { adapterPosition, item ->
                 val holder = binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
                         as? LayersAdapter.LayerItemViewHolder
@@ -89,10 +91,8 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         //search mode on/off
-        mViewModel.liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
-            val topRVPadding =
-                if (isSearchMode) binding.searchInclude.itemSearchCl.height else 0
-            binding.layersRecyclerView.setPadding(0, topRVPadding, 0, 0)
+        getSharedViewModel<LayersVM>().liveDataSearchMode.observe(viewLifecycleOwner) { isSearchMode ->
+
             val params = binding.searchInclude.itemSearchCl.layoutParams
                     as CoordinatorLayout.LayoutParams
             val behavior = params.behavior as SearchBarHideOnScrollBehavior
@@ -136,8 +136,8 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
 
         binding.searchInclude.searchEt.doOnTextChanged { text, start, before, count ->
             text ?: return@doOnTextChanged
-            if (!mViewModel.liveDataSearchMode.value!!) return@doOnTextChanged
-            mViewModel.onSearchTextChange(text)
+            if (!getSharedViewModel<LayersVM>().liveDataSearchMode.value!!) return@doOnTextChanged
+            getSharedViewModel<LayersVM>().onSearchTextChange(text)
             val notFoundText = "\"$text\" not found"
             nothingFoundToast = if (text.isNotEmpty())
                 Toast.makeText(
@@ -147,9 +147,9 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                 ) else null
         }
 
-        mViewModel.liveDataSearch.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataSearch.observe(viewLifecycleOwner) {
             it ?: return@observe
-            if (!mViewModel.liveDataSearchMode.value!!) return@observe
+            if (!getSharedViewModel<LayersVM>().liveDataSearchMode.value!!) return@observe
             if (it.isEmpty()) {
                 setRVAdapter(binding.layersRecyclerView, mLayersAdapter)
                 nothingFoundToast?.show()
@@ -160,33 +160,33 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
         }
 
         //background buttons click
-        mViewModel.liveDataBackgroundBtn.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataBackgroundBtn.observe(viewLifecycleOwner) {
             it ?: return@observe
             mToast.setText(it)
             mToast.show()
         }
 
-        mViewModel.liveDataMainSwitchPosition.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataMainSwitchPosition.observe(viewLifecycleOwner) {
             binding.mainSwitch.switchPosition = it
         }
 
         binding.mainSwitch.setOnPositionChangeByClickListener { position ->
             when(position) {
                 Switch3Way.SwitchPositions.START -> {
-                    mViewModel.setCheckedStatesForAll(false)
+                    getSharedViewModel<LayersVM>().setCheckedStatesForAll(false)
                     setSwitchPositionsOnViewHolders(position)
                 }
                 Switch3Way.SwitchPositions.MIDDLE -> {
-                    mViewModel.setSavedCheckedStates()
-                    setSavedCheckedStatesOnViewHolders(mViewModel.mSavedCheckedStates)
+                    getSharedViewModel<LayersVM>().setSavedCheckedStates()
+                    setSavedCheckedStatesOnViewHolders(getSharedViewModel<LayersVM>().mSavedCheckedStates)
                 }
                 Switch3Way.SwitchPositions.END -> {
-                    mViewModel.setCheckedStatesForAll(true)
+                    getSharedViewModel<LayersVM>().setCheckedStatesForAll(true)
                     setSwitchPositionsOnViewHolders(position)
                 }
             }
         }
-        mViewModel.liveDataIsSwitchTreeWay.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataIsSwitchTreeWay.observe(viewLifecycleOwner) {
             binding.mainSwitch.isThreeWay = it
         }
     }
@@ -202,7 +202,7 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
     private fun setSwitchPositionsOnViewHolders(
         position: Switch3Way.SwitchPositions
     ) {
-        mViewModel.liveDataLayers.value?.forEachIndexed { adapterPosition, item ->
+        getSharedViewModel<LayersVM>().liveDataLayers.value?.forEachIndexed { adapterPosition, item ->
             val holder =
                 binding.layersRecyclerView.findViewHolderForAdapterPosition(adapterPosition)
                         as? LayersAdapter.LayerItemViewHolder
@@ -248,18 +248,20 @@ class LayersSettingsFragment : Fragment(), OnStartDragListener, View.OnClickList
                     mToast.setText(text)
                     mToast.duration = Toast.LENGTH_LONG
                     mToast.show()
-                } else mViewModel.removeLayers()
+                } else getSharedViewModel<LayersVM>().removeLayers()
             }
             R.id.button_search -> {
-                mViewModel.liveDataSearchMode.value = mViewModel.liveDataSearchMode.value?.not()
+                getSharedViewModel<LayersVM>().liveDataSearchMode.value =
+                    getSharedViewModel<LayersVM>().liveDataSearchMode.value?.not()
             }
             R.id.button_add_new_layer -> {
-                mViewModel.addNewLayer {
+                getSharedViewModel<LayersVM>().addNewLayer {
                     binding.layersRecyclerView.smoothScrollToPosition(it)
                 }
             }
             R.id.button_drag -> {
-                mViewModel.liveDataDragMode.value = mViewModel.liveDataDragMode.value?.not()
+                getSharedViewModel<LayersVM>().liveDataDragMode.value =
+                    getSharedViewModel<LayersVM>().liveDataDragMode.value?.not()
             }
         }
     }

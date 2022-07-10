@@ -14,17 +14,16 @@ import io.reactivex.subjects.PublishSubject
 
 import java.util.concurrent.TimeUnit
 
-import com.gmail.zajcevserg.maptestapp.model.application.App
 import com.gmail.zajcevserg.maptestapp.model.database.DataItem
 import com.gmail.zajcevserg.maptestapp.model.database.LayerObject
 import com.gmail.zajcevserg.maptestapp.model.database.LayersDao
 
 
 class Repository(
-    private val dao: LayersDao = App.database.getDao(),
-    private val layerItemSubject: PublishSubject<List<DataItem.LayerItem>> = PublishSubject.create(),
-    private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>> = PublishSubject.create(),
-    private val searchTextSubject: PublishSubject<String> = PublishSubject.create()
+    private val dao: LayersDao,
+    private val layerItemSubject: PublishSubject<List<DataItem.LayerItem>>,
+    private val checkedFlagsSubject: PublishSubject<Map<Int, Boolean>>,
+    private val searchTextSubject: PublishSubject<String>
 ) {
     private var searchCallback: ((List<LayerObject>) -> Unit)? = null
 

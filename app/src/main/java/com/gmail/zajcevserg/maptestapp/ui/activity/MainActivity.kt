@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.animation.AccelerateInterpolator
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.activity.viewModels
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -22,11 +21,12 @@ import com.gmail.zajcevserg.maptestapp.ui.fragment.LayersSettingsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.MissionsFragment
 import com.gmail.zajcevserg.maptestapp.ui.fragment.SubstratesFragment
 import com.gmail.zajcevserg.maptestapp.viewmodel.LayersVM
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val mViewModel: LayersVM by viewModels()
+    private val mViewModel: LayersVM by viewModel<LayersVM>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

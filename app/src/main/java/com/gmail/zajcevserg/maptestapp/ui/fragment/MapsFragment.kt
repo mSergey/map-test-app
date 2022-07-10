@@ -8,8 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.Fragment
+
+import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,17 +30,17 @@ class MapsFragment : Fragment() {
     private var _binding: FragmentMapsBinding? = null
     private val binding get() = _binding!!
     private var mGoogleMap: GoogleMap? = null
-    private val mViewModel: LayersVM by activityViewModels()
+    //private val mViewModel: LayersVM by viewModel()
     private val callback = OnMapReadyCallback { googleMap ->
         mGoogleMap ?: run { mGoogleMap = googleMap }
-        mViewModel.liveDataLayersFlowable.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataLayersFlowable.observe(viewLifecycleOwner) {
             with(googleMap) {
                 clear()
                 if (it.isEmpty()) return@observe
                 val layer = it.findExceptHeader { it.id == 1 }
                 layer ?: return@observe
                 if (layer.turnedOn) {
-                    val polygon = addPolygon(mViewModel.getCoordinates())
+                    val polygon = addPolygon(getSharedViewModel<LayersVM>().getCoordinates())
                     val alpha = 255 * layer.transparency / 100
                     val color = Color.argb(alpha, 255, 0, 0)
                     polygon.fillColor = color
@@ -47,17 +48,17 @@ class MapsFragment : Fragment() {
             }
         }
 
-        mViewModel.liveDataMapType.observe(viewLifecycleOwner) {
+        getSharedViewModel<LayersVM>().liveDataMapType.observe(viewLifecycleOwner) {
             mGoogleMap?.mapType = it
         }
 
-        mViewModel.liveDataMapInteraction.observe(viewLifecycleOwner) { layerId ->
+        getSharedViewModel<LayersVM>().liveDataMapInteraction.observe(viewLifecycleOwner) { layerId ->
             layerId ?: return@observe
             if (layerId == 1) {
-                val minS: Double = mViewModel.getCoordinates().points.minOf { it.latitude }
-                val minW: Double = mViewModel.getCoordinates().points.minOf { it.longitude }
-                val maxN: Double = mViewModel.getCoordinates().points.maxOf { it.latitude }
-                val maxE: Double = mViewModel.getCoordinates().points.maxOf { it.longitude }
+                val minS: Double = getSharedViewModel<LayersVM>().getCoordinates().points.minOf { it.latitude }
+                val minW: Double = getSharedViewModel<LayersVM>().getCoordinates().points.minOf { it.longitude }
+                val maxN: Double = getSharedViewModel<LayersVM>().getCoordinates().points.maxOf { it.latitude }
+                val maxE: Double = getSharedViewModel<LayersVM>().getCoordinates().points.maxOf { it.longitude }
                 val bounds = LatLngBounds(
                     LatLng(minS, minW),
                     LatLng(maxN, maxE)

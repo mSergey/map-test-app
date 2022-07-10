@@ -1,23 +1,22 @@
 package com.gmail.zajcevserg.maptestapp.model.application
 
 import android.app.Application
-import androidx.room.Room
 
-import com.gmail.zajcevserg.maptestapp.model.database.LayersDB
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+
+import com.gmail.zajcevserg.maptestapp.model.di.appModule
+import com.gmail.zajcevserg.maptestapp.model.di.dataModule
 
 
 class App : Application() {
-
     override fun onCreate() {
         super.onCreate()
-        database = Room.databaseBuilder(applicationContext, LayersDB::class.java, "LayersDB.db")
-            .createFromAsset("layers_database.db")
-            .build()
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(listOf(appModule, dataModule))
+        }
     }
-
-    companion object {
-        lateinit var database: LayersDB
-    }
-
-
 }

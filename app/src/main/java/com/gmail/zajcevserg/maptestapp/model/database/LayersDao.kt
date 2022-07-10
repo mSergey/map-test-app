@@ -25,9 +25,6 @@ interface LayersDao {
     @Query("SELECT * FROM layer_objects WHERE object_name LIKE :query")
     fun find(query: String): List<LayerObject>
 
-    @Insert
-    fun insert(toSave: DataItem.LayerItem): Completable
-
     @Query("UPDATE layers SET turned_on = :checked WHERE id is :id")
     fun updateChecked(id: Int, checked: Int): Completable
 
